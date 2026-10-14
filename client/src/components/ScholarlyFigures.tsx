@@ -16,20 +16,17 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { InventoryCalculationResult, CalculationTrace } from '../../../shared/types';
-import { Language } from '../../../shared/i18n';
 
 interface ScholarlyFiguresProps {
   result: InventoryCalculationResult;
   selectedScope: number | null;
   onSelectScope: (scope: number | null) => void;
-  lang: Language;
 }
 
 export const ScholarlyFigures: React.FC<ScholarlyFiguresProps> = ({
   result,
   selectedScope,
-  onSelectScope,
-  lang
+  onSelectScope
 }) => {
   const [activeFigure, setActiveFigure] = useState<'scope_dist' | 'source_contrib' | 'scope1_breakdown' | 'commuting_comparison' | 'commuting_by_role'>('scope_dist');
   const [displayMetric, setDisplayMetric] = useState<'absolute' | 'percentage'>('absolute');
@@ -38,7 +35,6 @@ export const ScholarlyFigures: React.FC<ScholarlyFiguresProps> = ({
   const [exportNotice, setExportNotice] = useState<string | null>(null);
 
   const svgRef = useRef<SVGSVGElement>(null);
-  const isBn = lang === 'bn';
 
   const total = result.totalGrossEmissions;
   const s1 = result.scope1Total;

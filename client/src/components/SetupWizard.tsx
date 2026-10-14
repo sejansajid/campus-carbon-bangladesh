@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Building2, Users, Calendar, MapPin, CheckCircle, ShieldCheck } from 'lucide-react';
 import { Institution, PopulationRecord, CampusBoundary } from '../../../shared/types';
-import { Language, t } from '../../../shared/i18n';
 
 interface SetupWizardProps {
   institution: Institution;
@@ -10,7 +9,6 @@ interface SetupWizardProps {
   onSaveInstitution: (inst: Partial<Institution>) => Promise<void>;
   onSavePopulation: (pop: Partial<PopulationRecord>) => Promise<void>;
   onSaveBoundary: (bnd: Partial<CampusBoundary>) => Promise<void>;
-  lang: Language;
 }
 
 export const SetupWizard: React.FC<SetupWizardProps> = ({
@@ -19,11 +17,9 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({
   boundary,
   onSaveInstitution,
   onSavePopulation,
-  onSaveBoundary,
-  lang
+  onSaveBoundary
 }) => {
   const [name, setName] = useState(institution.name);
-  const [nameBn, setNameBn] = useState(institution.nameBn || '');
   const [type, setType] = useState(institution.type);
   const [division, setDivision] = useState(institution.division);
   const [district, setDistrict] = useState(institution.district);
@@ -46,7 +42,6 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({
   // Sync state whenever institution/population/boundary changes
   React.useEffect(() => {
     setName(institution.name);
-    setNameBn(institution.nameBn || '');
     setType(institution.type);
     setDivision(institution.division);
     setDistrict(institution.district);
@@ -77,7 +72,6 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({
       await onSaveInstitution({
         id: institution.id,
         name,
-        nameBn,
         type,
         division,
         district,
@@ -141,23 +135,12 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">Institution Name (English)</label>
+              <label className="block font-semibold text-slate-700 mb-1">Institution Official Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
                 required
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 text-xs"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Institution Name (Bangla)</label>
-              <input
-                type="text"
-                value={nameBn}
-                onChange={e => setNameBn(e.target.value)}
-                placeholder="যেমন: ইউনিভার্সিটি অব লিবারেল আর্টস বাংলাদেশ"
                 className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 text-xs"
               />
             </div>

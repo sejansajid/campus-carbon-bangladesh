@@ -22,21 +22,17 @@ import {
   FULL_SURVEY_BLUEPRINT,
   generateGoogleFormsAppsScript 
 } from '../../../shared/templates/surveyBlueprint';
-import { Language } from '../../../shared/i18n';
 
 interface ResourcesPageProps {
   initialTab?: 'templates' | 'factors' | 'methodology';
-  lang: Language;
 }
 
 export const ResourcesPage: React.FC<ResourcesPageProps> = ({
-  initialTab = 'templates',
-  lang
+  initialTab = 'templates'
 }) => {
   const [activeTab, setActiveTab] = useState<'templates' | 'factors' | 'methodology'>(initialTab);
   const [showBlueprintPreview, setShowBlueprintPreview] = useState<boolean>(false);
   const [blueprintInstrumentFilter, setBlueprintInstrumentFilter] = useState<'all' | 'commuter' | 'facilities'>('all');
-  const isBn = lang === 'bn';
 
   // Helper to trigger direct browser file downloads
   const handleDownloadFile = (filename: string, content: string, mime: string = 'text/plain') => {
@@ -118,7 +114,7 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
           }`}
         >
           <FileSpreadsheet className="w-4 h-4" />
-          <span>{isBn ? 'তথ্য সংগ্রহের টেমপ্লেট ও ফর্ম' : 'Survey & Data Templates'}</span>
+          <span>Survey & Data Templates</span>
         </button>
 
         <button
@@ -130,7 +126,7 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
           }`}
         >
           <Sparkles className="w-4 h-4" />
-          <span>{isBn ? 'নির্গমন সহগ ডেটাবেস' : 'Emission Factors'}</span>
+          <span>Emission Factors</span>
         </button>
 
         <button
@@ -142,7 +138,7 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
           }`}
         >
           <BookOpen className="w-4 h-4" />
-          <span>{isBn ? 'পদ্ধতি ও তথ্যসূত্র' : 'Methodology & References'}</span>
+          <span>Methodology & References</span>
         </button>
       </div>
 
@@ -152,12 +148,10 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
           {/* Header Card */}
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-navy-100 shadow-2xs space-y-2">
             <h2 className="text-xl sm:text-2xl font-bold text-navy-900">
-              {isBn ? 'প্রাতিষ্ঠানিক তথ্য সংগ্রহের টেমপ্লেট ও গুগল ফর্মস প্যাকেজ' : 'Institutional Data Collection Package & Google Forms Blueprint'}
+              Institutional Data Collection Package & Google Forms Blueprint
             </h2>
             <p className="text-sm text-navy-600">
-              {isBn
-                ? 'স্বয়ংক্রিয় গুগল ফর্মস তৈরি করার স্ক্রিপ্ট, পূর্ণাঙ্গ ব্লুপ্রিন্ট ও প্রমিত স্প্রেডশিট ডাউনলোড করে ক্যাম্পাসের তথ্য স্বচ্ছভাবে সংগ্রহ করুন।'
-                : 'Download structured survey blueprints, generate automated Google Forms in one click, and collect standardized activity logs for your greenhouse gas inventory.'}
+              Download structured survey blueprints, generate automated Google Forms in one click, and collect standardized activity logs for your greenhouse gas inventory.
             </p>
           </div>
 
@@ -408,12 +402,12 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
 
       {/* DESTINATION 2: Emission Factors */}
       {activeTab === 'factors' && (
-        <FactorRegistryBrowser lang={lang} />
+        <FactorRegistryBrowser />
       )}
 
       {/* DESTINATION 3: Methodology & References */}
       {activeTab === 'methodology' && (
-        <MethodologyReferences lang={lang} />
+        <MethodologyReferences />
       )}
     </div>
   );

@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
 import { GitCompare, AlertTriangle, CheckCircle2, BookOpen, ShieldAlert, Users, ExternalLink, Info } from 'lucide-react';
-import { Language, t } from '../../../shared/i18n';
-
 interface FairComparisonProps {
   currentInstitutionName: string;
   currentPerCapita: number;
-  lang: Language;
 }
 
 export const FairComparison: React.FC<FairComparisonProps> = ({
   currentInstitutionName,
-  currentPerCapita,
-  lang
+  currentPerCapita
 }) => {
   const [activeTab, setActiveTab] = useState<'literature' | 'guidelines'>('literature');
   const [sortBy, setSortBy] = useState<'perCapita' | 'name' | 'publishingYear'>('perCapita');
   const [sortAsc, setSortAsc] = useState<boolean>(true);
   const [selectedStudy, setSelectedStudy] = useState<any | null>(null);
-
-  const isBn = lang === 'bn';
 
   const literatureStudies = [
     {
@@ -133,15 +127,13 @@ export const FairComparison: React.FC<FairComparisonProps> = ({
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-navy-100 shadow-2xs space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-navy-50 text-navy-800 text-xs font-semibold">
           <GitCompare className="w-3.5 h-3.5 text-cobalt" />
-          <span>{isBn ? 'বিশ্ববিদ্যালয়সমূহের তুলনা' : 'Compare universities'}</span>
+          <span>Compare universities</span>
         </div>
         <h1 className="text-2xl font-bold text-navy-800">
-          {isBn ? 'আন্তর্জাতিক গবেষণা সাহিত্যের সাথে তুলনা' : 'Academic Literature Benchmarks'}
+          Academic Literature Benchmarks
         </h1>
         <p className="text-sm text-navy-600 leading-relaxed max-w-3xl">
-          {isBn
-            ? 'সঠিক তুলনার জন্য একই ধরনের রিপোর্টিং সময়কাল এবং নির্গমন পরিধিসম্পন্ন বিশ্ববিদ্যালয় নির্বাচন করুন।'
-            : 'For a fair comparison, choose universities with similar reporting periods and emission coverage.'}
+          For a fair comparison, choose universities with similar reporting periods and emission coverage.
         </p>
       </div>
 
@@ -149,7 +141,7 @@ export const FairComparison: React.FC<FairComparisonProps> = ({
       <div className="bg-ivory rounded-2xl p-5 border border-navy-200 space-y-2 text-xs text-navy-800">
         <div className="flex items-center gap-2 font-bold text-sm text-navy-900">
           <Info className="w-4 h-4 text-cobalt" />
-          <span>{isBn ? 'ন্যায্য তুলনার মূল নীতি' : 'About fair comparisons'}</span>
+          <span>About fair comparisons</span>
         </div>
         <p className="text-navy-600 leading-relaxed text-xs">
           Higher education institutions differ vastly in geographic climate, student residential housing, laboratory intensity, and reporting boundaries. Comparisons must account for:
@@ -177,7 +169,7 @@ export const FairComparison: React.FC<FairComparisonProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'প্রকাশিত গবেষণা ডেটাবেস' : 'Published Literature Benchmarks'}
+          Published Literature Benchmarks
         </button>
         <button
           onClick={() => setActiveTab('guidelines')}
@@ -187,7 +179,7 @@ export const FairComparison: React.FC<FairComparisonProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'তুলনা নীতি ও মানদণ্ড' : 'Comparability Criteria'}
+          Comparability Criteria
         </button>
       </div>
 
@@ -196,7 +188,7 @@ export const FairComparison: React.FC<FairComparisonProps> = ({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-navy-700">
-              {literatureStudies.length} {isBn ? 'টি গবেষণা প্রতিষ্ঠান অন্তর্ভুক্ত' : 'peer-reviewed studies recorded'}
+              {literatureStudies.length} peer-reviewed studies recorded
             </span>
             <div className="flex items-center gap-2 text-xs">
               <span className="text-navy-500">Sort by:</span>

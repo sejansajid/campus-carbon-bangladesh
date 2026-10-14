@@ -12,7 +12,6 @@ export type SurveyResponseType = 'multiple_choice' | 'number' | 'text' | 'scale'
 export interface SurveyQuestionSpec {
   stableFieldId: string;
   questionText: string;
-  questionTextBn?: string;
   instrument: SurveyInstrumentType;
   scope: 1 | 2 | 3 | 0; // 0 = administrative / contextual
   responseType: SurveyResponseType;
@@ -20,11 +19,9 @@ export interface SurveyQuestionSpec {
   isRequired: boolean;
   validationRules?: string;
   options?: string[];
-  optionsBn?: string[];
   exampleResponse: string;
   destinationCalculationField: string;
   helpText?: string;
-  helpTextBn?: string;
 }
 
 /**
@@ -35,13 +32,11 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'commuter_role',
     questionText: '1. What is your primary affiliation or role at the university?',
-    questionTextBn: '১. বিশ্ববিদ্যালয়ে আপনার প্রধান পরিচয় বা পদবী কী?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'multiple_choice',
     isRequired: true,
     options: ['Student', 'Faculty Member / Teacher', 'Administrative Staff'],
-    optionsBn: ['শিক্ষার্থী', 'শিক্ষক / ফ্যাকাল্টি মেম্বার', 'কর্মকর্তা / কর্মচারী'],
     exampleResponse: 'Student',
     destinationCalculationField: 'CommuterSurveyResponse.role',
     helpText: 'Used to stratify commuter populations and calculate per-role emissions accurately.'
@@ -49,7 +44,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'reporting_period',
     questionText: '2. Which academic semester or reporting year are you reporting travel for?',
-    questionTextBn: '২. আপনি কোন শিক্ষাবর্ষের যাতায়াতের তথ্য প্রদান করছেন?',
     instrument: 'commuter_survey',
     scope: 0,
     responseType: 'multiple_choice',
@@ -62,7 +56,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'origin_area',
     questionText: '3. Which metropolitan zone or area do you commute from?',
-    questionTextBn: '৩. আপনি মহানগরের কোন এলাকা থেকে ক্যাম্পাসে যাতায়াত করেন?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'multiple_choice',
@@ -80,7 +73,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'weekly_days',
     questionText: '4. On average, how many days per week do you commute to campus?',
-    questionTextBn: '৪. সপ্তাহে সাধারণত কতদিন ক্যাম্পাসে যাতায়াত করেন?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'scale',
@@ -95,7 +87,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'primary_mode',
     questionText: '5. What is your primary mode of transportation to campus?',
-    questionTextBn: '৫. ক্যাম্পাসে যাতায়াতে আপনার প্রধান যানবাহন মাধ্যম কোনটি?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'multiple_choice',
@@ -121,7 +112,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'is_multimodal',
     questionText: '6. Do you use multiple transportation modes during your typical one-way commute?',
-    questionTextBn: '৬. আপনার একমুখী যাতায়াতে কি একাধিক যানবাহন মাধ্যম ব্যবহার করেন?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'multiple_choice',
@@ -134,7 +124,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'one_way_km',
     questionText: '7. What is your approximate one-way travel distance to campus in kilometers (km)?',
-    questionTextBn: '৭. ক্যাম্পাস পর্যন্ত আপনার আনুমানিক একমুখী দূরত্ব কত কিলোমিটার (কিমি)?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'number',
@@ -148,7 +137,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'car_fuel_type',
     questionText: '8. If you travel by Private Car, what fuel type does the vehicle use?',
-    questionTextBn: '৮. ব্যক্তিগত গাড়ি ব্যবহার করলে জ্বালানির ধরন কোনটি?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'multiple_choice',
@@ -161,7 +149,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'car_occupancy',
     questionText: '9. If you travel by Private Car, how many passengers (including driver) typically share the vehicle?',
-    questionTextBn: '৯. গাড়িতে চালকসহ মোট কতজন যাত্রী যাতায়াত করেন?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'number',
@@ -175,7 +162,6 @@ export const COMMUTER_SURVEY_BLUEPRINT: SurveyQuestionSpec[] = [
   {
     stableFieldId: 'uses_institutional_fleet',
     questionText: '10. Do you commute using official university-owned buses or vans?',
-    questionTextBn: '১০. আপনি কি বিশ্ববিদ্যালয় পরিচালিত অফিসিয়াল বাস বা শাটল ব্যবহার করেন?',
     instrument: 'commuter_survey',
     scope: 3,
     responseType: 'multiple_choice',

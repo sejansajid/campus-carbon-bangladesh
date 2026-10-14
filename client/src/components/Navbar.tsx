@@ -1,33 +1,22 @@
 import React, { useState } from 'react';
 import { 
-  Building2, 
-  Globe2, 
   ArrowRight, 
   Menu, 
-  X,
-  FileSpreadsheet,
-  Layers,
-  Sparkles
+  X
 } from 'lucide-react';
-import { Language, t } from '../../../shared/i18n';
 
 interface NavbarProps {
   currentView: 'home' | 'assessment' | 'resources';
   setCurrentView: (view: 'home' | 'assessment' | 'resources') => void;
-  lang: Language;
-  setLang: (lang: Language) => void;
   onStartAssessment: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentView,
   setCurrentView,
-  lang,
-  setLang,
   onStartAssessment
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isBn = lang === 'bn';
 
   return (
     <header className="bg-white border-b border-navy-100 sticky top-0 z-50 shadow-2xs">
@@ -46,12 +35,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Campus Carbon <span className="text-cobalt">Bangladesh</span>
               </div>
               <div className="text-[10px] text-navy-500 font-medium">
-                {isBn ? 'উচ্চশিক্ষা কার্বন মূল্যায়ন ও রূপরেখা' : 'Higher Education Carbon Analytics'}
+                Higher Education Carbon Analytics & Decarbonization
               </div>
             </div>
           </div>
 
-          {/* Desktop Navigation: brand | Home | Assessment | Resources | language */}
+          {/* Desktop Navigation: Home | Assessment | Resources | CTA */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-navy-700">
             <button
               onClick={() => setCurrentView('home')}
@@ -59,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 currentView === 'home' ? 'text-cobalt font-bold border-b-2 border-cobalt' : ''
               }`}
             >
-              {isBn ? 'হোম' : 'Home'}
+              Home
             </button>
 
             <button
@@ -68,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 currentView === 'assessment' ? 'text-cobalt font-bold border-b-2 border-cobalt' : ''
               }`}
             >
-              {isBn ? 'মূল্যায়ন' : 'Assessment'}
+              Assessment
             </button>
 
             <button
@@ -77,26 +66,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 currentView === 'resources' ? 'text-cobalt font-bold border-b-2 border-cobalt' : ''
               }`}
             >
-              {isBn ? 'রিসোর্স' : 'Resources'}
+              Resources
             </button>
 
-            {/* Language Switcher */}
-            <button
-              onClick={() => setLang(lang === 'en' ? 'bn' : 'en')}
-              className="flex items-center space-x-1.5 bg-navy-50 hover:bg-navy-100 text-navy-700 px-3 py-1.5 rounded-xl transition text-xs font-semibold cursor-pointer border border-navy-200"
-              title="Toggle language English / বাংলা"
-            >
-              <Globe2 className="w-3.5 h-3.5 text-navy-500" />
-              <span>{lang === 'en' ? 'বাংলা' : 'English'}</span>
-            </button>
-
-            {/* Start Assessment CTA (Active when on Home or Resources) */}
+            {/* Start Assessment CTA */}
             {currentView !== 'assessment' && (
               <button
                 onClick={onStartAssessment}
                 className="px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs shadow-2xs transition flex items-center gap-1.5 cursor-pointer"
               >
-                <span>{isBn ? 'মূল্যায়ন শুরু করুন' : 'Start assessment'}</span>
+                <span>Start assessment</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}
@@ -104,13 +83,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={() => setLang(lang === 'en' ? 'bn' : 'en')}
-              className="px-2.5 py-1 text-xs font-bold bg-navy-50 rounded-lg text-navy-700 border border-navy-200"
-            >
-              {lang === 'en' ? 'বাং' : 'EN'}
-            </button>
-
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-navy-700 hover:text-navy-900 focus:outline-none"
@@ -131,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`w-full text-left py-2 font-medium ${currentView === 'home' ? 'text-cobalt font-bold' : 'text-navy-800'}`}
           >
-            {isBn ? 'হোম' : 'Home'}
+            Home
           </button>
           <button
             onClick={() => {
@@ -140,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`w-full text-left py-2 font-medium ${currentView === 'assessment' ? 'text-cobalt font-bold' : 'text-navy-800'}`}
           >
-            {isBn ? 'মূল্যায়ন' : 'Assessment'}
+            Assessment
           </button>
           <button
             onClick={() => {
@@ -149,20 +121,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`w-full text-left py-2 font-medium ${currentView === 'resources' ? 'text-cobalt font-bold' : 'text-navy-800'}`}
           >
-            {isBn ? 'রিসোর্স' : 'Resources'}
+            Resources
           </button>
 
-          <div className="pt-2">
+          {currentView !== 'assessment' && (
             <button
               onClick={() => {
                 onStartAssessment();
                 setMobileMenuOpen(false);
               }}
-              className="w-full py-3 rounded-xl bg-cobalt text-white font-bold text-center block shadow-2xs"
+              className="w-full py-2.5 rounded-xl bg-cobalt text-white font-bold text-xs flex items-center justify-center gap-1.5"
             >
-              {isBn ? 'মূল্যায়ন শুরু করুন' : 'Start assessment'}
+              <span>Start assessment</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
-          </div>
+          )}
         </div>
       )}
     </header>

@@ -3,11 +3,9 @@ import { Navbar } from './components/Navbar';
 import { Homepage } from './components/Homepage';
 import { AssessmentFlow } from './components/AssessmentFlow';
 import { ResourcesPage } from './components/ResourcesPage';
-import { Language } from '../../shared/i18n';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'assessment' | 'resources'>('home');
-  const [lang, setLang] = useState<Language>('en');
 
   // URL Hash Sync for bookmarkability and seamless navigation
   useEffect(() => {
@@ -50,12 +48,10 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-ivory flex flex-col selection:bg-cobalt-100 selection:text-navy-950 font-sans">
-      {/* 1. Global Navigation: brand | Home | Assessment | Resources | language */}
+      {/* 1. Global Navigation: brand | Home | Assessment | Resources */}
       <Navbar
         currentView={currentView}
         setCurrentView={navigateTo}
-        lang={lang}
-        setLang={setLang}
         onStartAssessment={handleStartAssessment}
       />
 
@@ -65,20 +61,15 @@ export const App: React.FC = () => {
           <Homepage
             onStartAssessment={handleStartAssessment}
             onViewExample={handleViewExample}
-            lang={lang}
           />
         )}
 
         {currentView === 'assessment' && (
-          <AssessmentFlow
-            lang={lang}
-          />
+          <AssessmentFlow />
         )}
 
         {currentView === 'resources' && (
-          <ResourcesPage
-            lang={lang}
-          />
+          <ResourcesPage />
         )}
       </main>
 

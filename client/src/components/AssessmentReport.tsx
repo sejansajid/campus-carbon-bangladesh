@@ -36,7 +36,6 @@ import {
 } from '../../../shared/types';
 import { ScholarlyFigures } from './ScholarlyFigures';
 import { CampusMap } from './CampusMap';
-import { Language, t } from '../../../shared/i18n';
 
 interface AssessmentReportProps {
   institution: Institution;
@@ -45,7 +44,6 @@ interface AssessmentReportProps {
   result: InventoryCalculationResult;
   isExample?: boolean;
   onReturnToAssessment?: () => void;
-  lang: Language;
 }
 
 export const AssessmentReport: React.FC<AssessmentReportProps> = ({
@@ -54,10 +52,15 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
   boundary,
   result,
   isExample = false,
-  onReturnToAssessment,
-  lang
+  onReturnToAssessment
 }) => {
   const [activeReportTab, setActiveReportTab] = useState<'overview' | 'figures' | 'map' | 'policy' | 'download'>('overview');
+  const [currentBoundary, setCurrentBoundary] = useState<CampusBoundary | undefined>(boundary);
+
+  useEffect(() => {
+    setCurrentBoundary(boundary);
+  }, [boundary]);
+
   const [selectedScope, setSelectedScope] = useState<number | null>(null);
   const [hotspotViewMode, setHotspotViewMode] = useState<'chart' | 'table'>('chart');
   const [tableSearch, setTableSearch] = useState('');
@@ -69,8 +72,6 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
   const [policyBriefError, setPolicyBriefError] = useState<string | null>(null);
   const [isPolicyStale, setIsPolicyStale] = useState(false);
   const loadedRunIdRef = useRef<string | null>(null);
-
-  const isBn = lang === 'bn';
 
   const total = result.totalGrossEmissions;
   const s1 = result.scope1Total;
@@ -93,7 +94,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
   const allRankedSources = [
     { 
       id: 'commute',
-      name: isBn ? 'দৈনিক যাতায়াত (শিক্ষার্থী ও কর্মী)' : 'Commuter Travel (Students & Staff)', 
+      name: 'Commuter Travel (Students & Staff)', 
       tons: result.scope3Breakdown.totalCommuting, 
       scope: 3, 
       category: 'Commuting & Passenger Transit',
@@ -101,7 +102,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
     },
     { 
       id: 'grid_elec',
-      name: isBn ? 'ক্রয়কৃত জাতীয় গ্রিড বিদ্যুৎ' : 'Purchased Utility Grid Electricity', 
+      name: 'Purchased Utility Grid Electricity', 
       tons: result.scope2LocationBased, 
       scope: 2, 
       category: 'Purchased Energy Generation',
@@ -109,7 +110,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
     },
     { 
       id: 'ac_fugitive',
-      name: isBn ? 'এসি রেফ্রিজারেন্ট লিকেজ (R-410A / R-22)' : 'AC Refrigerant Fugitives (R-410A / R-22)', 
+      name: 'AC Refrigerant Fugitives (R-410A / R-22)', 
       tons: result.scope1Breakdown.acR410A + (result.scope1Breakdown.acR22MontrealProtocol || 0), 
       scope: 1, 
       category: 'Fugitive HVAC Cooling Top-Up',
@@ -117,7 +118,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
     },
     { 
       id: 'fleet_transport',
-      name: isBn ? 'ক্যাম্পাস যানবাহন বহর (অকটেন ও ডিজেল)' : 'Campus Vehicle Fleet (Diesel & Octane)', 
+      name: 'Campus Vehicle Fleet (Diesel & Octane)', 
       tons: result.scope1Breakdown.fleetOctane + result.scope1Breakdown.fleetDiesel, 
       scope: 1, 
       category: 'Mobile Combustion Fleet',
@@ -125,7 +126,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
     },
     { 
       id: 'generator_diesel',
-      name: isBn ? 'জরুরি জেনারেটর (ডিজেল)' : 'Backup Emergency Generator (Diesel)', 
+      name: 'Backup Emergency Generator (Diesel)', 
       tons: result.scope1Breakdown.stationaryDiesel, 
       scope: 1, 
       category: 'Stationary Power Generation',
@@ -133,7 +134,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
     },
     { 
       id: 'cafeteria_lpg',
-      name: isBn ? 'ক্যাফেটেরিয়া রান্নার এলপিজি' : 'Cafeteria Cooking (Commercial LPG)', 
+      name: 'Cafeteria Cooking (Commercial LPG)', 
       tons: result.scope1Breakdown.cafeteriaLpg, 
       scope: 1, 
       category: 'Commercial Kitchen Combustion',
@@ -237,7 +238,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
       const res = await fetch('/api/policy-brief', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ evidencePacket, lang, forceRegenerate })
+        body: JSON.stringify({ evidencePacket, forceRegenerate })
       });
 
       if (res.ok) {
@@ -358,15 +359,13 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold">
-                <span>{isBn ? 'উদাহরণ মূল্যায়ন প্রতিবেদন — ইউল্যাব ২০২২' : 'Example assessment report — ULAB 2022'}</span>
+                <span>Example assessment report — ULAB 2022</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-amber-950 mt-1">
                 University of Liberal Arts Bangladesh (2022)
               </h1>
               <p className="text-xs text-amber-900/80 mt-1">
-                {isBn 
-                  ? 'ইউল্যাব ২০২২ গবেষণার উপাত্ত ব্যবহার করে প্রস্তুতকৃত উদাহরণ প্রতিবেদন। প্রকাশিত গবেষণা ফলাফল: ২,৪৯৮.৮০ tCO₂e এবং ০.৪৬৭১ tCO₂e/ব্যক্তি।'
-                  : 'Example report using ULAB\'s 2022 study data. Published study baseline: 2,498.80 tCO₂e and 0.4671 tCO₂e/person (reproduction within 0.03%).'}
+                Example report using ULAB's 2022 study data. Published study baseline: 2,498.80 tCO₂e and 0.4671 tCO₂e/person (reproduction within 0.03%).
               </p>
             </div>
 
@@ -376,7 +375,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
                 className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-900 text-white font-bold text-xs transition cursor-pointer shadow-2xs shrink-0 self-start"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>{isBn ? 'আমার মূল্যায়নে ফিরুন' : '← Return to my assessment'}</span>
+                <span>← Return to my assessment</span>
               </button>
             )}
           </div>
@@ -387,7 +386,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-navy-50 text-navy-800 text-xs font-semibold">
                 <CheckCircle2 className="w-3.5 h-3.5 text-cobalt" />
-                <span>{isBn ? 'প্রাতিষ্ঠানিক কার্বন মূল্যায়ন প্রতিবেদন' : 'Institutional Carbon Assessment Report'}</span>
+                <span>Institutional Carbon Assessment Report</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-navy-900 mt-1">
                 {institution.name}
@@ -403,7 +402,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-navy-50 hover:bg-navy-100 border border-navy-200 text-navy-700 font-bold text-xs transition cursor-pointer self-start"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>{isBn ? 'ইনপুট সংশোধন করুন' : 'Edit assessment inputs'}</span>
+                <span>Edit assessment inputs</span>
               </button>
             )}
           </div>
@@ -413,7 +412,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
       {/* 2. Summary: Total tCO2e, per-capita emissions with population denominator, largest source, and coverage status */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-navy-100 shadow-2xs space-y-1.5">
-          <span className="text-xs text-navy-500 font-medium">{isBn ? 'মোট প্রত্যক্ষ ও পরোক্ষ নির্গমন' : 'Total Gross Emissions'}</span>
+          <span className="text-xs text-navy-500 font-medium">Total Gross Emissions</span>
           <div className="text-2xl sm:text-3xl font-extrabold text-navy-900 tabular-nums">
             {total.toFixed(2)} <span className="text-xs font-normal text-navy-500">tCO₂e</span>
           </div>
@@ -423,7 +422,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-navy-100 shadow-2xs space-y-1.5">
-          <span className="text-xs text-navy-500 font-medium">{isBn ? 'মাথাপিছু কার্বন পদচিহ্ন' : 'Per Capita Footprint'}</span>
+          <span className="text-xs text-navy-500 font-medium">Per Capita Footprint</span>
           <div className="text-2xl sm:text-3xl font-extrabold text-cobalt tabular-nums">
             {result.perCapitaTotal.toFixed(4)} <span className="text-xs font-normal text-navy-500">tCO₂e/person</span>
           </div>
@@ -433,7 +432,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-navy-100 shadow-2xs space-y-1.5">
-          <span className="text-xs text-navy-500 font-medium">{isBn ? 'সর্ববৃহৎ নির্গমন উৎস' : 'Largest Emission Source'}</span>
+          <span className="text-xs text-navy-500 font-medium">Largest Emission Source</span>
           <div className="text-2xl sm:text-3xl font-extrabold text-purple-700 tabular-nums">
             {largestSourcePct}
           </div>
@@ -443,7 +442,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-navy-100 shadow-2xs space-y-1.5">
-          <span className="text-xs text-navy-500 font-medium">{isBn ? 'ইনভেনটরি কভারেজ স্ট্যাটাস' : 'Boundary Coverage Status'}</span>
+          <span className="text-xs text-navy-500 font-medium">Boundary Coverage Status</span>
           <div className="text-xl sm:text-2xl font-extrabold text-emerald-700 pt-0.5">
             {result.unquantifiedCategories?.length > 0 ? 'Partial Coverage' : 'Verified Scopes 1, 2, 3'}
           </div>
@@ -464,7 +463,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
           }`}
         >
           <Leaf className="w-3.5 h-3.5" />
-          <span>{isBn ? 'সারসংক্ষেপ ও হটস্পট' : 'Overview & Hotspots'}</span>
+          <span>Overview & Hotspots</span>
         </button>
 
         <button
@@ -474,7 +473,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
           }`}
         >
           <BarChart3 className="w-3.5 h-3.5" />
-          <span>{isBn ? 'চিত্র ও সারণীসমূহ' : 'Figures & tables'}</span>
+          <span>Figures & tables</span>
         </button>
 
         <button
@@ -484,7 +483,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
           }`}
         >
           <MapPin className="w-3.5 h-3.5" />
-          <span>{isBn ? 'ক্যাম্পাস মানচিত্র' : 'Campus map'}</span>
+          <span>Campus map</span>
         </button>
 
         <button
@@ -494,7 +493,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
           }`}
         >
           <Lightbulb className="w-3.5 h-3.5" />
-          <span>{isBn ? 'নীতিমালা ও এআই সুপারিশ' : 'Policy report'}</span>
+          <span>Policy report</span>
         </button>
 
         <button
@@ -504,7 +503,7 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
-          <span>{isBn ? 'প্রতিবেদন ডাউনলোড' : 'Downloads & Export'}</span>
+          <span>Downloads & Export</span>
         </button>
       </div>
 
@@ -748,7 +747,6 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
             result={result}
             selectedScope={selectedScope}
             onSelectScope={setSelectedScope}
-            lang={lang}
           />
 
           {/* Table 1: Inventory Summary by Scope & Category */}
@@ -901,12 +899,28 @@ export const AssessmentReport: React.FC<AssessmentReportProps> = ({
       )}
 
       {/* 6. Subview: Campus Map (Section 9) */}
-      {activeReportTab === 'map' && boundary && (
+      {activeReportTab === 'map' && (
         <CampusMap
-          boundary={boundary}
+          boundary={currentBoundary}
           institutionName={institution.name}
-          lang={lang}
           isDemo={isExample}
+          onUpdateBoundary={(updated) => {
+            setCurrentBoundary(prev => prev ? {
+              ...prev,
+              centerCoordinates: [updated.lat, updated.lng],
+              confirmedByInstitution: updated.confirmed
+            } : {
+              id: 'CAMPUS-USER',
+              institutionId: institution.id,
+              name: `${institution.name} Campus`,
+              isMainCampus: true,
+              centerCoordinates: [updated.lat, updated.lng],
+              grossFloorAreaM2: 0,
+              landAreaAcres: 0,
+              numberOfBuildings: 1,
+              confirmedByInstitution: updated.confirmed
+            });
+          }}
         />
       )}
 

@@ -29,7 +29,6 @@ import {
   ActionStatus 
 } from '../../../shared/types';
 import { PRESET_SCENARIOS, evaluateMitigationScenario } from '../../../shared/scenarios/mitigation';
-import { Language, t } from '../../../shared/i18n';
 
 interface PolicyActionPlanProps {
   institutionId: string;
@@ -38,7 +37,6 @@ interface PolicyActionPlanProps {
   actions: SustainabilityAction[];
   onAddAction: (act: Partial<SustainabilityAction>) => Promise<void>;
   onAddFeedback: (actionId: string, feedback: { author: string; text: string; status?: ActionStatus }) => Promise<void>;
-  lang: Language;
 }
 
 export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
@@ -47,8 +45,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
   baseline,
   actions,
   onAddAction,
-  onAddFeedback,
-  lang
+  onAddFeedback
 }) => {
   const [activeTab, setActiveTab] = useState<'recommended' | 'scenarios' | 'actions'>('recommended');
   const [selectedPresetId, setSelectedPresetId] = useState<string>('SCENARIO-INCREMENTAL');
@@ -86,13 +83,11 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
   // Run dynamic evaluation
   const evaluation = evaluateMitigationScenario(baseline, config);
 
-  const isBn = lang === 'bn';
-
   // Recommended Actions based on Hotspots
   const recommendedPolicies = [
     {
       id: 'REC-CAR-TRANSIT',
-      title: isBn ? 'ব্যক্তিগত গাড়ি থেকে ক্যাম্পাস শাটল ও কারপুলে স্থানান্তর' : 'Private Car Shift to Dedicated Campus Shuttles & Carpooling',
+      title: 'Private Car Shift to Dedicated Campus Shuttles & Carpooling',
       scope: 3,
       category: 'Commuting Transport',
       targetSource: 'Private Cars (59.6% of commuting footprint)',
@@ -106,7 +101,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
     },
     {
       id: 'REC-SOLAR-PV',
-      title: isBn ? 'ছাদভিত্তিক সৌরবিদ্যুৎ প্রকল্প (রুপটপ সোলার পিভি)' : 'Rooftop Solar PV Installation (Self-Consumption)',
+      title: 'Rooftop Solar PV Installation (Self-Consumption)',
       scope: 2,
       category: 'Renewable Generation',
       targetSource: 'Purchased Grid Electricity (171.3 tCO₂e Scope 2)',
@@ -120,7 +115,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
     },
     {
       id: 'REC-HVAC-REFRIGERANT',
-      title: isBn ? 'এসি রেফ্রিজারেন্ট লিকেজ রোধ ও নিম্ন-জিডব্লিউপি রূপান্তর' : 'Air Conditioning Leakage Prevention & Lower-GWP Refrigerant Transition',
+      title: 'Air Conditioning Leakage Prevention & Lower-GWP Refrigerant Transition',
       scope: 1,
       category: 'Fugitive Emissions',
       targetSource: 'Refrigerant Fugitive Top-ups (R-410A & legacy R-22)',
@@ -134,7 +129,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
     },
     {
       id: 'REC-LIGHTING-EE',
-      title: isBn ? 'শক্তির দক্ষতা বৃদ্ধি ও এলইডি লাইটিং রূপান্তর' : 'Campus Energy Efficiency & Smart Sensor LED Retrofit',
+      title: 'Campus Energy Efficiency & Smart Sensor LED Retrofit',
       scope: 2,
       category: 'Energy Demand Management',
       targetSource: 'Campus Lighting & Laboratory Baseload',
@@ -148,7 +143,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
     },
     {
       id: 'REC-GOVERNANCE-WASTE',
-      title: isBn ? 'ক্যাম্পাস বর্জ্য ও সংগ্রহ নিরীক্ষা ব্যবস্থাপনা' : 'Solid Waste Data Collection & Composting Governance',
+      title: 'Solid Waste Data Collection & Composting Governance',
       scope: 3,
       category: 'Waste & Circularity',
       targetSource: 'Unmeasured Cafeteria & Academic Waste',
@@ -228,17 +223,15 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-navy-100 shadow-2xs space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-navy-50 text-navy-800 text-xs font-semibold">
           <Lightbulb className="w-3.5 h-3.5 text-cobalt" />
-          <span>{isBn ? 'নীতি ও কর্মপরিকল্পনা' : 'Policy & action plan'}</span>
+          <span>Policy & action plan</span>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-navy-800">
-              {isBn ? 'ডিকার্বনাইজেশন কৌশল ও প্রাতিষ্ঠানিক কর্মপরিকল্পনা' : 'Decarbonization Pathways & Action Plan'}
+              Decarbonization Pathways & Action Plan
             </h1>
             <p className="text-xs text-navy-500 mt-1">
-              {isBn
-                ? 'পরিমাপিত নির্গমন তথ্যের উপর ভিত্তি করে অগ্রাধিকারভিত্তিক সুপারিশ, সিমুলেশন দৃশ্যপট ও কর্মপরিকল্পনা পরিচালনা করুন।'
-                : 'Turn measured emissions hotspots into prioritized institutional policies, technical simulations, and accountable action tracking.'}
+              Turn measured emissions hotspots into prioritized institutional policies, technical simulations, and accountable action tracking.
             </p>
           </div>
 
@@ -247,7 +240,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-900 text-white font-bold text-xs transition cursor-pointer shadow-2xs shrink-0"
           >
             <FileDown className="w-4 h-4" />
-            <span>{isBn ? 'খসড়া কর্মপরিকল্পনা রপ্তানি' : 'Export draft action plan'}</span>
+            <span>Export draft action plan</span>
           </button>
         </div>
       </div>
@@ -272,7 +265,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? '১. সুপারিশকৃত পদক্ষেপসমূহ' : '1. Recommended actions'} ({recommendedPolicies.length})
+          1. Recommended actions ({recommendedPolicies.length})
         </button>
         <button
           onClick={() => setActiveTab('scenarios')}
@@ -282,7 +275,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? '২. দৃশ্যপট বিশ্লেষণ ও সিমুলেশন' : '2. Explore scenarios'}
+          2. Explore scenarios
         </button>
         <button
           onClick={() => setActiveTab('actions')}
@@ -292,7 +285,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? '৩. প্রাতিষ্ঠানিক কর্মপরিকল্পনা ট্র্যাকার' : '3. Institutional action plan'} ({actions.length})
+          3. Institutional action plan ({actions.length})
         </button>
       </div>
 
@@ -334,7 +327,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
                       className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs cursor-pointer shadow-2xs"
                     >
                       <Check className="w-3.5 h-3.5" />
-                      <span>{isBn ? 'পরিকল্পনায় যুক্ত করুন' : 'Accept into plan'}</span>
+                      <span>Accept into plan</span>
                     </button>
                   </div>
                 </div>
@@ -559,12 +552,10 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 className="text-base font-bold text-navy-800">
-                {isBn ? 'প্রাতিষ্ঠানিক জলবায়ু পদক্ষেপ ও বাস্তবায়ন ট্র্যাকার' : 'Institutional Climate Actions'}
+                Institutional Climate Actions
               </h3>
               <p className="text-xs text-navy-500">
-                {isBn
-                  ? 'দায়িত্বপ্রাপ্ত বিভাগ, লক্ষ্যমাত্রা তারিখ, অনুমোদনের অবস্থা এবং অডিট প্রমাণের ট্র্যাকিং।'
-                  : 'Assigned departments, target dates, approval status, and implementation feedback.'}
+                Assigned departments, target dates, approval status, and implementation feedback.
               </p>
             </div>
 
@@ -573,7 +564,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs transition cursor-pointer shadow-2xs"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>{isBn ? 'নতুন পদক্ষেপ তৈরি করুন' : 'Add custom action'}</span>
+              <span>Add custom action</span>
             </button>
           </div>
 
@@ -605,7 +596,7 @@ export const PolicyActionPlan: React.FC<PolicyActionPlanProps> = ({
                       -{act.estimatedReductionTCO2e} tCO₂e
                     </div>
                     <div className="text-[11px] text-navy-400">
-                      Budget: ৳{act.estimatedCostBDT.toLocaleString()}
+                      Budget: BDT {act.estimatedCostBDT.toLocaleString()}
                     </div>
                   </div>
                 </div>

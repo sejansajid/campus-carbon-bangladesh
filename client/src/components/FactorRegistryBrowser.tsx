@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { Sparkles, Search, Filter, ExternalLink, ShieldCheck, Info } from 'lucide-react';
 import { EmissionFactor, FactorProvenance } from '../../../shared/types';
 import { EMISSION_FACTOR_REGISTRY } from '../../../shared/factors/registry';
-import { Language, t } from '../../../shared/i18n';
 
-interface FactorRegistryBrowserProps {
-  lang: Language;
-}
+interface FactorRegistryBrowserProps {}
 
-export const FactorRegistryBrowser: React.FC<FactorRegistryBrowserProps> = ({ lang }) => {
+export const FactorRegistryBrowser: React.FC<FactorRegistryBrowserProps> = () => {
   const [search, setSearch] = useState('');
   const [selectedProv, setSelectedProv] = useState<string>('all');
   const [selectedFactor, setSelectedFactor] = useState<EmissionFactor | null>(null);

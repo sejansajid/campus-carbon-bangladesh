@@ -25,7 +25,10 @@ import {
   FileText,
   X,
   AlertTriangle,
-  Info
+  Info,
+  Search,
+  Navigation,
+  Loader2
 } from 'lucide-react';
 import { 
   Institution, 
@@ -46,10 +49,24 @@ import {
   CommuterImportResult 
 } from '../../../shared/templates/surveyBlueprint';
 import { AssessmentReport } from './AssessmentReport';
-import { Language, t } from '../../../shared/i18n';
+
+const COMMUTER_CSV_TEMPLATE_TEXT = `Timestamp,Campus Role,Origin Neighborhood / Thana,Primary Commute Mode,Multimodal Trip,One-Way Distance (km),Weekly Campus Days,Uses University Shuttle / Bus,Car Fuel Type (if car),Car Occupancy (if car)
+2026-03-15 09:30:00,Student,Dhanmondi,Public City Bus,No (Single mode only),8.5,5,No,,
+2026-03-15 09:32:15,Faculty,Mirpur (Sec 1-12),Private Car,No (Single mode only),12.0,4,No,Octane / Gasoline,2
+2026-03-15 09:35:40,Staff,Mohammadpur,Rickshaw (Human-powered cycle),No (Single mode only),3.2,6,No,,
+2026-03-15 09:41:22,Student,Uttara,Train / Metro Rail (MRT Line 6),Yes (Multimodal trip),16.5,5,No,,
+2026-03-15 09:50:11,Student,Adabar,Walking,No (Single mode only),1.0,5,No,,`;
+
+const FACILITIES_CSV_TEMPLATE_TEXT = `Scope,Emission Source Category,Activity Record Name,Quantity,Unit,Activity Year,Data Status,Source Citation
+Scope 1,stationary_combustion_generator,Diesel Generator Fuel (Emergency Backup),9112.8,L,2024,reported,Facilities logbook & fuel vouchers
+Scope 1,mobile_combustion_fleet,University Sedans & Ambulances (Octane),8593.2,L,2024,reported,Transport department pump slips
+Scope 1,mobile_combustion_fleet,University Shuttle Buses (Diesel),19128.8,L,2024,reported,Transport fleet logs
+Scope 1,cooking_combustion_cafeteria,Commercial Cafeteria Cooking Gas (LPG),12720.0,kg,2024,reported,Cafeteria cylinder invoices
+Scope 1,fugitive_refrigerants_ac,Air Conditioning Refrigerant Top-Up (R-410A),240.0,kg,2024,reported,HVAC maintenance work orders
+Scope 1,fugitive_refrigerants_ac,Air Conditioning Refrigerant Top-Up (R-22),0.0,kg,2024,confirmed_zero,HVAC audit (no R-22 units)
+Scope 2,purchased_electricity_grid,Utility Grid Electricity (DPDC / DESCO / REB),777977.0,kWh,2024,reported,Monthly utility electricity bills`;
 
 interface AssessmentFlowProps {
-  lang: Language;
   onExploreExampleReport?: () => void;
   initialMode?: 'landing' | 'active' | 'example';
 }
@@ -57,8 +74,7 @@ interface AssessmentFlowProps {
 export type AssessmentRoute = 'templates' | 'manual';
 export type SourceDataStatus = 'reported' | 'confirmed_zero' | 'not_applicable' | 'not_collected';
 
-export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMode }) => {
-  const isBn = lang === 'bn';
+export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) => {
 
   // Master Mode: 'landing' (choose route or example) | 'active' (stepper 1..6) | 'example' (ULAB 2022 report)
   const [masterMode, setMasterMode] = useState<'landing' | 'active' | 'example'>(() => {
@@ -91,7 +107,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
   // STEP 1: Institution Details (Starts blank and unknown)
   // -------------------------------------------------------------
   const [institutionName, setInstitutionName] = useState<string>('');
-  const [institutionNameBn, setInstitutionNameBn] = useState<string>('');
   const [institutionType, setInstitutionType] = useState<'private' | 'public' | 'international'>('private');
   const [division, setDivision] = useState<string>('Dhaka');
   const [district, setDistrict] = useState<string>('Dhaka');
@@ -110,9 +125,15 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
   const [staffHeadcount, setStaffHeadcount] = useState<string>('');
   const [operatingDays, setOperatingDays] = useState<string>('');
 
-  // Physical campus metrics
+  // Physical campus metrics & Spatial Location (starts blank, not prefilled)
   const [floorAreaM2, setFloorAreaM2] = useState<string>('');
   const [landAreaAcres, setLandAreaAcres] = useState<string>('');
+  const [campusLat, setCampusLat] = useState<string>('');
+  const [campusLng, setCampusLng] = useState<string>('');
+  const [campusSearchQuery, setCampusSearchQuery] = useState<string>('');
+  const [campusSearching, setCampusSearching] = useState<boolean>(false);
+  const [campusSearchResults, setCampusSearchResults] = useState<any[]>([]);
+  const [campusSearchError, setCampusSearchError] = useState<string | null>(null);
 
   // -------------------------------------------------------------
   // STEP 2: Scope 1 Quantities & Statuses (Reported | Confirmed Zero | N/A | Not Collected)
@@ -198,11 +219,14 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.institutionName) setInstitutionName(parsed.institutionName);
-        if (parsed.institutionNameBn) setInstitutionNameBn(parsed.institutionNameBn);
         if (parsed.studentHeadcount) setStudentHeadcount(parsed.studentHeadcount);
         if (parsed.facultyHeadcount) setFacultyHeadcount(parsed.facultyHeadcount);
         if (parsed.staffHeadcount) setStaffHeadcount(parsed.staffHeadcount);
         if (parsed.operatingDays) setOperatingDays(parsed.operatingDays);
+        if (parsed.campusLat) setCampusLat(parsed.campusLat);
+        if (parsed.campusLng) setCampusLng(parsed.campusLng);
+        if (parsed.floorAreaM2) setFloorAreaM2(parsed.floorAreaM2);
+        if (parsed.landAreaAcres) setLandAreaAcres(parsed.landAreaAcres);
         if (parsed.genDieselLitres) setGenDieselLitres(parsed.genDieselLitres);
         if (parsed.fleetOctaneLitres) setFleetOctaneLitres(parsed.fleetOctaneLitres);
         if (parsed.fleetDieselLitres) setFleetDieselLitres(parsed.fleetDieselLitres);
@@ -222,7 +246,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
   const handleSaveDraft = () => {
     const draft = {
       institutionName,
-      institutionNameBn,
       institutionType,
       division,
       district,
@@ -234,6 +257,8 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
       operatingDays,
       floorAreaM2,
       landAreaAcres,
+      campusLat,
+      campusLng,
       genDieselLitres,
       genDieselStatus,
       fleetOctaneLitres,
@@ -264,19 +289,19 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
 
     if (step === 1) {
       if (!institutionName.trim()) {
-        errs.institutionName = isBn ? 'প্রতিষ্ঠানের নাম প্রদান আবশ্যক।' : 'Institution official name is required.';
+        errs.institutionName = 'Institution official name is required.';
       }
       if (!studentHeadcount || Number(studentHeadcount) < 0) {
-        errs.studentHeadcount = isBn ? 'শিক্ষার্থী সংখ্যা উল্লেখ করুন।' : 'Please enter student headcount.';
+        errs.studentHeadcount = 'Please enter student headcount.';
       }
       if (!facultyHeadcount || Number(facultyHeadcount) < 0) {
-        errs.facultyHeadcount = isBn ? 'শিক্ষক সংখ্যা উল্লেখ করুন।' : 'Please enter faculty headcount.';
+        errs.facultyHeadcount = 'Please enter faculty headcount.';
       }
       if (!staffHeadcount || Number(staffHeadcount) < 0) {
-        errs.staffHeadcount = isBn ? 'কর্মকর্তা/কর্মচারী সংখ্যা উল্লেখ করুন।' : 'Please enter staff headcount.';
+        errs.staffHeadcount = 'Please enter staff headcount.';
       }
       if (!operatingDays || Number(operatingDays) <= 0 || Number(operatingDays) > 366) {
-        errs.operatingDays = isBn ? 'বাৎসরিক কার্যকর দিন (১–৩৬৫) লিখুন।' : 'Please enter campus operating days per year (e.g. 250–300).';
+        errs.operatingDays = 'Please enter campus operating days per year (e.g. 250–300).';
       }
     } else if (step === 2) {
       if (genDieselStatus === 'reported' && (!genDieselLitres || Number(genDieselLitres) < 0)) {
@@ -631,7 +656,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
   const activeUserInstitution: Institution = {
     id: 'INST-USER',
     name: institutionName.trim() || 'Institutional Assessment',
-    nameBn: institutionNameBn.trim() || undefined,
+    nameBn: undefined,
     type: institutionType,
     division,
     district,
@@ -658,18 +683,226 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
     sourceCitation: 'Institutional Census'
   };
 
+  const parsedLat = parseFloat(campusLat);
+  const parsedLng = parseFloat(campusLng);
+  const hasValidCoords = !isNaN(parsedLat) && !isNaN(parsedLng) && parsedLat >= 20 && parsedLat <= 27 && parsedLng >= 88 && parsedLng <= 93;
+
   const activeUserBoundary: CampusBoundary = {
     id: 'CAMPUS-USER',
     institutionId: 'INST-USER',
-    name: 'Main Campus',
+    name: `${institutionName.trim() || 'Main'} Campus`,
     isMainCampus: true,
-    centerCoordinates: [23.7547, 90.3582],
+    centerCoordinates: hasValidCoords ? [parsedLat, parsedLng] : undefined,
     grossFloorAreaM2: Number(floorAreaM2) || 0,
     landAreaAcres: Number(landAreaAcres) || 0,
     numberOfBuildings: 2,
-    geometrySource: 'drawn',
-    confirmedByInstitution: true
+    geometrySource: hasValidCoords ? 'drawn' : undefined,
+    confirmedByInstitution: hasValidCoords
   };
+
+  // Helper renderer: Survey Templates & Google Forms Automation Package
+  // Positioned right at the start with disclaimer for manual analysis and inline non-blocking blueprint preview
+  const renderTemplatePackage = (isStep1: boolean = false) => (
+    <div className="p-6 sm:p-7 rounded-3xl border-2 border-navy-100 bg-navy-50/40 space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-navy-100 text-navy-800 text-xs font-bold uppercase tracking-wider mb-2">
+            <FileSpreadsheet className="w-3.5 h-3.5 text-cobalt" />
+            <span>Survey Templates & Google Forms Automation Package</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-extrabold text-navy-900">
+            Data Collection Blueprint & Direct CSV Templates
+          </h3>
+          <p className="text-xs sm:text-sm text-navy-600 mt-1 max-w-2xl">
+            Everything your institution needs to collect primary commuter responses from students and staff, or organize departmental energy and fuel records before calculation.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => setPreviewBlueprintInstrument(previewBlueprintInstrument ? null : 'commuter')}
+            className="px-3.5 py-2 rounded-xl bg-white hover:bg-navy-100 border border-navy-200 text-navy-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+          >
+            <Eye className="w-3.5 h-3.5 text-cobalt" />
+            <span>{previewBlueprintInstrument ? 'Hide Questions Blueprint' : 'Preview Questions (Inline)'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Prominent Disclaimer */}
+      <div className="p-4 rounded-2xl bg-amber-50/90 border border-amber-300 text-xs text-amber-950 flex items-start gap-3 leading-relaxed shadow-2xs">
+        <AlertCircle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+        <div className="space-y-1">
+          <strong className="text-amber-950 font-bold block text-sm">
+            Data Collection & Manual Entry Guidance:
+          </strong>
+          <span className="block">
+            If your university already possesses institutional activity records (such as utility electricity bills, generator fuel receipts, vehicle logbooks, and commuter sample surveys) and you want to analyze data manually, you can use these sources directly and proceed through the guided assessment entry steps below.
+          </span>
+          <span className="text-amber-900 block font-medium">
+            If your institution needs to collect fresh primary commuter records from students and faculty or activity logs from campus facilities first, download our ready-to-run Google Forms automation script and matching CSV templates below.
+          </span>
+        </div>
+      </div>
+
+      {/* 4 Usable Artifact Downloads */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+        {/* 1. Google Forms Script */}
+        <div className="p-4 rounded-2xl bg-white border border-navy-100 hover:border-cobalt transition shadow-2xs flex flex-col justify-between space-y-3">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-cobalt uppercase tracking-wider block">Google Workspace</span>
+            <h4 className="text-xs font-bold text-navy-900">Google Forms Creation Script</h4>
+            <p className="text-[11px] text-navy-500">
+              Generates a full 10-question Commuter Travel Survey with sections, choices, and input validation.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => triggerDownload('CampusCarbon_CommuterSurvey_GoogleFormsGenerator.gs', generateGoogleFormsAppsScript(), 'text/plain')}
+            className="w-full py-2 px-3 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+          >
+            <FileCode className="w-3.5 h-3.5" />
+            <span>Download .gs Script</span>
+          </button>
+        </div>
+
+        {/* 2. Commuter CSV Template */}
+        <div className="p-4 rounded-2xl bg-white border border-navy-100 hover:border-cobalt transition shadow-2xs flex flex-col justify-between space-y-3">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-purple-700 uppercase tracking-wider block">Scope 3 Commuting</span>
+            <h4 className="text-xs font-bold text-navy-900">Commuter Survey CSV Template</h4>
+            <p className="text-[11px] text-navy-500">
+              Standard format for student and staff travel responses with verified mode codes and distance fields.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => triggerDownload('commuter_survey_template.csv', COMMUTER_CSV_TEMPLATE_TEXT, 'text/csv')}
+            className="w-full py-2 px-3 rounded-xl bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 text-navy-600" />
+            <span>Download Commuter CSV</span>
+          </button>
+        </div>
+
+        {/* 3. Facilities CSV Template */}
+        <div className="p-4 rounded-2xl bg-white border border-navy-100 hover:border-cobalt transition shadow-2xs flex flex-col justify-between space-y-3">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider block">Scope 1 & Scope 2</span>
+            <h4 className="text-xs font-bold text-navy-900">Facilities Activity CSV Template</h4>
+            <p className="text-[11px] text-navy-500">
+              Spreadsheet layout for generator diesel, vehicle fuel, cafeteria LPG, AC gases, and electricity bills.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => triggerDownload('facilities_records_template.csv', FACILITIES_CSV_TEMPLATE_TEXT, 'text/csv')}
+            className="w-full py-2 px-3 rounded-xl bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 text-navy-600" />
+            <span>Download Facilities CSV</span>
+          </button>
+        </div>
+
+        {/* 4. Technical Blueprint JSON */}
+        <div className="p-4 rounded-2xl bg-white border border-navy-100 hover:border-cobalt transition shadow-2xs flex flex-col justify-between space-y-3">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-navy-700 uppercase tracking-wider block">Specification</span>
+            <h4 className="text-xs font-bold text-navy-900">Question Blueprint JSON</h4>
+            <p className="text-[11px] text-navy-500">
+              Machine-readable schema containing stable field IDs, validation rules, units, and calculation destinations.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => triggerDownload('survey_question_blueprint.json', JSON.stringify(FULL_SURVEY_BLUEPRINT, null, 2), 'application/json')}
+            className="w-full py-2 px-3 rounded-xl bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 text-navy-600" />
+            <span>Download Blueprint (.json)</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Setup & Import Guide */}
+      <div className="p-4 rounded-2xl bg-white border border-navy-100 space-y-2">
+        <span className="text-[11px] font-bold text-navy-700 uppercase tracking-wider block">Standard Collection & Calculation Workflow:</span>
+        <div className="grid grid-cols-2 sm:grid-cols-7 gap-2 text-center text-xs">
+          <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">1. Download Script</div>
+          <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">2. Run in Apps Script</div>
+          <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">3. Collect Responses</div>
+          <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">4. Export CSV</div>
+          <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">5. Upload to Step 4</div>
+          <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">6. Review In Step 5</div>
+          <div className="p-2 rounded-xl bg-emerald-50 font-semibold text-emerald-800">7. Calculate</div>
+        </div>
+      </div>
+
+      {/* INLINE Question Blueprint Viewer (NO MODAL, NO SCREEN OVERLAP!) */}
+      {previewBlueprintInstrument && (
+        <div className="p-5 rounded-2xl bg-white border-2 border-cobalt/30 shadow-md space-y-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-navy-100 pb-3">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPreviewBlueprintInstrument('commuter')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                  previewBlueprintInstrument === 'commuter' ? 'bg-cobalt text-white shadow-2xs' : 'bg-navy-50 text-navy-700 hover:bg-navy-100'
+                }`}
+              >
+                Student / Staff Commuter Survey (10 Questions)
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewBlueprintInstrument('facilities')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                  previewBlueprintInstrument === 'facilities' ? 'bg-cobalt text-white shadow-2xs' : 'bg-navy-50 text-navy-700 hover:bg-navy-100'
+                }`}
+              >
+                Facilities Records Blueprint (6 Categories)
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setPreviewBlueprintInstrument(null)}
+              className="px-3 py-1 rounded-xl bg-navy-50 hover:bg-navy-100 text-navy-600 font-bold text-xs flex items-center gap-1 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>Collapse Preview</span>
+            </button>
+          </div>
+
+          <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+            {(previewBlueprintInstrument === 'commuter' ? COMMUTER_SURVEY_BLUEPRINT : FACILITIES_RECORDS_BLUEPRINT).map((q) => (
+              <div key={q.stableFieldId} className="p-3.5 rounded-xl bg-navy-50/50 border border-navy-100 space-y-1.5 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-navy-900 text-xs sm:text-sm">{q.questionText}</span>
+                  <span className="font-mono text-[10px] bg-white px-2 py-0.5 rounded border border-navy-200 text-navy-600">
+                    ID: {q.stableFieldId}
+                  </span>
+                </div>
+                {q.helpText && <p className="text-navy-500 text-[11px]">{q.helpText}</p>}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] text-navy-600 border-t border-navy-100">
+                  <div><strong>Type:</strong> {q.responseType}</div>
+                  <div><strong>Required:</strong> {q.isRequired ? 'Yes' : 'No'}</div>
+                  <div><strong>Unit:</strong> {q.unit || 'N/A'}</div>
+                  <div><strong>Destination:</strong> <span className="font-mono text-[10px]">{q.destinationCalculationField}</span></div>
+                </div>
+                {q.options && (
+                  <div className="pt-1 text-[11px]">
+                    <span className="font-semibold text-navy-700">Options: </span>
+                    <span className="text-navy-600">{q.options.join(', ')}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   // -------------------------------------------------------------
   // RENDERING: MODE = 'example' (ULAB 2022 Fixture)
@@ -680,7 +913,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
         institution={{
           id: 'INST-ULAB',
           name: 'University of Liberal Arts Bangladesh',
-          nameBn: 'ইউনিভার্সিটি অব লিবারেল আর্টস বাংলাদেশ',
           type: 'private',
           division: 'Dhaka',
           district: 'Dhaka',
@@ -713,7 +945,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
           window.location.hash = 'assessment';
           setMasterMode(activeStep > 1 || institutionName ? 'active' : 'landing');
         }}
-        lang={lang}
       />
     );
   }
@@ -727,17 +958,18 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
         {/* Landing Title */}
         <div className="text-center space-y-3 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-navy-50 border border-navy-200 text-xs font-semibold text-navy-800">
-            <span>{isBn ? 'প্রাতিষ্ঠানিক কার্বন মূল্যায়ন' : 'Institutional Carbon Assessment'}</span>
+            <span>Institutional Carbon Assessment</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight">
-            {isBn ? 'আপনার বিশ্ববিদ্যালয়ের মূল্যায়ন পদ্ধতি বেছে নিন' : 'Choose how you want to supply your data'}
+            Choose how you want to supply your data
           </h1>
           <p className="text-sm text-navy-600">
-            {isBn
-              ? 'বিদ্যমান নথি ও বিল সরাসরি প্রবেশ করান অথবা আমাদের নির্ধারিত টেমপ্লেট ডাউনলোড করে তথ্য সংগ্রহ করুন।'
-              : 'Select your preferred data entry route to calculate your campus greenhouse gas inventory.'}
+            Select your preferred data entry route to calculate your campus greenhouse gas inventory.
           </p>
         </div>
+
+        {/* Survey Templates & Google Forms Automation Package with Disclaimer */}
+        {renderTemplatePackage(false)}
 
         {/* Two Clear Choices */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -755,12 +987,10 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-xl font-bold text-navy-900 group-hover:text-cobalt transition">
-                  {isBn ? 'জরিপ টেমপ্লেট ব্যবহার করে তথ্য সংগ্রহ' : 'Collect data using survey templates'}
+                  Collect data using survey templates
                 </h3>
                 <p className="text-xs sm:text-sm text-navy-600 leading-relaxed">
-                  {isBn
-                    ? 'প্রমিত স্প্রেডশিট ডাউনলোড করুন, ক্যাম্পাসের বিভিন্ন বিভাগ থেকে জ্বালানি রেকর্ড ও জরিপের তথ্য সংগ্রহ করে আপলোড করুন।'
-                    : 'Download structured survey blueprints, auto-generate Google Forms, gather campus records across departments, then upload response files.'}
+                  Download structured survey blueprints, auto-generate Google Forms, gather campus records across departments, then upload response files.
                 </p>
               </div>
               <div className="text-xs text-navy-500 space-y-1.5 pt-2 border-t border-navy-50">
@@ -771,7 +1001,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
             </div>
 
             <button className="w-full py-3 px-4 rounded-xl bg-navy-50 group-hover:bg-cobalt text-navy-800 group-hover:text-white font-bold text-xs transition flex items-center justify-center gap-2">
-              <span>{isBn ? 'টেমপ্লেট সংগ্রহ রুট চালু করুন' : 'Start with survey templates'}</span>
+              <span>Start with survey templates</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -790,12 +1020,10 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-xl font-bold text-navy-900 group-hover:text-cobalt transition">
-                  {isBn ? 'বিদ্যমান তথ্য সরাসরি প্রবেশ করান' : 'Enter existing data'}
+                  Enter existing data
                 </h3>
                 <p className="text-xs sm:text-sm text-navy-600 leading-relaxed">
-                  {isBn
-                    ? 'আপনার কাছে ইতিমধ্যে থাকা বার্ষিক বিদ্যুৎ বিল, জেনারেটরের রসিদ ও যাতায়াতের হিসাব দিয়ে ধাপে ধাপে মূল্যায়ন সম্পন্ন করুন।'
-                    : 'Use institutional records you already have to complete the assessment step by step using structured online entry forms.'}
+                  Use institutional records you already have to complete the assessment step by step using structured online entry forms.
                 </p>
               </div>
               <div className="text-xs text-navy-500 space-y-1.5 pt-2 border-t border-navy-50">
@@ -806,7 +1034,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
             </div>
 
             <button className="w-full py-3 px-4 rounded-xl bg-navy-50 group-hover:bg-cobalt text-navy-800 group-hover:text-white font-bold text-xs transition flex items-center justify-center gap-2">
-              <span>{isBn ? 'সরাসরি তথ্য প্রবেশ রুট চালু করুন' : 'Enter existing data step by step'}</span>
+              <span>Enter existing data step by step</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -816,14 +1044,14 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
         <div className="pt-4 text-center">
           <div className="inline-flex flex-col sm:flex-row items-center gap-3 p-4 sm:px-6 rounded-2xl bg-white border border-navy-100 shadow-2xs">
             <span className="text-xs text-navy-600 font-medium">
-              {isBn ? 'আগে দেখতে চান সম্পূর্ণ প্রতিবেদন কেমন হবে?' : 'Want to see what an official assessment report looks like?'}
+              Want to see what an official assessment report looks like?
             </span>
             <button
               onClick={() => setMasterMode('example')}
               className="text-xs font-bold text-cobalt hover:text-cobalt-700 hover:underline flex items-center gap-1.5 cursor-pointer"
             >
               <Eye className="w-4 h-4" />
-              <span>{isBn ? 'ইউল্যাব ২০২২ উদাহরণ মূল্যায়ন প্রতিবেদন দেখুন' : 'See what your assessment report will look like'}</span>
+              <span>See what your assessment report will look like</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -836,12 +1064,12 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
   // RENDERING: STEPPER WORKFLOW (Steps 1 to 6)
   // -------------------------------------------------------------
   const steps = [
-    { num: 1, label: isBn ? 'প্রতিষ্ঠান ও সময়কাল' : 'Institution & Period', icon: Building2 },
-    { num: 2, label: isBn ? 'স্কোপ ১' : 'Scope 1', icon: Flame },
-    { num: 3, label: isBn ? 'স্কোপ ২' : 'Scope 2', icon: Zap },
-    { num: 4, label: isBn ? 'স্কোপ ৩' : 'Scope 3', icon: Car },
-    { num: 5, label: isBn ? 'পর্যালোচনা' : 'Review', icon: ClipboardCheck },
-    { num: 6, label: isBn ? 'ফলাফল' : 'Results', icon: BarChart3 }
+    { num: 1, label: 'Institution & Period', icon: Building2 },
+    { num: 2, label: 'Scope 1', icon: Flame },
+    { num: 3, label: 'Scope 2', icon: Zap },
+    { num: 4, label: 'Scope 3', icon: Car },
+    { num: 5, label: 'Review', icon: ClipboardCheck },
+    { num: 6, label: 'Results', icon: BarChart3 }
   ];
 
   return (
@@ -851,7 +1079,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-navy-50 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-navy-800">
-              {institutionName.trim() ? institutionName : (isBn ? 'নতুন মূল্যায়ন খসড়া' : 'New Assessment Draft')}
+              {institutionName.trim() ? institutionName : 'New Assessment Draft'}
             </span>
             <span className="text-navy-300">•</span>
             <span className="text-xs text-navy-500">
@@ -926,20 +1154,21 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
           <div className="space-y-1">
             <span className="text-[10px] font-bold tracking-wider text-cobalt uppercase">Step 1 of 5</span>
             <h2 className="text-2xl font-bold text-navy-900">
-              {isBn ? 'প্রতিষ্ঠান ও হিসাবরক্ষণ সময়কাল' : 'Institution & Reporting Period'}
+              Institution & Reporting Period
             </h2>
             <p className="text-xs text-navy-600">
-              {isBn
-                ? 'আপনার বিশ্ববিদ্যালয়ের প্রাতিষ্ঠানিক নাম এবং হিসাবের জন্য জনসংখ্যার ভিত্তি প্রদান করুন।'
-                : 'Enter your institution official name, designated 12-month reporting period, and campus community population.'}
+              Enter your institution official name, designated 12-month reporting period, and campus community population.
             </p>
           </div>
 
-          <div className="space-y-5">
+          <div className="space-y-6">
+            {/* Survey Templates & Google Forms Automation Package with Disclaimer */}
+            {renderTemplatePackage(true)}
+
             {/* Single Official Name Field (Initially blank, Unicode accepted) */}
             <div>
               <label className="block text-xs font-bold text-navy-800 mb-1">
-                {isBn ? 'প্রতিষ্ঠানের নাম (বাংলা বা ইংরেজিতে) *' : 'Institution Official Name (English or বাংলা) *'}
+                Institution Official Name *
               </label>
               <input
                 type="text"
@@ -998,7 +1227,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
             <div className="bg-navy-50/40 p-5 rounded-2xl border border-navy-100 space-y-3">
               <div className="space-y-0.5">
                 <h3 className="text-xs font-bold text-navy-800">
-                  {isBn ? 'ক্যাম্পাস জনসংখ্যা ও কার্যকর দিন (মাথাপিছু সূচকের জন্য) *' : 'Campus Community Population & Operating Days *'}
+                  Campus Community Population & Operating Days *
                 </h3>
                 <p className="text-[11px] text-navy-500">
                   Used as the official denominator for per-capita intensity metrics. Inputs begin empty, not prefilled.
@@ -1111,6 +1340,149 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
                     <span>Financial / Equity Share</span>
                   </label>
                 </div>
+              </div>
+            </div>
+
+            {/* Campus Geographic Location & OpenStreetMap Search */}
+            <div className="p-5 rounded-2xl border border-navy-100 bg-navy-50/40 space-y-3">
+              <div className="space-y-0.5">
+                <h3 className="text-xs font-bold text-navy-900 flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 text-cobalt" />
+                  <span>Campus Geographic Location (Optional — Used for Spatial Boundary Map)</span>
+                </h3>
+                <p className="text-[11px] text-navy-500">
+                  Search for your campus location by name or provide latitude and longitude coordinates. If not configured, no fake map is displayed.
+                </p>
+              </div>
+
+              {/* Location Search Bar */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={campusSearchQuery}
+                  onChange={(e) => setCampusSearchQuery(e.target.value)}
+                  placeholder="Search campus location (e.g. University of Dhaka, BUET, Chittagong University)..."
+                  className="flex-1 px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900 bg-white focus:outline-none focus:border-cobalt"
+                />
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const q = (campusSearchQuery || institutionName).trim();
+                    if (!q) return;
+                    setCampusSearching(true);
+                    setCampusSearchError(null);
+                    setCampusSearchResults([]);
+                    try {
+                      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q + ', Bangladesh')}&limit=5`, {
+                        headers: { 'Accept-Language': 'en' }
+                      });
+                      const data = await res.json();
+                      if (data && data.length > 0) {
+                        setCampusSearchResults(data);
+                      } else {
+                        setCampusSearchError(`No location found for "${q}". Please enter coordinates manually below.`);
+                      }
+                    } catch (e) {
+                      setCampusSearchError('Geocoding service unavailable. Please enter coordinates manually below.');
+                    } finally {
+                      setCampusSearching(false);
+                    }
+                  }}
+                  disabled={campusSearching}
+                  className="px-4 py-2 rounded-xl bg-navy-800 hover:bg-navy-900 text-white font-bold text-xs flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-2xs"
+                >
+                  {campusSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
+                  <span>{campusSearching ? 'Searching...' : 'Locate'}</span>
+                </button>
+              </div>
+
+              {campusSearchError && (
+                <div className="p-2.5 rounded-lg bg-coral-50 border border-coral-200 text-xs text-coral-800">
+                  {campusSearchError}
+                </div>
+              )}
+
+              {campusSearchResults.length > 0 && (
+                <div className="space-y-1.5 bg-white p-2.5 rounded-xl border border-navy-100 max-h-44 overflow-y-auto text-xs">
+                  {campusSearchResults.map((r: any) => (
+                    <div key={r.place_id} className="flex items-center justify-between p-2 hover:bg-navy-50 rounded-lg border border-navy-50">
+                      <div className="truncate mr-2">
+                        <span className="font-semibold block truncate text-navy-900">{r.display_name}</span>
+                        <span className="text-[10px] text-navy-400 font-mono">{parseFloat(r.lat).toFixed(4)}° N, {parseFloat(r.lon).toFixed(4)}° E</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCampusLat(parseFloat(r.lat).toFixed(4));
+                          setCampusLng(parseFloat(r.lon).toFixed(4));
+                          setCampusSearchResults([]);
+                        }}
+                        className="px-3 py-1 rounded-lg bg-cobalt text-white font-bold text-[10px] shrink-0 cursor-pointer"
+                      >
+                        Select
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Lat / Lng inputs & Presets */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label className="block text-[10px] font-semibold text-navy-700 mb-1">Campus Latitude (°N)</label>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    value={campusLat}
+                    onChange={(e) => setCampusLat(e.target.value)}
+                    placeholder="e.g. 23.7262"
+                    className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs font-mono bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-semibold text-navy-700 mb-1">Campus Longitude (°E)</label>
+                  <input
+                    type="number"
+                    step="0.0001"
+                    value={campusLng}
+                    onChange={(e) => setCampusLng(e.target.value)}
+                    placeholder="e.g. 90.4005"
+                    className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs font-mono bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Presets */}
+              <div className="flex items-center gap-2 flex-wrap pt-1 text-[11px]">
+                <span className="font-semibold text-navy-500">Quick Presets:</span>
+                <button
+                  type="button"
+                  onClick={() => { setCampusLat('23.7262'); setCampusLng('90.4005'); }}
+                  className="px-2 py-0.5 rounded bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 cursor-pointer"
+                >
+                  Dhaka University
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setCampusLat('23.7266'); setCampusLng('90.3924'); }}
+                  className="px-2 py-0.5 rounded bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 cursor-pointer"
+                >
+                  BUET
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setCampusLat('22.4716'); setCampusLng('91.7877'); }}
+                  className="px-2 py-0.5 rounded bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 cursor-pointer"
+                >
+                  Chittagong Univ
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setCampusLat('24.9205'); setCampusLng('91.8319'); }}
+                  className="px-2 py-0.5 rounded bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 cursor-pointer"
+                >
+                  SUST Sylhet
+                </button>
               </div>
             </div>
           </div>
@@ -1430,11 +1802,11 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   type="button"
-                  onClick={() => setPreviewBlueprintInstrument('commuter')}
+                  onClick={() => setPreviewBlueprintInstrument(previewBlueprintInstrument === 'commuter' ? null : 'commuter')}
                   className="px-3 py-1.5 rounded-xl bg-white hover:bg-navy-100 border border-navy-200 text-navy-800 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                 >
                   <Eye className="w-3.5 h-3.5 text-cobalt" />
-                  <span>Preview questions</span>
+                  <span>{previewBlueprintInstrument === 'commuter' ? 'Hide questions' : 'Preview questions'}</span>
                 </button>
 
                 <button
@@ -1470,6 +1842,40 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
                 <div className="p-2 rounded-xl bg-emerald-50 font-semibold text-emerald-800">7. Calculate</div>
               </div>
             </div>
+
+            {/* INLINE Question Blueprint Viewer in Step 4 */}
+            {previewBlueprintInstrument === 'commuter' && (
+              <div className="p-4 rounded-2xl bg-white border border-cobalt/30 shadow-xs space-y-3">
+                <div className="flex items-center justify-between border-b border-navy-100 pb-2">
+                  <span className="font-bold text-navy-900 text-xs">Commuter Travel Survey Blueprint (10 Questions)</span>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewBlueprintInstrument(null)}
+                    className="text-xs text-navy-500 hover:text-navy-800 font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    <span>Collapse Preview</span>
+                  </button>
+                </div>
+                <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                  {COMMUTER_SURVEY_BLUEPRINT.map(q => (
+                    <div key={q.stableFieldId} className="p-3 rounded-xl bg-navy-50/50 border border-navy-100 text-xs space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-navy-900">{q.questionText}</span>
+                        <span className="font-mono text-[10px] bg-white px-1.5 py-0.5 rounded border border-navy-200">{q.stableFieldId}</span>
+                      </div>
+                      {q.helpText && <p className="text-navy-500 text-[11px]">{q.helpText}</p>}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 text-[10px] text-navy-600 pt-1">
+                        <div>Type: <strong>{q.responseType}</strong></div>
+                        <div>Required: <strong>{q.isRequired ? 'Yes' : 'No'}</strong></div>
+                        <div>Unit: <strong>{q.unit || 'N/A'}</strong></div>
+                        <div>Dest: <span className="font-mono">{q.destinationCalculationField}</span></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Google Forms Response CSV Upload Area */}
             <div className="p-6 rounded-2xl border-2 border-dashed border-navy-200 bg-white text-center space-y-3">
@@ -1771,7 +2177,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
           result={userCalculationRun}
           isExample={false}
           onReturnToAssessment={() => setActiveStep(5)}
-          lang={lang}
         />
       )}
 
@@ -1807,79 +2212,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMod
               <span>Continue</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
-          </div>
-        </div>
-      )}
-
-      {/* BLUEPRINT PREVIEW MODAL */}
-      {previewBlueprintInstrument && (
-        <div className="fixed inset-0 z-50 bg-navy-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-navy-100 overflow-hidden">
-            <div className="p-6 border-b border-navy-100 flex items-center justify-between">
-              <div>
-                <span className="text-[10px] font-bold text-cobalt uppercase tracking-wider">Survey Specification</span>
-                <h3 className="text-lg font-bold text-navy-900">
-                  {previewBlueprintInstrument === 'commuter' ? 'Commuter Survey Question Blueprint' : 'Facilities Records Blueprint'}
-                </h3>
-              </div>
-              <button
-                onClick={() => setPreviewBlueprintInstrument(null)}
-                className="p-2 rounded-xl hover:bg-navy-50 text-navy-500 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 overflow-y-auto space-y-4 text-xs">
-              {(previewBlueprintInstrument === 'commuter' ? COMMUTER_SURVEY_BLUEPRINT : FACILITIES_RECORDS_BLUEPRINT).map((q, qIdx) => (
-                <div key={q.stableFieldId} className="p-4 rounded-2xl bg-navy-50/50 border border-navy-100 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-navy-900 text-sm">{q.questionText}</span>
-                    <span className="font-mono text-[10px] bg-white px-2 py-0.5 rounded border border-navy-200 text-navy-600">
-                      ID: {q.stableFieldId}
-                    </span>
-                  </div>
-
-                  {q.helpText && <p className="text-navy-500 text-[11px]">{q.helpText}</p>}
-
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] text-navy-600 border-t border-navy-100">
-                    <div><strong>Type:</strong> {q.responseType}</div>
-                    <div><strong>Required:</strong> {q.isRequired ? 'Yes' : 'No'}</div>
-                    <div><strong>Unit:</strong> {q.unit || 'N/A'}</div>
-                    <div><strong>Destination:</strong> <span className="font-mono text-[10px]">{q.destinationCalculationField}</span></div>
-                  </div>
-
-                  {q.options && (
-                    <div className="pt-1 text-[11px]">
-                      <span className="font-semibold text-navy-700">Available Choices:</span>
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {q.options.map((opt, oIdx) => (
-                          <span key={oIdx} className="bg-white px-2 py-0.5 rounded border border-navy-200 text-navy-700 text-[10px]">
-                            {opt}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="p-4 bg-navy-50 border-t border-navy-100 flex justify-end gap-2">
-              <button
-                onClick={() => triggerDownload('survey_question_blueprint.json', JSON.stringify(FULL_SURVEY_BLUEPRINT, null, 2), 'application/json')}
-                className="px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Download Blueprint JSON</span>
-              </button>
-              <button
-                onClick={() => setPreviewBlueprintInstrument(null)}
-                className="px-4 py-2 rounded-xl bg-white border border-navy-200 text-navy-800 font-bold text-xs cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
           </div>
         </div>
       )}

@@ -14,7 +14,6 @@ import {
   Calendar
 } from 'lucide-react';
 import { InventoryCalculationResult, PopulationRecord, Institution, CalculationMethodTier } from '../../../shared/types';
-import { Language, t } from '../../../shared/i18n';
 
 interface OverviewProps {
   institution: Institution;
@@ -23,7 +22,6 @@ interface OverviewProps {
   tier: CalculationMethodTier;
   setTier: (tier: CalculationMethodTier) => void;
   onNavigate: (tab: string) => void;
-  lang: Language;
 }
 
 export const Overview: React.FC<OverviewProps> = ({
@@ -32,8 +30,7 @@ export const Overview: React.FC<OverviewProps> = ({
   latestRun,
   tier,
   setTier,
-  onNavigate,
-  lang
+  onNavigate
 }) => {
   const totalEmissions = latestRun ? latestRun.totalGrossEmissions.toFixed(2) : '2,498.79';
   const perCapita = latestRun ? latestRun.perCapitaTotal.toFixed(4) : '0.4671';
@@ -129,7 +126,7 @@ export const Overview: React.FC<OverviewProps> = ({
         {/* Total Emissions */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 hover:border-teal-300 transition">
           <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-            <span>{t('totalEmissions', lang)}</span>
+            <span>Total Emissions</span>
             <Leaf className="w-4 h-4 text-forest-600" />
           </div>
           <div className="text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -143,7 +140,7 @@ export const Overview: React.FC<OverviewProps> = ({
         {/* Per Capita Footprint */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 hover:border-teal-300 transition">
           <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-            <span>{t('perCapitaFootprint', lang)}</span>
+            <span>Per Capita Footprint</span>
             <Users className="w-4 h-4 text-teal-600" />
           </div>
           <div className="text-3xl font-extrabold text-teal-700 tracking-tight">

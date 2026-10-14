@@ -15,30 +15,25 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { InventoryCalculationResult, CalculationMethodTier, CalculationTrace } from '../../../shared/types';
-import { Language, t } from '../../../shared/i18n';
 
 interface DashboardProps {
   result: InventoryCalculationResult;
   tier: CalculationMethodTier;
   setTier: (tier: CalculationMethodTier) => void;
   onRecalculate: () => Promise<void>;
-  lang: Language;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
   result,
   tier,
   setTier,
-  onRecalculate,
-  lang
+  onRecalculate
 }) => {
   const [selectedTrace, setSelectedTrace] = useState<CalculationTrace | null>(null);
   const [activeView, setActiveView] = useState<'overview' | 'commuting' | 'traces'>('overview');
   const [recalculating, setRecalculating] = useState(false);
   const [selectedSourceFilter, setSelectedSourceFilter] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-
-  const isBn = lang === 'bn';
 
   const handleRecalculate = async () => {
     setRecalculating(true);
@@ -70,7 +65,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   const rankedSources = [
     { 
       id: 'commuting',
-      name: isBn ? 'দৈনিক যাতায়াত (শিক্ষার্থী, শিক্ষক ও কর্মী)' : 'Daily Commuting (Students, Faculty, Staff)', 
+      name: 'Daily Commuting (Students, Faculty, Staff)', 
       tons: result.scope3Breakdown.totalCommuting, 
       scope: 3, 
       color: 'bg-purple-600',
@@ -79,8 +74,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
     { 
       id: 'refrigerants',
       name: isLegacy 
-        ? (isBn ? 'এসি রেফ্রিজারেন্ট লিকেজ (R-410A ও R-22)' : 'AC Refrigerant Fugitives (R-410A & R-22)')
-        : (isBn ? 'এসি রেফ্রিজারেন্ট লিকেজ (R-410A HFC)' : 'AC Refrigerant Fugitives (R-410A HFC)'), 
+        ? 'AC Refrigerant Fugitives (R-410A & R-22)'
+        : 'AC Refrigerant Fugitives (R-410A HFC)', 
       tons: inScopeRefrigerant, 
       scope: 1, 
       color: 'bg-amber-600',
@@ -88,7 +83,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     },
     { 
       id: 'grid_electricity',
-      name: isBn ? 'ক্রয়কৃত জাতীয় গ্রিড বিদ্যুৎ' : 'Purchased Grid Electricity (Building & Facility Load)', 
+      name: 'Purchased Grid Electricity (Building & Facility Load)', 
       tons: result.scope2Breakdown.generationEmissions, 
       scope: 2, 
       color: 'bg-cobalt',
@@ -96,7 +91,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     },
     { 
       id: 'fleet',
-      name: isBn ? 'ক্যাম্পাস যানবাহন বহর (ডিজেল ও অকটেন)' : 'Campus Transport Fleet (Diesel & Octane)', 
+      name: 'Campus Transport Fleet (Diesel & Octane)', 
       tons: result.scope1Breakdown.fleetOctane + result.scope1Breakdown.fleetDiesel, 
       scope: 1, 
       color: 'bg-amber-700',
@@ -104,7 +99,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     },
     { 
       id: 'td_losses',
-      name: isBn ? 'গ্রিড সঞ্চালন ও বিতরণ ক্ষয়ক্ষতি' : 'Grid Transmission & Distribution Losses', 
+      name: 'Grid Transmission & Distribution Losses', 
       tons: result.scope3Breakdown.gridTdLosses || 0, 
       scope: 3, 
       color: 'bg-purple-700',
@@ -112,7 +107,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     },
     { 
       id: 'generator',
-      name: isBn ? 'জরুরি জেনারেটর (ডিজেল দহন)' : 'Backup Emergency Generator (Diesel Combustion)', 
+      name: 'Backup Emergency Generator (Diesel Combustion)', 
       tons: result.scope1Breakdown.stationaryDiesel, 
       scope: 1, 
       color: 'bg-amber-800',
@@ -120,7 +115,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     },
     { 
       id: 'cafeteria',
-      name: isBn ? 'ক্যাফেটেরিয়া রান্নার গ্যাস (এলপিজি)' : 'Cafeteria Cooking (LPG Cylinders)', 
+      name: 'Cafeteria Cooking (LPG Cylinders)', 
       tons: result.scope1Breakdown.cafeteriaLpg, 
       scope: 1, 
       color: 'bg-amber-900',
@@ -170,12 +165,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </span>
           </div>
           <h1 className="text-2xl font-bold text-navy-800 mt-1">
-            {isBn ? 'প্রাতিষ্ঠানিক গ্রিনহাউস গ্যাস ইনভেনটরি' : 'Institutional Greenhouse Gas Inventory'}
+            Institutional Greenhouse Gas Inventory
           </h1>
           <p className="text-xs text-navy-500">
-            {isBn
-              ? 'স্কোপ ১ (প্রত্যক্ষ জ্বালানি ও গ্যাস), স্কোপ ২ (বিদ্যুৎ), এবং স্কোপ ৩ (যাতায়াত ও সঞ্চালন ক্ষয়ক্ষতি)।'
-              : 'Categorized by Scope 1 (Direct operations), Scope 2 (Purchased electricity), and Scope 3 (Commuting & value chain).'}
+            Categorized by Scope 1 (Direct operations), Scope 2 (Purchased electricity), and Scope 3 (Commuting & value chain).
           </p>
         </div>
 
@@ -186,7 +179,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs transition shadow-2xs disabled:opacity-50 cursor-pointer"
           >
             <RotateCcw className={`w-3.5 h-3.5 ${recalculating ? 'animate-spin' : ''}`} />
-            {recalculating ? (isBn ? 'হিসাব হচ্ছে...' : 'Updating...') : (isBn ? 'ফলাফল আপডেট করুন' : 'Update results')}
+            {recalculating ? 'Updating...' : 'Update results'}
           </button>
         </div>
       </div>
@@ -195,7 +188,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-navy-100 shadow-2xs space-y-2">
           <div className="text-xs font-semibold text-navy-500 flex justify-between items-center">
-            <span>{isBn ? 'মোট প্রত্যক্ষ ও পরোক্ষ নির্গমন' : 'Total Quantified Emissions'}</span>
+            <span>Total Quantified Emissions</span>
             <Leaf className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="text-3xl font-extrabold text-navy-800 tabular-nums">
@@ -208,7 +201,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         <div className="bg-white p-5 rounded-2xl border border-navy-100 shadow-2xs space-y-2">
           <div className="text-xs font-semibold text-navy-500 flex justify-between items-center">
-            <span>{isBn ? 'মাথাপিছু কার্বন পদচিহ্ন' : 'Per Capita Footprint'}</span>
+            <span>Per Capita Footprint</span>
             <Leaf className="w-4 h-4 text-cobalt" />
           </div>
           <div className="text-3xl font-extrabold text-cobalt tabular-nums">
@@ -259,7 +252,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Scope Proportion Visualizer Bar */}
       <div className="bg-white p-6 rounded-2xl border border-navy-100 shadow-2xs space-y-3">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-bold text-navy-800">{isBn ? 'স্কোপ অবদান অনুপাত' : 'Scope Contribution Distribution'}</span>
+          <span className="font-bold text-navy-800">Scope Contribution Distribution</span>
           <span className="text-navy-500 tabular-nums">Sum = 100% ({total.toFixed(2)} tCO₂e)</span>
         </div>
 
@@ -323,7 +316,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'শীর্ষ নির্গমন উৎসসমূহ' : 'Ranked Source Hotspots'}
+          Ranked Source Hotspots
         </button>
         <button
           onClick={() => setActiveView('commuting')}
@@ -333,7 +326,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'যাতায়াত মাধ্যমের অংশ বনাম নির্গমন' : 'Commuting Mode Share vs Emissions'}
+          Commuting Mode Share vs Emissions
         </button>
         <button
           onClick={() => setActiveView('traces')}
@@ -343,7 +336,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'হিসাব প্রণালী ও অডিট ট্রেস' : 'How this was calculated'} ({filteredTraces.length})
+          How this was calculated ({filteredTraces.length})
         </button>
       </div>
 
@@ -353,12 +346,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h3 className="text-sm font-bold text-navy-800">
-                {isBn ? 'ক্রমবিন্যস্ত প্রধান নির্গমন উৎসসমূহ' : 'Ranked Major Emission Contributors'}
+                Ranked Major Emission Contributors
               </h3>
               <p className="text-xs text-navy-500">
-                {isBn 
-                  ? 'কোনো বারে ক্লিক করে নিচে সংশ্লিষ্ট হিসাবের ট্রেস ফিল্টার করুন।'
-                  : 'Click any source bar below to filter the detailed audit inventory. All rows sum strictly to the reported total.'}
+                Click any source bar below to filter the detailed audit inventory. All rows sum strictly to the reported total.
               </p>
             </div>
 
@@ -418,12 +409,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             <div>
               <h3 className="text-sm font-bold text-navy-800">
-                {isBn ? 'যাতায়াত প্রভাব ও অসম বণ্টন বিশ্লেষণ' : 'Commuting Disproportionate Impact Analysis'}
+                Commuting Disproportionate Impact Analysis
               </h3>
               <p className="text-xs text-navy-500">
-                {isBn 
-                  ? 'দৈনিক ভ্রমণকারীর সংখ্যার শতকরা হার বনাম প্রকৃত কার্বন নির্গমন ভাগের তুলনা।'
-                  : 'Comparison of daily commuter numbers versus actual GHG generation share across travel modes.'}
+                Comparison of daily commuter numbers versus actual GHG generation share across travel modes.
               </p>
             </div>
             <div className="p-3 rounded-xl bg-ivory border border-navy-200 text-navy-800 text-xs max-w-sm">
@@ -472,12 +461,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 className="text-sm font-bold text-navy-800">
-                {isBn ? 'হিসাব প্রণালী ও গাণিতিক অডিট ট্রেইল' : 'How this was calculated'}
+                How this was calculated
               </h3>
               <p className="text-xs text-navy-500">
-                {isBn 
-                  ? 'যেকোনো লাইনে ক্লিক করে ব্যবহৃত সমীকরণ, রূপান্তর ফ্যাক্টর ও প্রমাণের উৎস দেখুন।'
-                  : 'Select any line item to inspect the exact mathematical equation, conversion factors, and data provenance.'}
+                Select any line item to inspect the exact mathematical equation, conversion factors, and data provenance.
               </p>
             </div>
 

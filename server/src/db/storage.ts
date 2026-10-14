@@ -36,7 +36,6 @@ function initializeDefaultData(): DatabaseSchema {
   const ulabInstitution: Institution = {
     id: 'INST-ULAB',
     name: 'University of Liberal Arts Bangladesh',
-    nameBn: 'ইউনিভার্সিটি অব লিবারেল আর্টস বাংলাদেশ',
     type: 'private',
     division: 'Dhaka',
     district: 'Dhaka',

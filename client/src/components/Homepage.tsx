@@ -1,48 +1,32 @@
 import React from 'react';
 import { ArrowRight, Flame, Zap, Car, Eye, ChevronRight } from 'lucide-react';
 import { CampusIllustration } from './CampusIllustration';
-import { Language } from '../../../shared/i18n';
 
 interface HomepageProps {
   onStartAssessment: () => void;
   onViewExample?: () => void;
-  lang: Language;
 }
 
 export const Homepage: React.FC<HomepageProps> = ({
   onStartAssessment,
-  onViewExample,
-  lang
+  onViewExample
 }) => {
-  const isBn = lang === 'bn';
-
   return (
     <div className="space-y-12 pb-12 max-w-6xl mx-auto">
       {/* 1. Purpose-Led Hero */}
       <section className="pt-4 sm:pt-8 text-center space-y-5 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-navy-50 border border-navy-200 text-xs font-semibold text-navy-800">
           <span className="w-2 h-2 rounded-full bg-cobalt"></span>
-          {isBn ? 'উচ্চশিক্ষা প্রতিষ্ঠানের জন্য কার্বন মূল্যায়ন সেবা' : 'Institutional Carbon Assessment for Higher Education'}
+          Institutional Carbon Assessment for Higher Education
         </div>
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-navy-800 tracking-tight leading-[1.15]">
-          {isBn ? (
-            <>
-              আপনার বিশ্ববিদ্যালয়ের কার্বন পদচিহ্ন পরিমাপ করুন। <br className="hidden sm:inline" />
-              উৎস জানুন। বাস্তবসম্মত প্রশমন পরিকল্পনা করুন।
-            </>
-          ) : (
-            <>
-              Measure your university’s carbon footprint. <br className="hidden sm:inline" />
-              Understand its sources. Plan practical reductions.
-            </>
-          )}
+          Measure your university’s carbon footprint. <br className="hidden sm:inline" />
+          Understand its sources. Plan practical reductions.
         </h1>
 
         <p className="text-lg sm:text-xl text-navy-600 max-w-2xl mx-auto leading-relaxed">
-          {isBn
-            ? 'ক্যাম্পাস জ্বালানি, বিদ্যুৎ বিল ও যাতায়াতের হিসাবকে একটি সমন্বিত কার্বন ইনভেনটরি ও প্রাতিষ্ঠানিক কর্মপরিকল্পনায় রূপান্তর করুন।'
-            : 'Turn campus energy, transport and activity records into a clear emissions inventory and practical action plan.'}
+          Turn campus energy, transport and activity records into a clear emissions inventory and practical action plan.
         </p>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -50,7 +34,7 @@ export const Homepage: React.FC<HomepageProps> = ({
             onClick={onStartAssessment}
             className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-base shadow-sm hover:shadow transition inline-flex items-center justify-center gap-2 cursor-pointer group"
           >
-            <span>{isBn ? 'মূল্যায়ন শুরু করুন' : 'Start assessment'}</span>
+            <span>Start assessment</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </button>
 
@@ -60,7 +44,7 @@ export const Homepage: React.FC<HomepageProps> = ({
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 font-bold text-base shadow-2xs transition inline-flex items-center justify-center gap-2 cursor-pointer"
             >
               <Eye className="w-4 h-4 text-cobalt" />
-              <span>{isBn ? 'প্রতিবেদন নমুনা দেখুন (ইউল্যাব ২০২২)' : 'See what your report will look like'}</span>
+              <span>See what your report will look like</span>
             </button>
           )}
         </div>
@@ -71,12 +55,10 @@ export const Homepage: React.FC<HomepageProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-navy-100 pb-4">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-navy-800">
-              {isBn ? 'কীভাবে কাজ করে: তথ্য সংগ্রহ থেকে নীতিগত উদ্যোগ' : 'How It Works: From Data Collection to Institutional Action'}
+              How It Works: From Data Collection to Institutional Action
             </h2>
             <p className="text-xs sm:text-sm text-navy-600">
-              {isBn
-                ? 'একটি সম্পূর্ণ, প্রামাণ্য কার্বন নিরীক্ষা সম্পন্ন করার ৪টি স্বচ্ছ ধাপ'
-                : 'Four transparent steps to compute your campus greenhouse gas inventory and institutional brief.'}
+              Four transparent steps to compute your campus greenhouse gas inventory and institutional brief.
             </p>
           </div>
           <span className="text-xs font-bold text-cobalt bg-cobalt-50 px-3 py-1 rounded-full">
@@ -94,12 +76,10 @@ export const Homepage: React.FC<HomepageProps> = ({
               <span className="text-xs font-bold uppercase tracking-wider text-navy-500">Step 1</span>
             </div>
             <h3 className="font-bold text-navy-900 text-sm">
-              {isBn ? 'প্রতিষ্ঠান ও সীমানা নির্ধারণ' : 'Setup & Boundary'}
+              Setup & Boundary
             </h3>
             <p className="text-xs text-navy-600 leading-relaxed">
-              {isBn
-                ? 'বিশ্ববিদ্যালয়ের নাম, রিপোর্টিং বছর, ক্যাম্পাসের ভৌগোলিক অবস্থান ও মোট জনসংখ্যা (শিক্ষার্থী, শিক্ষক, কর্মী) নির্ধারণ করুন।'
-                : 'Specify institution name, calendar reporting year, physical campus boundaries, and census population denominator.'}
+              Specify institution name, calendar reporting year, physical campus boundaries, and census population denominator.
             </p>
           </div>
 
@@ -112,12 +92,10 @@ export const Homepage: React.FC<HomepageProps> = ({
               <span className="text-xs font-bold uppercase tracking-wider text-navy-500">Step 2</span>
             </div>
             <h3 className="font-bold text-navy-900 text-sm">
-              {isBn ? 'তথ্য সংগ্রহ ও আপলোড' : 'Collect & Upload'}
+              Collect & Upload
             </h3>
             <p className="text-xs text-navy-600 leading-relaxed">
-              {isBn
-                ? 'আমাদের স্বয়ংক্রিয় গুগল ফর্মস স্ক্রিপ্ট ও জরিপ টেমপ্লেট দিয়ে তথ্য সংগ্রহ করুন অথবা বিদ্যুৎ ও জ্বালানি বিল সরাসরি প্রবেশ করান।'
-                : 'Use downloadable Google Forms blueprints & CSV templates across departments, or enter monthly utility bills and vehicle logs directly.'}
+              Use downloadable Google Forms blueprints & CSV templates across departments, or enter monthly utility bills and vehicle logs directly.
             </p>
           </div>
 
@@ -130,12 +108,10 @@ export const Homepage: React.FC<HomepageProps> = ({
               <span className="text-xs font-bold uppercase tracking-wider text-navy-500">Step 3</span>
             </div>
             <h3 className="font-bold text-navy-900 text-sm">
-              {isBn ? 'স্বয়ংক্রিয় নির্গমন হিসাব' : 'Calculate Emissions'}
+              Calculate Emissions
             </h3>
             <p className="text-xs text-navy-600 leading-relaxed">
-              {isBn
-                ? 'আইপিসিসি এআর৬ ও বাংলাদেশের জাতীয় গ্রিড গুণক প্রয়োগ করে স্কোপ ১, ২ ও ৩ নির্গমন স্বচ্ছভাবে গণনা করা হয়।'
-                : 'Deterministic GHG Protocol & IPCC AR6 formulas compute exact Scope 1, 2, and 3 tCO₂e without silent zero-conversions.'}
+              Deterministic GHG Protocol & IPCC AR6 formulas compute exact Scope 1, 2, and 3 tCO₂e without silent zero-conversions.
             </p>
           </div>
 
@@ -148,12 +124,10 @@ export const Homepage: React.FC<HomepageProps> = ({
               <span className="text-xs font-bold uppercase tracking-wider text-navy-500">Step 4</span>
             </div>
             <h3 className="font-bold text-navy-900 text-sm">
-              {isBn ? 'প্রতিবেদন ও নীতিগত পদক্ষেপ' : 'Report & Decarbonize'}
+              Report & Decarbonize
             </h3>
             <p className="text-xs text-navy-600 leading-relaxed">
-              {isBn
-                ? 'হটস্পট র্যাকিং, ফিল্টারেবল ডোনাট ও চার্ট, প্রমাণ-ভিত্তিক নীতিগত ব্রিফ এবং অফিশিয়াল পিডিএফ/এসভিজি ডাউনলোড করুন।'
-                : 'Explore interactive hotspot rankings, generate evidence-backed policy briefs, and export high-res figures and reports for leadership.'}
+              Explore interactive hotspot rankings, generate evidence-backed policy briefs, and export high-res figures and reports for leadership.
             </p>
           </div>
         </div>
@@ -164,10 +138,10 @@ export const Homepage: React.FC<HomepageProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-navy-100 pb-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-navy-50 text-[11px] font-semibold text-navy-700 mb-1">
-              <span>{isBn ? 'বাস্তব প্রাতিষ্ঠানিক প্রতিবেদন প্রিভিউ' : 'Institutional Assessment Preview'}</span>
+              <span>Institutional Assessment Preview</span>
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-navy-900">
-              {isBn ? 'ইউল্যাব ২০২২ বেঞ্চমার্ক কার্বন মূল্যায়ন প্রতিবেদন' : 'University of Liberal Arts Bangladesh (ULAB) — 2022'}
+              University of Liberal Arts Bangladesh (ULAB) — 2022
             </h2>
             <p className="text-xs text-navy-500">
               Permanent Campus, Mohammadpur, Dhaka • Calendar Year 2022 • GHG Protocol Operational Control
@@ -179,7 +153,7 @@ export const Homepage: React.FC<HomepageProps> = ({
               className="self-start sm:self-auto px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs shadow-2xs transition flex items-center gap-1.5 cursor-pointer"
             >
               <Eye className="w-4 h-4" />
-              <span>{isBn ? 'সম্পূর্ণ ইন্টারেক্টিভ প্রতিবেদন দেখুন' : 'Explore full interactive report'}</span>
+              <span>Explore full interactive report</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           )}
@@ -291,12 +265,10 @@ export const Homepage: React.FC<HomepageProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-navy-100 pb-3">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-navy-800">
-              {isBn ? 'ক্যাম্পাস নির্গমন কাঠামো ও স্কোপ' : 'Campus Emission Boundaries'}
+              Campus Emission Boundaries
             </h2>
             <p className="text-xs sm:text-sm text-navy-600">
-              {isBn 
-                ? 'ক্যাম্পাসের প্রতিটি কার্যকলাপ আন্তর্জাতিক হিসাব মানদণ্ডে কীভাবে বিন্যস্ত তা জানতে যেকোনো উপাদানে ক্লিক করুন।'
-                : 'Select any source on campus to see how university activities map to international accounting scopes.'}
+              Select any source on campus to see how university activities map to international accounting scopes.
             </p>
           </div>
           <div className="flex items-center gap-4 text-xs font-semibold">
@@ -306,7 +278,7 @@ export const Homepage: React.FC<HomepageProps> = ({
           </div>
         </div>
 
-        <CampusIllustration lang={lang} />
+        <CampusIllustration />
       </section>
 
       {/* 5. Concise Overview of Scopes and Data Needed */}

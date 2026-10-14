@@ -11,16 +11,10 @@ import {
   Database,
   ArrowRight
 } from 'lucide-react';
-import { Language } from '../../../shared/i18n';
+interface MethodologyReferencesProps {}
 
-interface MethodologyReferencesProps {
-  lang: Language;
-}
-
-export const MethodologyReferences: React.FC<MethodologyReferencesProps> = ({ lang }) => {
+export const MethodologyReferences: React.FC<MethodologyReferencesProps> = () => {
   const [activeTab, setActiveTab] = useState<'accounting' | 'literature' | 'limitations'>('accounting');
-
-  const isBn = lang === 'bn';
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
@@ -28,15 +22,13 @@ export const MethodologyReferences: React.FC<MethodologyReferencesProps> = ({ la
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-navy-100 shadow-2xs space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-navy-50 text-navy-800 text-xs font-semibold">
           <BookOpen className="w-3.5 h-3.5 text-cobalt" />
-          <span>{isBn ? 'পদ্ধতিগত রেফারেন্স ও প্রমাণ' : 'Methodology & Academic References'}</span>
+          <span>Methodology & Academic References</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-navy-800">
-          {isBn ? 'হিসাবরক্ষণ নীতি, সমীকরণ ও গবেষণা রেফারেন্স' : 'Carbon Accounting Methodology & Reference Standards'}
+          Carbon Accounting Methodology & Reference Standards
         </h1>
         <p className="text-sm text-navy-600 leading-relaxed max-w-3xl">
-          {isBn
-            ? 'এই প্ল্যাটফর্মটি আন্তর্জাতিক গ্রিনহাউস গ্যাস প্রোটোকল (GHG Protocol Corporate Standard) এবং প্রকাশিত গবেষণা সাহিত্যের উপর ভিত্তি করে উচ্চশিক্ষা প্রতিষ্ঠানের নির্গমন হিসাব করে।'
-            : 'Transparent documentation of carbon accounting boundaries, emission factor sources, GWP versions, sample expansion mathematics, and methodological boundaries.'}
+          Transparent documentation of carbon accounting boundaries, emission factor sources, GWP versions, sample expansion mathematics, and methodological boundaries.
         </p>
       </div>
 
@@ -50,7 +42,7 @@ export const MethodologyReferences: React.FC<MethodologyReferencesProps> = ({ la
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'হিসাবরক্ষণ কাঠামো ও সমীকরণ' : 'Accounting Framework & Mathematics'}
+          Accounting Framework & Mathematics
         </button>
         <button
           onClick={() => setActiveTab('literature')}
@@ -60,7 +52,7 @@ export const MethodologyReferences: React.FC<MethodologyReferencesProps> = ({ la
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'গবেষণা ও উদ্ধৃতি' : 'Study Citations & Data Sources'}
+          Study Citations & Data Sources
         </button>
         <button
           onClick={() => setActiveTab('limitations')}
@@ -70,7 +62,7 @@ export const MethodologyReferences: React.FC<MethodologyReferencesProps> = ({ la
               : 'border-transparent text-navy-500 hover:text-navy-800'
           }`}
         >
-          {isBn ? 'সীমাবদ্ধতা ও পরিধি' : 'Boundaries & Exclusions'}
+          Boundaries & Exclusions
         </button>
       </div>
 
