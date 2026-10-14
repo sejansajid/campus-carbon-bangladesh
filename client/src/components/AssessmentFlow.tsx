@@ -20,7 +20,12 @@ import {
   ChevronRight,
   Eye,
   Trash2,
-  Plus
+  Plus,
+  FileCode,
+  FileText,
+  X,
+  AlertTriangle,
+  Info
 } from 'lucide-react';
 import { 
   Institution, 
@@ -28,30 +33,59 @@ import {
   CampusBoundary, 
   ActivityRecord, 
   CommuterSurveyResponse, 
-  InventoryCalculationResult,
-  CalculationMethodTier
+  InventoryCalculationResult 
 } from '../../../shared/types';
 import { calculateInventory } from '../../../shared/engine/calculator';
 import { LEGACY_ULAB_2022_FIXTURE } from '../../../shared/engine/legacy-reproduction';
+import { 
+  COMMUTER_SURVEY_BLUEPRINT, 
+  FACILITIES_RECORDS_BLUEPRINT, 
+  FULL_SURVEY_BLUEPRINT, 
+  generateGoogleFormsAppsScript, 
+  parseGoogleFormsExportCsv,
+  CommuterImportResult 
+} from '../../../shared/templates/surveyBlueprint';
 import { AssessmentReport } from './AssessmentReport';
 import { Language, t } from '../../../shared/i18n';
 
 interface AssessmentFlowProps {
   lang: Language;
   onExploreExampleReport?: () => void;
+  initialMode?: 'landing' | 'active' | 'example';
 }
 
 export type AssessmentRoute = 'templates' | 'manual';
+export type SourceDataStatus = 'reported' | 'confirmed_zero' | 'not_applicable' | 'not_collected';
 
-export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
+export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang, initialMode }) => {
   const isBn = lang === 'bn';
 
   // Master Mode: 'landing' (choose route or example) | 'active' (stepper 1..6) | 'example' (ULAB 2022 report)
-  const [masterMode, setMasterMode] = useState<'landing' | 'active' | 'example'>('landing');
+  const [masterMode, setMasterMode] = useState<'landing' | 'active' | 'example'>(() => {
+    if (initialMode) return initialMode;
+    if (typeof window !== 'undefined' && (window.location.hash.includes('example') || window.location.hash.includes('demo'))) {
+      return 'example';
+    }
+    return 'landing';
+  });
+
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash.includes('example') || window.location.hash.includes('demo')) {
+        setMasterMode('example');
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
   const [activeStep, setActiveStep] = useState<number>(1);
   const [route, setRoute] = useState<AssessmentRoute>('manual');
   const [draftSavedToast, setDraftSavedToast] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  // Blueprint Preview Modal
+  const [previewBlueprintInstrument, setPreviewBlueprintInstrument] = useState<'commuter' | 'facilities' | null>(null);
 
   // -------------------------------------------------------------
   // STEP 1: Institution Details (Starts blank and unknown)
@@ -69,8 +103,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
 
   // Operational Control Boundary
   const [hasOperationalControl, setHasOperationalControl] = useState<boolean>(true);
-  const [cafeteriaGovernance, setCafeteriaGovernance] = useState<'university_operated' | 'commercial_concession'>('university_operated');
-  const [fleetGovernance, setFleetGovernance] = useState<'university_owned' | 'third_party_contract'>('university_owned');
 
   // Population Denominator (Starts unknown / blank, NOT zero, NOT ULAB numbers)
   const [studentHeadcount, setStudentHeadcount] = useState<string>('');
@@ -83,36 +115,36 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
   const [landAreaAcres, setLandAreaAcres] = useState<string>('');
 
   // -------------------------------------------------------------
-  // STEP 2: Scope 1 Quantities & Statuses
+  // STEP 2: Scope 1 Quantities & Statuses (Reported | Confirmed Zero | N/A | Not Collected)
   // -------------------------------------------------------------
-  const [genDieselStatus, setGenDieselStatus] = useState<'reported' | 'no_activity' | 'unavailable'>('reported');
+  const [genDieselStatus, setGenDieselStatus] = useState<SourceDataStatus>('reported');
   const [genDieselLitres, setGenDieselLitres] = useState<string>('');
 
-  const [fleetOctaneStatus, setFleetOctaneStatus] = useState<'reported' | 'no_activity' | 'unavailable'>('reported');
+  const [fleetOctaneStatus, setFleetOctaneStatus] = useState<SourceDataStatus>('reported');
   const [fleetOctaneLitres, setFleetOctaneLitres] = useState<string>('');
 
-  const [fleetDieselStatus, setFleetDieselStatus] = useState<'reported' | 'no_activity' | 'unavailable'>('reported');
+  const [fleetDieselStatus, setFleetDieselStatus] = useState<SourceDataStatus>('reported');
   const [fleetDieselLitres, setFleetDieselLitres] = useState<string>('');
 
-  const [cafeteriaLpgStatus, setCafeteriaLpgStatus] = useState<'reported' | 'no_activity' | 'unavailable'>('reported');
+  const [cafeteriaLpgStatus, setCafeteriaLpgStatus] = useState<SourceDataStatus>('reported');
   const [cafeteriaLpgKg, setCafeteriaLpgKg] = useState<string>('');
 
-  const [acR410AStatus, setAcR410AStatus] = useState<'reported' | 'no_activity' | 'unavailable'>('reported');
+  const [acR410AStatus, setAcR410AStatus] = useState<SourceDataStatus>('reported');
   const [acR410AKg, setAcR410AKg] = useState<string>('');
 
-  const [acR22Status, setAcR22Status] = useState<'reported' | 'no_activity' | 'unavailable'>('no_activity');
+  const [acR22Status, setAcR22Status] = useState<SourceDataStatus>('confirmed_zero');
   const [acR22Kg, setAcR22Kg] = useState<string>('');
 
   // -------------------------------------------------------------
   // STEP 3: Scope 2 Quantities & Statuses
   // -------------------------------------------------------------
-  const [gridElectricityStatus, setGridElectricityStatus] = useState<'reported' | 'no_activity' | 'unavailable'>('reported');
+  const [gridElectricityStatus, setGridElectricityStatus] = useState<SourceDataStatus>('reported');
   const [gridElectricityKWh, setGridElectricityKWh] = useState<string>('');
 
   // -------------------------------------------------------------
   // STEP 4: Scope 3 Quantities & Commuting
   // -------------------------------------------------------------
-  const [commuterSurveyStatus, setCommuterSurveyStatus] = useState<'reported' | 'unavailable'>('reported');
+  const [commuterSurveyStatus, setCommuterSurveyStatus] = useState<SourceDataStatus>('reported');
   const [surveySampleSize, setSurveySampleSize] = useState<string>('300');
   const [avgOneWayKm, setAvgOneWayKm] = useState<string>('8.5');
   const [avgWeeklyDays, setAvgWeeklyDays] = useState<string>('4.5');
@@ -123,10 +155,10 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
   const [rickshawSharePct, setRickshawSharePct] = useState<string>('25.0');
   const [walkSharePct, setWalkSharePct] = useState<string>('25.5');
 
-  // File Upload State for Template Route
-  const [uploadedScope1FileName, setUploadedScope1FileName] = useState<string | null>(null);
-  const [uploadedScope2FileName, setUploadedScope2FileName] = useState<string | null>(null);
-  const [uploadedScope3FileName, setUploadedScope3FileName] = useState<string | null>(null);
+  // Imported Commuters from Google Forms CSV
+  const [importedCommuters, setImportedCommuters] = useState<any[]>([]);
+  const [importSummary, setImportSummary] = useState<CommuterImportResult | null>(null);
+  const [importErrorDetails, setImportErrorDetails] = useState<string | null>(null);
 
   // -------------------------------------------------------------
   // STEP 6: Calculated Run Result
@@ -136,7 +168,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
   // -------------------------------------------------------------
   // Pre-calculated ULAB 2022 Benchmark Fixture
   // -------------------------------------------------------------
-  const [ulabBenchmarkResult, setUlabBenchmarkResult] = useState<InventoryCalculationResult>(() => {
+  const [ulabBenchmarkResult] = useState<InventoryCalculationResult>(() => {
     return calculateInventory(
       LEGACY_ULAB_2022_FIXTURE.activities,
       LEGACY_ULAB_2022_FIXTURE.population,
@@ -145,8 +177,19 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
     );
   });
 
-  // Reference for scrolling to errors
   const stepContainerRef = useRef<HTMLDivElement>(null);
+
+  // Helper trigger downloads in browser
+  const triggerDownload = (filename: string, content: string, mime: string = 'text/plain') => {
+    const blob = new Blob([content], { type: `${mime};charset=utf-8;` });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Save / Load Draft to LocalStorage
   useEffect(() => {
@@ -192,11 +235,16 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
       floorAreaM2,
       landAreaAcres,
       genDieselLitres,
+      genDieselStatus,
       fleetOctaneLitres,
       fleetDieselLitres,
       cafeteriaLpgKg,
+      cafeteriaLpgStatus,
       acR410AKg,
+      acR410AStatus,
       gridElectricityKWh,
+      gridElectricityStatus,
+      commuterSurveyStatus,
       activeStep,
       route,
       updatedAt: new Date().toISOString()
@@ -232,10 +280,10 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
       }
     } else if (step === 2) {
       if (genDieselStatus === 'reported' && (!genDieselLitres || Number(genDieselLitres) < 0)) {
-        errs.genDieselLitres = 'Please specify generator fuel in liters, or select "No activity".';
+        errs.genDieselLitres = 'Please specify generator fuel in liters, or choose Confirmed zero / N/A.';
       }
       if (cafeteriaLpgStatus === 'reported' && (!cafeteriaLpgKg || Number(cafeteriaLpgKg) < 0)) {
-        errs.cafeteriaLpgKg = 'Please enter cafeteria LPG in kg, or select "Not applicable".';
+        errs.cafeteriaLpgKg = 'Please enter cafeteria LPG in kg, or choose Confirmed zero / N/A.';
       }
     } else if (step === 3) {
       if (gridElectricityStatus === 'reported' && (!gridElectricityKWh || Number(gridElectricityKWh) <= 0)) {
@@ -265,6 +313,24 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
     stepContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // Google Forms Response CSV Upload Handler
+  const handleGoogleFormCsvUpload = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result as string;
+      if (!text) return;
+      const opDays = Number(operatingDays) || 294;
+      const parsed = parseGoogleFormsExportCsv(text, 'INST-USER', opDays);
+      setImportSummary(parsed);
+      if (parsed.validCommuters.length > 0) {
+        setImportedCommuters(parsed.validCommuters);
+        setCommuterSurveyStatus('reported');
+        setSurveySampleSize(String(parsed.validCommuters.length));
+      }
+    };
+    reader.readAsText(file);
+  };
+
   // Execute Calculation for Step 6
   const executeCalculation = () => {
     const s = Number(studentHeadcount) || 0;
@@ -286,6 +352,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
     };
 
     const activities: ActivityRecord[] = [];
+    const unquantified: string[] = [];
 
     // Scope 1: Generator
     if (genDieselStatus === 'reported' && Number(genDieselLitres) > 0) {
@@ -304,6 +371,8 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
         dataQualityTier: 'billed',
         createdAt: new Date().toISOString()
       });
+    } else if (genDieselStatus === 'not_collected') {
+      unquantified.push('Backup generator diesel fuel');
     }
 
     // Scope 1: Fleet Octane
@@ -361,6 +430,8 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
         dataQualityTier: 'billed',
         createdAt: new Date().toISOString()
       });
+    } else if (cafeteriaLpgStatus === 'not_collected') {
+      unquantified.push('Cafeteria cooking LPG');
     }
 
     // Scope 1: AC R-410A
@@ -380,6 +451,8 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
         dataQualityTier: 'estimated',
         createdAt: new Date().toISOString()
       });
+    } else if (acR410AStatus === 'not_collected') {
+      unquantified.push('Air conditioning refrigerant top-ups');
     }
 
     // Scope 1: AC R-22
@@ -417,11 +490,28 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
         dataQualityTier: 'billed',
         createdAt: new Date().toISOString()
       });
+    } else if (gridElectricityStatus === 'not_collected') {
+      unquantified.push('Purchased utility electricity');
     }
 
-    // Scope 3: Commuter Sample Responses
-    const commuterResponses: CommuterSurveyResponse[] = [];
-    if (commuterSurveyStatus === 'reported') {
+    // Scope 3: Commuter Responses (from real Google Form import OR guided survey synthesis)
+    let commuterResponses: CommuterSurveyResponse[] = [];
+    if (importedCommuters.length > 0) {
+      commuterResponses = importedCommuters.map(c => ({
+        id: c.id,
+        institutionId: 'INST-USER',
+        campusId: 'CAMPUS-1',
+        role: c.role,
+        originArea: c.originArea,
+        annualAttendanceDays: c.annualAttendanceDays,
+        primaryMode: c.primaryMode,
+        totalOneWayKm: c.totalOneWayKm,
+        distanceBasis: 'one_way',
+        usesInstitutionalFleet: c.usesInstitutionalFleet,
+        carFuelType: c.carFuelType,
+        carOccupancy: c.carOccupancy
+      }));
+    } else if (commuterSurveyStatus === 'reported') {
       const sampleN = Number(surveySampleSize) || 100;
       const km = Number(avgOneWayKm) || 8.0;
       const attDays = Number(avgWeeklyDays) ? Number(avgWeeklyDays) * (days / 6) : 200;
@@ -519,6 +609,8 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
           usesInstitutionalFleet: false
         });
       }
+    } else if (commuterSurveyStatus === 'not_collected') {
+      unquantified.push('Commuter travel');
     }
 
     const result = calculateInventory(activities, population, commuterResponses, {
@@ -526,6 +618,10 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
       includeOdsInScope1: false,
       separateTdLosses: true
     });
+
+    if (unquantified.length > 0) {
+      result.unquantifiedCategories = unquantified;
+    }
 
     setUserCalculationRun(result);
     setActiveStep(6);
@@ -613,7 +709,10 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
         }}
         result={ulabBenchmarkResult}
         isExample={true}
-        onReturnToAssessment={() => setMasterMode(activeStep > 1 || institutionName ? 'active' : 'landing')}
+        onReturnToAssessment={() => {
+          window.location.hash = 'assessment';
+          setMasterMode(activeStep > 1 || institutionName ? 'active' : 'landing');
+        }}
         lang={lang}
       />
     );
@@ -642,7 +741,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
 
         {/* Two Clear Choices */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Choice 1: Collect data using templates */}
+          {/* Choice 1: Collect data using survey templates */}
           <div 
             onClick={() => {
               setRoute('templates');
@@ -656,23 +755,23 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-xl font-bold text-navy-900 group-hover:text-cobalt transition">
-                  {isBn ? 'টেমপ্লেটে তথ্য সংগ্রহ করুন' : 'Collect data using templates'}
+                  {isBn ? 'জরিপ টেমপ্লেট ব্যবহার করে তথ্য সংগ্রহ' : 'Collect data using survey templates'}
                 </h3>
                 <p className="text-xs sm:text-sm text-navy-600 leading-relaxed">
                   {isBn
                     ? 'প্রমিত স্প্রেডশিট ডাউনলোড করুন, ক্যাম্পাসের বিভিন্ন বিভাগ থেকে জ্বালানি রেকর্ড ও জরিপের তথ্য সংগ্রহ করে আপলোড করুন।'
-                    : 'Download structured forms, collect campus records and survey responses across departments, then upload the completed files.'}
+                    : 'Download structured survey blueprints, auto-generate Google Forms, gather campus records across departments, then upload response files.'}
                 </p>
               </div>
-              <div className="text-xs text-navy-500 space-y-1 pt-2 border-t border-navy-50">
-                <div>• Downloadable CSV collection forms for Scopes 1, 2, and 3</div>
-                <div>• Commuter survey Google Form template & CSV import</div>
-                <div>• Save draft and resume at any time</div>
+              <div className="text-xs text-navy-500 space-y-1.5 pt-2 border-t border-navy-50">
+                <div className="flex items-center gap-1.5">• <span>Complete Google Forms creation script (Apps Script)</span></div>
+                <div className="flex items-center gap-1.5">• <span>Downloadable Question Blueprint (JSON / CSV)</span></div>
+                <div className="flex items-center gap-1.5">• <span>Direct Google Forms response CSV importer</span></div>
               </div>
             </div>
 
             <button className="w-full py-3 px-4 rounded-xl bg-navy-50 group-hover:bg-cobalt text-navy-800 group-hover:text-white font-bold text-xs transition flex items-center justify-center gap-2">
-              <span>{isBn ? 'টেমপ্লেট সংগ্রহ রুট চালু করুন' : 'Start with templates'}</span>
+              <span>{isBn ? 'টেমপ্লেট সংগ্রহ রুট চালু করুন' : 'Start with survey templates'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -696,13 +795,13 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
                 <p className="text-xs sm:text-sm text-navy-600 leading-relaxed">
                   {isBn
                     ? 'আপনার কাছে ইতিমধ্যে থাকা বার্ষিক বিদ্যুৎ বিল, জেনারেটরের রসিদ ও যাতায়াতের হিসাব দিয়ে ধাপে ধাপে মূল্যায়ন সম্পন্ন করুন।'
-                    : 'Use records you already have to complete the assessment step by step using structured online entry forms.'}
+                    : 'Use institutional records you already have to complete the assessment step by step using structured online entry forms.'}
                 </p>
               </div>
-              <div className="text-xs text-navy-500 space-y-1 pt-2 border-t border-navy-50">
-                <div>• Step-by-step guided entry for each emission scope</div>
-                <div>• Live emission formula previews and unit conversions</div>
-                <div>• Immediate error validation and review before calculation</div>
+              <div className="text-xs text-navy-500 space-y-1.5 pt-2 border-t border-navy-50">
+                <div className="flex items-center gap-1.5">• <span>Step-by-step guided entry for each emission scope</span></div>
+                <div className="flex items-center gap-1.5">• <span>Live emission formula previews and unit conversions</span></div>
+                <div className="flex items-center gap-1.5">• <span>Distinguish Confirmed zero, N/A, and Not collected</span></div>
               </div>
             </div>
 
@@ -717,7 +816,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
         <div className="pt-4 text-center">
           <div className="inline-flex flex-col sm:flex-row items-center gap-3 p-4 sm:px-6 rounded-2xl bg-white border border-navy-100 shadow-2xs">
             <span className="text-xs text-navy-600 font-medium">
-              {isBn ? 'আগে দেখতে চান সম্পূর্ণ প্রতিবেদন কেমন হবে?' : 'Want to see the expected report before entering your data?'}
+              {isBn ? 'আগে দেখতে চান সম্পূর্ণ প্রতিবেদন কেমন হবে?' : 'Want to see what an official assessment report looks like?'}
             </span>
             <button
               onClick={() => setMasterMode('example')}
@@ -737,7 +836,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
   // RENDERING: STEPPER WORKFLOW (Steps 1 to 6)
   // -------------------------------------------------------------
   const steps = [
-    { num: 1, label: isBn ? 'প্রতিষ্ঠান' : 'Institution', icon: Building2 },
+    { num: 1, label: isBn ? 'প্রতিষ্ঠান ও সময়কাল' : 'Institution & Period', icon: Building2 },
     { num: 2, label: isBn ? 'স্কোপ ১' : 'Scope 1', icon: Flame },
     { num: 3, label: isBn ? 'স্কোপ ২' : 'Scope 2', icon: Zap },
     { num: 4, label: isBn ? 'স্কোপ ৩' : 'Scope 3', icon: Car },
@@ -746,17 +845,17 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
   ];
 
   return (
-    <div ref={stepContainerRef} className="space-y-8 max-w-5xl mx-auto pb-20">
+    <div ref={stepContainerRef} className="space-y-8 max-w-5xl mx-auto pb-20 font-sans">
       {/* 1. Persistent Numbered Stepper & Selected Route Indicator */}
       <div className="bg-white p-4 sm:p-5 rounded-3xl border border-navy-100 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-navy-50 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-navy-800">
-              {institutionName.trim() ? institutionName : (isBn ? 'নতুন মূল্যায়ন' : 'New Assessment Draft')}
+              {institutionName.trim() ? institutionName : (isBn ? 'নতুন মূল্যায়ন খসড়া' : 'New Assessment Draft')}
             </span>
             <span className="text-navy-300">•</span>
             <span className="text-xs text-navy-500">
-              {route === 'templates' ? 'Route: Collect with templates' : 'Route: Enter existing data'}
+              {route === 'templates' ? 'Route: Survey templates & Google Forms' : 'Route: Enter existing data'}
             </span>
           </div>
 
@@ -773,7 +872,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               className="inline-flex items-center gap-1 text-[11px] font-bold text-navy-700 hover:text-navy-900 bg-navy-50 px-2.5 py-1 rounded-lg border border-navy-200 cursor-pointer"
             >
               <Save className="w-3 h-3 text-navy-500" />
-              <span>{draftSavedToast ? 'Saved!' : 'Save draft'}</span>
+              <span>{draftSavedToast ? 'Draft saved!' : 'Save draft'}</span>
             </button>
             <span className="text-navy-300">•</span>
             <button
@@ -790,7 +889,6 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
           {steps.map((st) => {
             const isCurrent = activeStep === st.num;
             const isCompleted = activeStep > st.num;
-            const Icon = st.icon;
 
             return (
               <button
@@ -828,12 +926,12 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
           <div className="space-y-1">
             <span className="text-[10px] font-bold tracking-wider text-cobalt uppercase">Step 1 of 5</span>
             <h2 className="text-2xl font-bold text-navy-900">
-              {isBn ? 'প্রাতিষ্ঠানিক পরিচিতি ও পরিধি' : 'Institution Identity & Accounting Boundary'}
+              {isBn ? 'প্রতিষ্ঠান ও হিসাবরক্ষণ সময়কাল' : 'Institution & Reporting Period'}
             </h2>
             <p className="text-xs text-navy-600">
               {isBn
                 ? 'আপনার বিশ্ববিদ্যালয়ের প্রাতিষ্ঠানিক নাম এবং হিসাবের জন্য জনসংখ্যার ভিত্তি প্রদান করুন।'
-                : 'Enter your institution official name, reporting period, and community population denominator.'}
+                : 'Enter your institution official name, designated 12-month reporting period, and campus community population.'}
             </p>
           </div>
 
@@ -841,7 +939,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
             {/* Single Official Name Field (Initially blank, Unicode accepted) */}
             <div>
               <label className="block text-xs font-bold text-navy-800 mb-1">
-                {isBn ? 'প্রতিষ্ঠানের নাম *' : 'Institution official name *'}
+                {isBn ? 'প্রতিষ্ঠানের নাম (বাংলা বা ইংরেজিতে) *' : 'Institution Official Name (English or বাংলা) *'}
               </label>
               <input
                 type="text"
@@ -865,111 +963,35 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               )}
             </div>
 
-            {/* Expandable Additional Details (Optional Bangla Name, Division, District, Address) */}
-            <div className="border border-navy-100 rounded-2xl overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setShowAdditionalDetails(!showAdditionalDetails)}
-                className="w-full px-4 py-3 bg-navy-50/50 hover:bg-navy-50 flex items-center justify-between text-xs font-bold text-navy-700 cursor-pointer"
-              >
-                <span>Additional details & location (Optional local name, address, dates)</span>
-                <span>{showAdditionalDetails ? '▲' : '▼'}</span>
-              </button>
-
-              {showAdditionalDetails && (
-                <div className="p-4 space-y-4 bg-white border-t border-navy-100">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-navy-700 mb-1">
-                        Local language name (Bengali / ঐচ্ছিক বাংলা নাম)
-                      </label>
-                      <input
-                        type="text"
-                        value={institutionNameBn}
-                        onChange={(e) => setInstitutionNameBn(e.target.value)}
-                        placeholder="যেমন: ঢাকা বিশ্ববিদ্যালয়"
-                        className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-navy-700 mb-1">
-                        Institution Type
-                      </label>
-                      <select
-                        value={institutionType}
-                        onChange={(e: any) => setInstitutionType(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
-                      >
-                        <option value="private">Private University</option>
-                        <option value="public">Public University</option>
-                        <option value="international">International / Specialized Institute</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-navy-700 mb-1">Division</label>
-                      <input
-                        type="text"
-                        value={division}
-                        onChange={(e) => setDivision(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-navy-700 mb-1">District</label>
-                      <input
-                        type="text"
-                        value={district}
-                        onChange={(e) => setDistrict(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-navy-700 mb-1">Campus Address</label>
-                    <input
-                      type="text"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="e.g. Permanent Campus, Mohammadpur, Dhaka"
-                      className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-navy-50">
-                    <div>
-                      <label className="block text-xs font-semibold text-navy-700 mb-1">Reporting Year</label>
-                      <input
-                        type="number"
-                        value={reportingYear}
-                        onChange={(e) => setReportingYear(Number(e.target.value))}
-                        className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900 font-mono"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-navy-700 mb-1">Period Start</label>
-                      <input
-                        type="date"
-                        value={periodStart}
-                        onChange={(e) => setPeriodStart(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-navy-700 mb-1">Period End</label>
-                      <input
-                        type="date"
-                        value={periodEnd}
-                        onChange={(e) => setPeriodEnd(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
+            {/* Reporting Period & Location */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+              <div>
+                <label className="block text-xs font-semibold text-navy-700 mb-1">Reporting Calendar Year *</label>
+                <input
+                  type="number"
+                  value={reportingYear}
+                  onChange={(e) => setReportingYear(Number(e.target.value))}
+                  className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900 font-mono"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-navy-700 mb-1">Period Start Date</label>
+                <input
+                  type="date"
+                  value={periodStart}
+                  onChange={(e) => setPeriodStart(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-navy-700 mb-1">Period End Date</label>
+                <input
+                  type="date"
+                  value={periodEnd}
+                  onChange={(e) => setPeriodEnd(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-navy-200 text-xs text-navy-900"
+                />
+              </div>
             </div>
 
             {/* Population Denominator (Starts blank/unknown) */}
@@ -1038,7 +1060,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               </div>
             </div>
 
-            {/* Operational Boundary & Area Questions */}
+            {/* Operational Boundary & Area */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 rounded-2xl border border-navy-100 bg-white space-y-2">
                 <span className="text-xs font-bold text-navy-800">Campus Physical Footprint (Separate units)</span>
@@ -1104,261 +1126,207 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               Scope 1 — Direct Campus Emissions
             </h2>
             <p className="text-xs text-navy-600 leading-relaxed bg-amber-50/50 p-3.5 rounded-2xl border border-amber-200/60">
-              <strong>Direct emissions:</strong> fuel used by university-controlled emergency generators and official vehicles, cafeteria cooking gas, and eligible air conditioning refrigerant leakage. Find records in fuel requisition slips, fleet logbooks, and HVAC servicing invoices.
+              <strong>Scope 1 direct emissions:</strong> fuel combustion from sources the university owns or controls (emergency generators, official administration vehicles, cafeteria cooking gas) and eligible air conditioning refrigerant leakage. Collate monthly fuel requisition slips, logbooks, and HVAC servicing invoices.
             </p>
           </div>
 
-          {route === 'templates' ? (
-            /* Route: Template Upload */
-            <div className="space-y-6">
-              <div className="p-6 rounded-2xl bg-navy-50 border border-navy-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h4 className="font-bold text-navy-900 text-sm">Scope 1 Fuel & Refrigerant Template</h4>
-                  <p className="text-xs text-navy-600">Download the structured CSV form to gather invoices from facilities.</p>
-                </div>
-                <button
-                  onClick={() => {
-                    const csv = `category,source_name,quantity,unit,fuel_type,data_tier\nstationary_combustion_generator,Backup Generator,8500,L,Diesel,billed\nmobile_combustion_fleet,University Vehicles,8000,L,Octane,billed\nmobile_combustion_fleet,Transport Shuttles,18000,L,Diesel,billed\ncooking_combustion_cafeteria,Student Cafeteria,12000,kg,LPG,billed\nrefrigerant_fugitive_ac,Campus AC Top-Up,120,kg,R-410A,estimated\n`;
-                    const blob = new Blob([csv], { type: 'text/csv' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = 'scope1_collection_template.csv';
-                    link.click();
-                  }}
-                  className="px-4 py-2 rounded-xl bg-cobalt text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-2xs"
+          <div className="space-y-4">
+            {/* Generator Diesel */}
+            <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-navy-900">Emergency Backup Generator (Diesel)</span>
+                <div className="text-[11px] text-navy-500">Factor: 2.676 kg CO₂/L (EPA 2024 / IPCC)</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={genDieselStatus}
+                  onChange={(e: any) => setGenDieselStatus(e.target.value)}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
                 >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download Scope 1 CSV</span>
-                </button>
-              </div>
-
-              <div className="p-8 rounded-2xl border-2 border-dashed border-navy-200 text-center space-y-3">
-                <Upload className="w-8 h-8 text-navy-400 mx-auto" />
-                <div>
-                  <label className="px-4 py-2 rounded-xl bg-navy-800 hover:bg-navy-900 text-white font-bold text-xs cursor-pointer inline-block">
-                    <span>Upload Completed Scope 1 CSV</span>
+                  <option value="reported">Reported value</option>
+                  <option value="confirmed_zero">Confirmed zero</option>
+                  <option value="not_applicable">Not applicable</option>
+                  <option value="not_collected">Not collected</option>
+                </select>
+                {genDieselStatus === 'reported' && (
+                  <div className="flex items-center gap-1">
                     <input
-                      type="file"
-                      accept=".csv"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          setUploadedScope1FileName(file.name);
-                          // Auto-fill reasonable defaults from template preview
-                          setGenDieselLitres('9112');
-                          setFleetOctaneLitres('8593');
-                          setFleetDieselLitres('19128');
-                          setCafeteriaLpgKg('12720');
-                          setAcR410AKg('136');
-                        }
-                      }}
+                      type="number"
+                      value={genDieselLitres}
+                      onChange={(e) => setGenDieselLitres(e.target.value)}
+                      placeholder="0"
+                      className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
                     />
-                  </label>
-                  {uploadedScope1FileName && (
-                    <div className="text-xs text-emerald-700 font-bold mt-2 flex items-center justify-center gap-1">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>Imported {uploadedScope1FileName} (5 line items recognized)</span>
-                    </div>
-                  )}
-                </div>
+                    <span className="text-xs text-navy-500">Liters</span>
+                  </div>
+                )}
               </div>
             </div>
-          ) : (
-            /* Route: Manual Structured Rows */
-            <div className="space-y-4">
-              {/* Row 1: Diesel Generator */}
-              <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-xs font-bold text-navy-900">Backup Emergency Generator (Diesel)</span>
-                  <div className="text-[11px] text-navy-500">Emission factor: 2.676 kg CO₂/L (EPA 2024 / IPCC)</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={genDieselStatus}
-                    onChange={(e: any) => setGenDieselStatus(e.target.value)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
-                  >
-                    <option value="reported">Reported activity</option>
-                    <option value="no_activity">No activity / Zero</option>
-                    <option value="unavailable">Data unavailable</option>
-                  </select>
-                  {genDieselStatus === 'reported' && (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={genDieselLitres}
-                        onChange={(e) => setGenDieselLitres(e.target.value)}
-                        placeholder="0"
-                        className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                      />
-                      <span className="text-xs text-navy-500">Litres</span>
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              {/* Row 2: Fleet Octane */}
-              <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-xs font-bold text-navy-900">Official Vehicles — Octane Fuel</span>
-                  <div className="text-[11px] text-navy-500">Emission factor: 2.308 kg CO₂/L</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={fleetOctaneStatus}
-                    onChange={(e: any) => setFleetOctaneStatus(e.target.value)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
-                  >
-                    <option value="reported">Reported activity</option>
-                    <option value="no_activity">No activity / Zero</option>
-                    <option value="unavailable">Data unavailable</option>
-                  </select>
-                  {fleetOctaneStatus === 'reported' && (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={fleetOctaneLitres}
-                        onChange={(e) => setFleetOctaneLitres(e.target.value)}
-                        placeholder="0"
-                        className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                      />
-                      <span className="text-xs text-navy-500">Litres</span>
-                    </div>
-                  )}
-                </div>
+            {/* Fleet Octane */}
+            <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-navy-900">Official Vehicles — Octane Fuel</span>
+                <div className="text-[11px] text-navy-500">Factor: 2.308 kg CO₂/L</div>
               </div>
-
-              {/* Row 3: Fleet Diesel */}
-              <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-xs font-bold text-navy-900">University Shuttles / Transport — Diesel</span>
-                  <div className="text-[11px] text-navy-500">Emission factor: 2.687 kg CO₂/L</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={fleetDieselStatus}
-                    onChange={(e: any) => setFleetDieselStatus(e.target.value)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
-                  >
-                    <option value="reported">Reported activity</option>
-                    <option value="no_activity">No activity / Zero</option>
-                    <option value="unavailable">Data unavailable</option>
-                  </select>
-                  {fleetDieselStatus === 'reported' && (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={fleetDieselLitres}
-                        onChange={(e) => setFleetDieselLitres(e.target.value)}
-                        placeholder="0"
-                        className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                      />
-                      <span className="text-xs text-navy-500">Litres</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Row 4: Cafeteria LPG */}
-              <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-xs font-bold text-navy-900">Cafeteria Cooking — Commercial LPG</span>
-                  <div className="text-[11px] text-navy-500">Emission factor: 3.00 kg CO₂/kg LPG (IPCC 2006 Mass-Based)</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={cafeteriaLpgStatus}
-                    onChange={(e: any) => setCafeteriaLpgStatus(e.target.value)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
-                  >
-                    <option value="reported">Reported activity</option>
-                    <option value="no_activity">No activity / Zero</option>
-                    <option value="unavailable">Data unavailable</option>
-                  </select>
-                  {cafeteriaLpgStatus === 'reported' && (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={cafeteriaLpgKg}
-                        onChange={(e) => setCafeteriaLpgKg(e.target.value)}
-                        placeholder="0"
-                        className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                      />
-                      <span className="text-xs text-navy-500">kg</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Row 5: AC Refrigerant Top-Up (R-410A) */}
-              <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-xs font-bold text-navy-900">AC Refrigerant Fugitive Top-Up (R-410A HFC)</span>
-                  <div className="text-[11px] text-navy-500">GWP: 2,255.5 kg CO₂e/kg (IPCC AR6 100-year)</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={acR410AStatus}
-                    onChange={(e: any) => setAcR410AStatus(e.target.value)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
-                  >
-                    <option value="reported">Reported activity</option>
-                    <option value="no_activity">No activity / Zero</option>
-                    <option value="unavailable">Data unavailable</option>
-                  </select>
-                  {acR410AStatus === 'reported' && (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={acR410AKg}
-                        onChange={(e) => setAcR410AKg(e.target.value)}
-                        placeholder="0"
-                        className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                      />
-                      <span className="text-xs text-navy-500">kg added</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Row 6: AC Refrigerant Top-Up (R-22 Montreal Protocol) */}
-              <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-0.5">
-                  <span className="text-xs font-bold text-navy-900">AC Refrigerant Top-Up (R-22 / HCFC-22)</span>
-                  <div className="text-[11px] text-navy-500">Montreal Protocol ODS • Separately disclosed out-of-scope memo</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={acR22Status}
-                    onChange={(e: any) => setAcR22Status(e.target.value)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
-                  >
-                    <option value="no_activity">No legacy R-22 units</option>
-                    <option value="reported">Reported activity</option>
-                    <option value="unavailable">Data unavailable</option>
-                  </select>
-                  {acR22Status === 'reported' && (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={acR22Kg}
-                        onChange={(e) => setAcR22Kg(e.target.value)}
-                        placeholder="0"
-                        className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                      />
-                      <span className="text-xs text-navy-500">kg added</span>
-                    </div>
-                  )}
-                </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={fleetOctaneStatus}
+                  onChange={(e: any) => setFleetOctaneStatus(e.target.value)}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
+                >
+                  <option value="reported">Reported value</option>
+                  <option value="confirmed_zero">Confirmed zero</option>
+                  <option value="not_applicable">Not applicable</option>
+                  <option value="not_collected">Not collected</option>
+                </select>
+                {fleetOctaneStatus === 'reported' && (
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={fleetOctaneLitres}
+                      onChange={(e) => setFleetOctaneLitres(e.target.value)}
+                      placeholder="0"
+                      className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
+                    />
+                    <span className="text-xs text-navy-500">Liters</span>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+
+            {/* Fleet Diesel */}
+            <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-navy-900">University Transport Shuttles — Diesel</span>
+                <div className="text-[11px] text-navy-500">Factor: 2.687 kg CO₂/L</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={fleetDieselStatus}
+                  onChange={(e: any) => setFleetDieselStatus(e.target.value)}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
+                >
+                  <option value="reported">Reported value</option>
+                  <option value="confirmed_zero">Confirmed zero</option>
+                  <option value="not_applicable">Not applicable</option>
+                  <option value="not_collected">Not collected</option>
+                </select>
+                {fleetDieselStatus === 'reported' && (
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={fleetDieselLitres}
+                      onChange={(e) => setFleetDieselLitres(e.target.value)}
+                      placeholder="0"
+                      className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
+                    />
+                    <span className="text-xs text-navy-500">Liters</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Cafeteria LPG */}
+            <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-navy-900">Campus Cafeteria Cooking (Commercial LPG)</span>
+                <div className="text-[11px] text-navy-500">Factor: 3.00 kg CO₂/kg LPG (IPCC Mass Factor)</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={cafeteriaLpgStatus}
+                  onChange={(e: any) => setCafeteriaLpgStatus(e.target.value)}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
+                >
+                  <option value="reported">Reported value</option>
+                  <option value="confirmed_zero">Confirmed zero</option>
+                  <option value="not_applicable">Not applicable</option>
+                  <option value="not_collected">Not collected</option>
+                </select>
+                {cafeteriaLpgStatus === 'reported' && (
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={cafeteriaLpgKg}
+                      onChange={(e) => setCafeteriaLpgKg(e.target.value)}
+                      placeholder="0"
+                      className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
+                    />
+                    <span className="text-xs text-navy-500">kg</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* AC R-410A */}
+            <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-navy-900">AC Refrigerant Fugitives (R-410A HFC Top-Up)</span>
+                <div className="text-[11px] text-navy-500">GWP: 2,255.5 kg CO₂e/kg (IPCC AR6 100-year)</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={acR410AStatus}
+                  onChange={(e: any) => setAcR410AStatus(e.target.value)}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
+                >
+                  <option value="reported">Reported value</option>
+                  <option value="confirmed_zero">Confirmed zero</option>
+                  <option value="not_applicable">Not applicable</option>
+                  <option value="not_collected">Not collected</option>
+                </select>
+                {acR410AStatus === 'reported' && (
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={acR410AKg}
+                      onChange={(e) => setAcR410AKg(e.target.value)}
+                      placeholder="0"
+                      className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
+                    />
+                    <span className="text-xs text-navy-500">kg added</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* AC R-22 */}
+            <div className="p-4 rounded-2xl border border-navy-100 bg-navy-50/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-navy-900">Legacy AC Units (R-22 / HCFC-22 Top-Up)</span>
+                <div className="text-[11px] text-navy-500">Montreal Protocol ODS • Separately disclosed memo item</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={acR22Status}
+                  onChange={(e: any) => setAcR22Status(e.target.value)}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
+                >
+                  <option value="confirmed_zero">Confirmed zero (No R-22 units)</option>
+                  <option value="reported">Reported value</option>
+                  <option value="not_applicable">Not applicable</option>
+                  <option value="not_collected">Not collected</option>
+                </select>
+                {acR22Status === 'reported' && (
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={acR22Kg}
+                      onChange={(e) => setAcR22Kg(e.target.value)}
+                      placeholder="0"
+                      className="w-24 px-2 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
+                    />
+                    <span className="text-xs text-navy-500">kg added</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* STEP 3: Scope 2 (Purchased Energy) */}
+      {/* STEP 3: Scope 2 (Purchased Electricity) */}
       {activeStep === 3 && (
         <div className="bg-white p-6 sm:p-10 rounded-3xl border border-navy-100 shadow-2xs space-y-6">
           <div className="space-y-1">
@@ -1367,7 +1335,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               Scope 2 — Purchased Electricity
             </h2>
             <p className="text-xs text-navy-600 leading-relaxed bg-blue-50/50 p-3.5 rounded-2xl border border-blue-200/60">
-              <strong>Purchased energy:</strong> emissions associated with utility grid electricity used by campus facilities. Enter total kilowatt-hours (kWh) summed across 12 monthly billing statements from your electric utility (e.g., DPDC, DESCO, BREB).
+              <strong>Scope 2 emissions:</strong> emissions associated with purchased electricity imported and consumed by campus facilities. Enter total kilowatt-hours (kWh) summed across 12 monthly utility billing statements (e.g. DPDC, DESCO, BREB).
             </p>
           </div>
 
@@ -1375,9 +1343,9 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
             <div className="p-5 rounded-2xl border border-navy-100 bg-navy-50/30 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <span className="text-xs font-bold text-navy-900">National Grid Electricity Inflow</span>
+                  <span className="text-xs font-bold text-navy-900">National Grid Utility Electricity Consumption</span>
                   <div className="text-[11px] text-navy-500">
-                    Official Bangladesh grid generation factor: 0.637861 kg CO₂e/kWh
+                    SREDA Grid Factor: 0.637861 kg CO₂e/kWh • 11% T&D grid losses allocated to Scope 3 Category 3
                   </div>
                 </div>
 
@@ -1386,8 +1354,9 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
                   onChange={(e: any) => setGridElectricityStatus(e.target.value)}
                   className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
                 >
-                  <option value="reported">Reported utility invoices</option>
-                  <option value="unavailable">Data unavailable</option>
+                  <option value="reported">Reported value</option>
+                  <option value="confirmed_zero">Confirmed zero (100% off-grid)</option>
+                  <option value="not_collected">Not collected</option>
                 </select>
               </div>
 
@@ -1406,7 +1375,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
                           setValidationErrors(prev => ({ ...prev, gridElectricityKWh: '' }));
                         }
                       }}
-                      placeholder="e.g. 711977"
+                      placeholder="e.g. 641412"
                       className={`w-full px-3 py-2 rounded-xl border text-sm font-mono text-navy-900 ${
                         validationErrors.gridElectricityKWh ? 'border-coral-500 bg-coral-50/20' : 'border-navy-200'
                       }`}
@@ -1432,7 +1401,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
         </div>
       )}
 
-      {/* STEP 4: Scope 3 (Commuting & Indirect) */}
+      {/* STEP 4: Scope 3 (Commuting & Google Forms Package) */}
       {activeStep === 4 && (
         <div className="bg-white p-6 sm:p-10 rounded-3xl border border-navy-100 shadow-2xs space-y-6">
           <div className="space-y-1">
@@ -1441,124 +1410,228 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               Scope 3 — Commuting & Indirect Activities
             </h2>
             <p className="text-xs text-navy-600 leading-relaxed bg-purple-50/50 p-3.5 rounded-2xl border border-purple-200/60">
-              <strong>Other related activities:</strong> student, faculty, and staff commuting, plus upstream grid transmission and distribution losses. Gather commuter data using a representative sample survey. Unmeasured categories (e.g., solid waste disposal) remain outside this assessment boundary.
+              <strong>Scope 3 indirect emissions:</strong> passenger travel by students, faculty, and administrative staff, plus upstream grid transmission and distribution losses. Other value chain categories (e.g. procurement, solid waste) remain outside boundary unless surveyed.
             </p>
           </div>
 
-          <div className="space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-navy-50/30 border border-navy-100">
+          {/* Section 2: Complete Google Forms Template Package */}
+          <div className="p-6 rounded-3xl border-2 border-navy-100 bg-navy-50/30 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-navy-900">Commuter Travel Survey Status</span>
-                <p className="text-[11px] text-navy-500">Representative modal survey of student and staff travel.</p>
+                <h3 className="font-bold text-navy-900 text-base flex items-center gap-2">
+                  <FileSpreadsheet className="w-5 h-5 text-cobalt" />
+                  <span>Google Forms Commuter Survey Package</span>
+                </h3>
+                <p className="text-xs text-navy-600 mt-0.5">
+                  Generate your university Google Form in one click, collect anonymous student responses, and import the export CSV directly.
+                </p>
               </div>
 
-              <select
-                value={commuterSurveyStatus}
-                onChange={(e: any) => setCommuterSurveyStatus(e.target.value)}
-                className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
-              >
-                <option value="reported">Survey data available</option>
-                <option value="unavailable">Data unavailable / Outside scope</option>
-              </select>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setPreviewBlueprintInstrument('commuter')}
+                  className="px-3 py-1.5 rounded-xl bg-white hover:bg-navy-100 border border-navy-200 text-navy-800 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                >
+                  <Eye className="w-3.5 h-3.5 text-cobalt" />
+                  <span>Preview questions</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => triggerDownload('survey_question_blueprint.json', JSON.stringify(FULL_SURVEY_BLUEPRINT, null, 2), 'application/json')}
+                  className="px-3 py-1.5 rounded-xl bg-white hover:bg-navy-100 border border-navy-200 text-navy-800 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5 text-navy-600" />
+                  <span>Blueprint (.json)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => triggerDownload('CampusCarbon_CommuterSurvey_GoogleFormsGenerator.gs', generateGoogleFormsAppsScript(), 'text/plain')}
+                  className="px-3 py-1.5 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-2xs"
+                >
+                  <FileCode className="w-3.5 h-3.5" />
+                  <span>Download Google Apps Script (.gs)</span>
+                </button>
+              </div>
             </div>
 
-            {commuterSurveyStatus === 'reported' && (
-              <div className="p-5 rounded-2xl border border-navy-100 bg-white space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-semibold text-navy-700 mb-1">Survey Sample Size (n)</label>
-                    <input
-                      type="number"
-                      value={surveySampleSize}
-                      onChange={(e) => setSurveySampleSize(e.target.value)}
-                      placeholder="e.g. 350"
-                      className="w-full px-3 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                    />
+            {/* Workflow Banner: Download -> Create Form -> Collect -> Export -> Upload -> Review -> Calculate */}
+            <div className="p-4 rounded-2xl bg-white border border-navy-100 space-y-2">
+              <span className="text-[11px] font-bold text-navy-700 uppercase tracking-wider block">Standard Collection Workflow:</span>
+              <div className="grid grid-cols-2 sm:grid-cols-7 gap-2 text-center text-xs">
+                <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">1. Download Script</div>
+                <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">2. Run in Apps Script</div>
+                <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">3. Collect Responses</div>
+                <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">4. Export CSV</div>
+                <div className="p-2 rounded-xl bg-cobalt/10 font-bold text-cobalt border border-cobalt/20">5. Upload Below</div>
+                <div className="p-2 rounded-xl bg-navy-50 font-semibold text-navy-800">6. Review</div>
+                <div className="p-2 rounded-xl bg-emerald-50 font-semibold text-emerald-800">7. Calculate</div>
+              </div>
+            </div>
+
+            {/* Google Forms Response CSV Upload Area */}
+            <div className="p-6 rounded-2xl border-2 border-dashed border-navy-200 bg-white text-center space-y-3">
+              <Upload className="w-8 h-8 text-cobalt mx-auto" />
+              <div>
+                <label className="px-5 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-900 text-white font-bold text-xs cursor-pointer inline-block shadow-2xs transition">
+                  <span>Upload Google Forms Responses CSV</span>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleGoogleFormCsvUpload(file);
+                    }}
+                  />
+                </label>
+                <p className="text-[11px] text-navy-400 mt-1">Accepts standard Google Forms response export sheets.</p>
+              </div>
+
+              {importSummary && (
+                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-left space-y-2 text-xs">
+                  <div className="flex items-center justify-between font-bold text-emerald-950">
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Successfully mapped {importSummary.validCommuters.length} of {importSummary.totalRows} survey rows!</span>
+                    </span>
+                    <span>Ready for calculation</span>
                   </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-navy-700 mb-1">Average One-Way Distance (km)</label>
-                    <input
-                      type="number"
-                      value={avgOneWayKm}
-                      onChange={(e) => setAvgOneWayKm(e.target.value)}
-                      placeholder="e.g. 8.5"
-                      className="w-full px-3 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-navy-700 mb-1">Campus Days / Week</label>
-                    <input
-                      type="number"
-                      value={avgWeeklyDays}
-                      onChange={(e) => setAvgWeeklyDays(e.target.value)}
-                      placeholder="e.g. 4.5"
-                      className="w-full px-3 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
-                    />
-                  </div>
+
+                  {importSummary.errors.length > 0 && (
+                    <div className="bg-white p-3 rounded-xl border border-coral-200 text-coral-800 space-y-1">
+                      <span className="font-bold block">Validation notices ({importSummary.errors.length} rows required adjustments):</span>
+                      <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
+                        {importSummary.errors.slice(0, 5).map((err, eIdx) => (
+                          <li key={eIdx}>Row {err.rowNumber}: {err.field} — {err.error} (raw: "{err.rawValue}")</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Fallback Guided Sample Entry (if no Google Forms CSV uploaded yet) */}
+          {importedCommuters.length === 0 && (
+            <div className="p-5 rounded-2xl border border-navy-100 bg-white space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-navy-50 pb-2">
+                <div>
+                  <span className="text-xs font-bold text-navy-900">Alternative: Guided Aggregate Sample Entry</span>
+                  <p className="text-[11px] text-navy-500">If you already have survey summary percentages, enter them directly below.</p>
                 </div>
 
-                <div className="pt-2 border-t border-navy-100 space-y-2">
-                  <span className="text-xs font-bold text-navy-800">Commuting Modal Split (% of respondents)</span>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                <select
+                  value={commuterSurveyStatus}
+                  onChange={(e: any) => setCommuterSurveyStatus(e.target.value)}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-navy-200 bg-white"
+                >
+                  <option value="reported">Survey available</option>
+                  <option value="not_collected">Not collected / Outside boundary</option>
+                </select>
+              </div>
+
+              {commuterSurveyStatus === 'reported' && (
+                <div className="space-y-4 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-[10px] text-navy-600">Solo Car (%):</label>
+                      <label className="block text-[11px] font-semibold text-navy-700 mb-1">Survey Sample Size (n)</label>
                       <input
                         type="number"
-                        value={carSharePct}
-                        onChange={(e) => setCarSharePct(e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        value={surveySampleSize}
+                        onChange={(e) => setSurveySampleSize(e.target.value)}
+                        placeholder="e.g. 350"
+                        className="w-full px-3 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] text-navy-600">Public Bus (%):</label>
+                      <label className="block text-[11px] font-semibold text-navy-700 mb-1">Average One-Way Distance (km)</label>
                       <input
                         type="number"
-                        value={busSharePct}
-                        onChange={(e) => setBusSharePct(e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        value={avgOneWayKm}
+                        onChange={(e) => setAvgOneWayKm(e.target.value)}
+                        placeholder="e.g. 8.5"
+                        className="w-full px-3 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] text-navy-600">CNG Rickshaw (%):</label>
+                      <label className="block text-[11px] font-semibold text-navy-700 mb-1">Campus Days / Week</label>
                       <input
                         type="number"
-                        value={cngSharePct}
-                        onChange={(e) => setCngSharePct(e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-navy-600">Motorcycle (%):</label>
-                      <input
-                        type="number"
-                        value={motorcycleSharePct}
-                        onChange={(e) => setMotorcycleSharePct(e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-navy-600">Cycle Rickshaw (%):</label>
-                      <input
-                        type="number"
-                        value={rickshawSharePct}
-                        onChange={(e) => setRickshawSharePct(e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-navy-600">Walking / Bicycle (%):</label>
-                      <input
-                        type="number"
-                        value={walkSharePct}
-                        onChange={(e) => setWalkSharePct(e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        value={avgWeeklyDays}
+                        onChange={(e) => setAvgWeeklyDays(e.target.value)}
+                        placeholder="e.g. 4.5"
+                        className="w-full px-3 py-1.5 rounded-lg border border-navy-200 text-xs font-mono"
                       />
                     </div>
                   </div>
+
+                  <div className="pt-2 border-t border-navy-50 space-y-2">
+                    <span className="text-xs font-bold text-navy-800">Commuting Modal Split (% of respondents)</span>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                      <div>
+                        <label className="block text-[10px] text-navy-600">Solo Car (%):</label>
+                        <input
+                          type="number"
+                          value={carSharePct}
+                          onChange={(e) => setCarSharePct(e.target.value)}
+                          className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-navy-600">Public Bus (%):</label>
+                        <input
+                          type="number"
+                          value={busSharePct}
+                          onChange={(e) => setBusSharePct(e.target.value)}
+                          className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-navy-600">CNG Rickshaw (%):</label>
+                        <input
+                          type="number"
+                          value={cngSharePct}
+                          onChange={(e) => setCngSharePct(e.target.value)}
+                          className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-navy-600">Motorcycle (%):</label>
+                        <input
+                          type="number"
+                          value={motorcycleSharePct}
+                          onChange={(e) => setMotorcycleSharePct(e.target.value)}
+                          className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-navy-600">Cycle Rickshaw (%):</label>
+                        <input
+                          type="number"
+                          value={rickshawSharePct}
+                          onChange={(e) => setRickshawSharePct(e.target.value)}
+                          className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-navy-600">Walking / Bicycle (%):</label>
+                        <input
+                          type="number"
+                          value={walkSharePct}
+                          onChange={(e) => setWalkSharePct(e.target.value)}
+                          className="w-full px-2 py-1 rounded border border-navy-200 font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -1620,7 +1693,7 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
                   <td className="p-3"><span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-bold text-[10px]">Scope 1</span></td>
                   <td className="p-3 font-mono">{(Number(fleetOctaneLitres) || 0) + (Number(fleetDieselLitres) || 0)} L</td>
                   <td className="p-3 text-navy-500">2.308 / 2.687 kg CO₂/L</td>
-                  <td className="p-3 font-medium">Reported</td>
+                  <td className="p-3 font-medium capitalize">{fleetOctaneStatus.replace('_', ' ')}</td>
                   <td className="p-3 text-right"><button onClick={() => setActiveStep(2)} className="text-cobalt hover:underline font-semibold cursor-pointer">Edit</button></td>
                 </tr>
                 {/* Cafeteria */}
@@ -1654,8 +1727,12 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
                 <tr>
                   <td className="p-3 font-semibold text-navy-900">Commuter Travel (Students & Staff)</td>
                   <td className="p-3"><span className="px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 font-bold text-[10px]">Scope 3</span></td>
-                  <td className="p-3 font-mono">{commuterSurveyStatus === 'reported' ? `n = ${surveySampleSize} survey sample` : '—'}</td>
-                  <td className="p-3 text-navy-500">Multi-modal research factors</td>
+                  <td className="p-3 font-mono">
+                    {importedCommuters.length > 0 
+                      ? `${importedCommuters.length} verified responses (Google Form)` 
+                      : (commuterSurveyStatus === 'reported' ? `n = ${surveySampleSize} survey sample` : '—')}
+                  </td>
+                  <td className="p-3 text-navy-500">Multi-modal Bangladesh factors</td>
                   <td className="p-3 font-medium capitalize">{commuterSurveyStatus.replace('_', ' ')}</td>
                   <td className="p-3 text-right"><button onClick={() => setActiveStep(4)} className="text-cobalt hover:underline font-semibold cursor-pointer">Edit</button></td>
                 </tr>
@@ -1730,6 +1807,79 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ lang }) => {
               <span>Continue</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* BLUEPRINT PREVIEW MODAL */}
+      {previewBlueprintInstrument && (
+        <div className="fixed inset-0 z-50 bg-navy-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-navy-100 overflow-hidden">
+            <div className="p-6 border-b border-navy-100 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-cobalt uppercase tracking-wider">Survey Specification</span>
+                <h3 className="text-lg font-bold text-navy-900">
+                  {previewBlueprintInstrument === 'commuter' ? 'Commuter Survey Question Blueprint' : 'Facilities Records Blueprint'}
+                </h3>
+              </div>
+              <button
+                onClick={() => setPreviewBlueprintInstrument(null)}
+                className="p-2 rounded-xl hover:bg-navy-50 text-navy-500 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-4 text-xs">
+              {(previewBlueprintInstrument === 'commuter' ? COMMUTER_SURVEY_BLUEPRINT : FACILITIES_RECORDS_BLUEPRINT).map((q, qIdx) => (
+                <div key={q.stableFieldId} className="p-4 rounded-2xl bg-navy-50/50 border border-navy-100 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-navy-900 text-sm">{q.questionText}</span>
+                    <span className="font-mono text-[10px] bg-white px-2 py-0.5 rounded border border-navy-200 text-navy-600">
+                      ID: {q.stableFieldId}
+                    </span>
+                  </div>
+
+                  {q.helpText && <p className="text-navy-500 text-[11px]">{q.helpText}</p>}
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] text-navy-600 border-t border-navy-100">
+                    <div><strong>Type:</strong> {q.responseType}</div>
+                    <div><strong>Required:</strong> {q.isRequired ? 'Yes' : 'No'}</div>
+                    <div><strong>Unit:</strong> {q.unit || 'N/A'}</div>
+                    <div><strong>Destination:</strong> <span className="font-mono text-[10px]">{q.destinationCalculationField}</span></div>
+                  </div>
+
+                  {q.options && (
+                    <div className="pt-1 text-[11px]">
+                      <span className="font-semibold text-navy-700">Available Choices:</span>
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {q.options.map((opt, oIdx) => (
+                          <span key={oIdx} className="bg-white px-2 py-0.5 rounded border border-navy-200 text-navy-700 text-[10px]">
+                            {opt}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="p-4 bg-navy-50 border-t border-navy-100 flex justify-end gap-2">
+              <button
+                onClick={() => triggerDownload('survey_question_blueprint.json', JSON.stringify(FULL_SURVEY_BLUEPRINT, null, 2), 'application/json')}
+                className="px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Download Blueprint JSON</span>
+              </button>
+              <button
+                onClick={() => setPreviewBlueprintInstrument(null)}
+                className="px-4 py-2 rounded-xl bg-white border border-navy-200 text-navy-800 font-bold text-xs cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

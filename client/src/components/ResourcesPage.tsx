@@ -7,10 +7,21 @@ import {
   FileText, 
   CheckCircle2, 
   HelpCircle,
-  Code
+  Code,
+  Layers,
+  ChevronDown,
+  ChevronUp,
+  FileCode,
+  Table
 } from 'lucide-react';
 import { FactorRegistryBrowser } from './FactorRegistryBrowser';
 import { MethodologyReferences } from './MethodologyReferences';
+import { 
+  COMMUTER_SURVEY_BLUEPRINT, 
+  FACILITIES_RECORDS_BLUEPRINT, 
+  FULL_SURVEY_BLUEPRINT,
+  generateGoogleFormsAppsScript 
+} from '../../../shared/templates/surveyBlueprint';
 import { Language } from '../../../shared/i18n';
 
 interface ResourcesPageProps {
@@ -23,11 +34,13 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
   lang
 }) => {
   const [activeTab, setActiveTab] = useState<'templates' | 'factors' | 'methodology'>(initialTab);
+  const [showBlueprintPreview, setShowBlueprintPreview] = useState<boolean>(false);
+  const [blueprintInstrumentFilter, setBlueprintInstrumentFilter] = useState<'all' | 'commuter' | 'facilities'>('all');
   const isBn = lang === 'bn';
 
-  // Helper to trigger direct CSV downloads
-  const handleDownloadCsv = (filename: string, content: string) => {
-    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+  // Helper to trigger direct browser file downloads
+  const handleDownloadFile = (filename: string, content: string, mime: string = 'text/plain') => {
+    const blob = new Blob([content], { type: `${mime};charset=utf-8;` });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
@@ -35,6 +48,24 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const downloadBlueprintJson = () => {
+    const jsonStr = JSON.stringify(FULL_SURVEY_BLUEPRINT, null, 2);
+    handleDownloadFile('campus_carbon_question_blueprint.json', jsonStr, 'application/json');
+  };
+
+  const downloadBlueprintCsv = () => {
+    const header = 'stable_field_id,instrument,scope,question_text,response_type,unit,is_required,validation_rules,example_response,destination_calculation_field\n';
+    const rows = FULL_SURVEY_BLUEPRINT.map(q => 
+      `"${q.stableFieldId}","${q.instrument}",${q.scope},"${q.questionText.replace(/"/g, '""')}","${q.responseType}","${q.unit || ''}",${q.isRequired},"${q.validationRules || ''}","${q.exampleResponse}","${q.destinationCalculationField}"`
+    ).join('\n');
+    handleDownloadFile('campus_carbon_question_blueprint.csv', header + rows, 'text/csv');
+  };
+
+  const downloadAppsScript = () => {
+    const script = generateGoogleFormsAppsScript();
+    handleDownloadFile('CampusCarbon_GoogleFormsGenerator.gs', script, 'application/javascript');
   };
 
   const downloadEnergyTemplate = () => {
@@ -46,7 +77,7 @@ export const ResourcesPage: React.FC<ResourcesPageProps> = ({
 2022-01,1,Student Cafeteria,cooking_combustion_cafeteria,1050,kg,Cylinder Supplier Bill,Commercial 45kg LPG
 2022-02,2,Main Substation Meter,purchased_electricity_grid,61400,kWh,Utility Monthly Invoice,DPDC Meter #A441
 `;
-    handleDownloadCsv('campus_energy_fuel_records_template.csv', csv);
+    handleDownloadFile('campus_energy_fuel_records_template.csv', csv, 'text/csv');
   };
 
   const downloadCommuterTemplate = () => {
@@ -57,7 +88,7 @@ R003,faculty,Uttara,private_car,18.0,4,false,octane,1
 R004,staff,Mohammadpur,walking,1.5,5,false,,
 R005,student,Bashundhara,battery_rickshaw,14.5,5,false,,
 `;
-    handleDownloadCsv('campus_commuter_survey_template.csv', csv);
+    handleDownloadFile('campus_commuter_survey_template.csv', csv, 'text/csv');
   };
 
   const downloadRefrigerantTemplate = () => {
@@ -65,8 +96,14 @@ R005,student,Bashundhara,battery_rickshaw,14.5,5,false,,
 CHILLER-01,Academic Building Roof,R-410A,45,2022-06-15,Delta Aircon,Routine annual top-up
 SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit (Montreal Protocol)
 `;
-    handleDownloadCsv('campus_refrigerant_servicing_log.csv', csv);
+    handleDownloadFile('campus_refrigerant_servicing_log.csv', csv, 'text/csv');
   };
+
+  const displayedQuestions = FULL_SURVEY_BLUEPRINT.filter(q => {
+    if (blueprintInstrumentFilter === 'commuter') return q.instrument === 'commuter_survey';
+    if (blueprintInstrumentFilter === 'facilities') return q.instrument === 'facilities_records';
+    return true;
+  });
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-16">
@@ -81,7 +118,7 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
           }`}
         >
           <FileSpreadsheet className="w-4 h-4" />
-          <span>{isBn ? 'তথ্য সংগ্রহের টেমপ্লেট' : 'Data templates'}</span>
+          <span>{isBn ? 'তথ্য সংগ্রহের টেমপ্লেট ও ফর্ম' : 'Survey & Data Templates'}</span>
         </button>
 
         <button
@@ -93,7 +130,7 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
           }`}
         >
           <Sparkles className="w-4 h-4" />
-          <span>{isBn ? 'নির্গমন সহগ ডেটাবেস' : 'Emission factors'}</span>
+          <span>{isBn ? 'নির্গমন সহগ ডেটাবেস' : 'Emission Factors'}</span>
         </button>
 
         <button
@@ -105,24 +142,177 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
           }`}
         >
           <BookOpen className="w-4 h-4" />
-          <span>{isBn ? 'পদ্ধতি ও তথ্যসূত্র' : 'Methodology & references'}</span>
+          <span>{isBn ? 'পদ্ধতি ও তথ্যসূত্র' : 'Methodology & References'}</span>
         </button>
       </div>
 
       {/* DESTINATION 1: Data Templates */}
       {activeTab === 'templates' && (
         <div className="space-y-6">
+          {/* Header Card */}
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-navy-100 shadow-2xs space-y-2">
             <h2 className="text-xl sm:text-2xl font-bold text-navy-900">
-              {isBn ? 'প্রাতিষ্ঠানিক তথ্য সংগ্রহের টেমপ্লেট ও ফর্ম' : 'Institutional Data Collection Templates'}
+              {isBn ? 'প্রাতিষ্ঠানিক তথ্য সংগ্রহের টেমপ্লেট ও গুগল ফর্মস প্যাকেজ' : 'Institutional Data Collection Package & Google Forms Blueprint'}
             </h2>
             <p className="text-sm text-navy-600">
               {isBn
-                ? 'বিশ্ববিদ্যালয়ের জ্বালানি বিল, বিদ্যুৎ মিটার, এসি রক্ষণাবেক্ষণ এবং যাতায়াত জরিপের তথ্য সংগ্রহের জন্য প্রমিত স্প্রেডশিট ডাউনলোড করুন।'
-                : 'Download structured spreadsheets and standardized survey templates to collect verified campus records for your greenhouse gas inventory.'}
+                ? 'স্বয়ংক্রিয় গুগল ফর্মস তৈরি করার স্ক্রিপ্ট, পূর্ণাঙ্গ ব্লুপ্রিন্ট ও প্রমিত স্প্রেডশিট ডাউনলোড করে ক্যাম্পাসের তথ্য স্বচ্ছভাবে সংগ্রহ করুন।'
+                : 'Download structured survey blueprints, generate automated Google Forms in one click, and collect standardized activity logs for your greenhouse gas inventory.'}
             </p>
           </div>
 
+          {/* Featured Google Forms Generator Package */}
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border-2 border-cobalt-200/80 shadow-xs space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-navy-100 pb-5">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cobalt-50 text-cobalt font-bold text-xs">
+                  <Code className="w-3.5 h-3.5" />
+                  <span>Google Apps Script Generator</span>
+                </div>
+                <h3 className="text-lg font-black text-navy-900">
+                  Automated Commuter Survey Form Package
+                </h3>
+                <p className="text-xs text-navy-600">
+                  Builds a full 9-question anonymous commuter travel survey in your Google Drive with zero manual question entry.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  onClick={downloadAppsScript}
+                  className="px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download .gs Script</span>
+                </button>
+                <button
+                  onClick={downloadBlueprintJson}
+                  className="px-3 py-2 rounded-xl bg-navy-50 hover:bg-navy-100 text-navy-800 border border-navy-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <FileCode className="w-3.5 h-3.5 text-cobalt" />
+                  <span>Blueprint (JSON)</span>
+                </button>
+                <button
+                  onClick={downloadBlueprintCsv}
+                  className="px-3 py-2 rounded-xl bg-navy-50 hover:bg-navy-100 text-navy-800 border border-navy-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Table className="w-3.5 h-3.5 text-cobalt" />
+                  <span>Blueprint (CSV)</span>
+                </button>
+                <button
+                  onClick={() => setShowBlueprintPreview(!showBlueprintPreview)}
+                  className="px-3 py-2 rounded-xl bg-navy-50 hover:bg-navy-100 text-navy-800 border border-navy-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  {showBlueprintPreview ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  <span>{showBlueprintPreview ? 'Hide Questions' : 'Preview Questions'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quick 4-Step Deployment Guide */}
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+              <div className="p-3.5 rounded-2xl bg-navy-50/60 border border-navy-100 space-y-1">
+                <span className="font-bold text-navy-800 block text-xs">1. Download Script</span>
+                <p className="text-[11px] text-navy-600 leading-relaxed">
+                  Download the generator script (`CampusCarbon_GoogleFormsGenerator.gs`) above.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-navy-50/60 border border-navy-100 space-y-1">
+                <span className="font-bold text-navy-800 block text-xs">2. Open Google Apps Script</span>
+                <p className="text-[11px] text-navy-600 leading-relaxed">
+                  Open Google Drive, click New → More → Google Apps Script, and paste the code.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-navy-50/60 border border-navy-100 space-y-1">
+                <span className="font-bold text-navy-800 block text-xs">3. Run Form Generator</span>
+                <p className="text-[11px] text-navy-600 leading-relaxed">
+                  Select `createCampusCommuterSurvey` and click Run. Grant form-creation permission.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-navy-50/60 border border-navy-100 space-y-1">
+                <span className="font-bold text-navy-800 block text-xs">4. Export & Upload CSV</span>
+                <p className="text-[11px] text-navy-600 leading-relaxed">
+                  Distribute the form link to students & staff. Export responses to CSV and import in Assessment!
+                </p>
+              </div>
+            </div>
+
+            {/* Expandable Blueprint Schema Table */}
+            {showBlueprintPreview && (
+              <div className="mt-4 pt-4 border-t border-navy-100 space-y-4">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-navy-800">Filter Instrument:</span>
+                    <button
+                      onClick={() => setBlueprintInstrumentFilter('all')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
+                        blueprintInstrumentFilter === 'all' ? 'bg-navy-800 text-white' : 'bg-navy-50 text-navy-700'
+                      }`}
+                    >
+                      All ({FULL_SURVEY_BLUEPRINT.length})
+                    </button>
+                    <button
+                      onClick={() => setBlueprintInstrumentFilter('commuter')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
+                        blueprintInstrumentFilter === 'commuter' ? 'bg-purple-700 text-white' : 'bg-navy-50 text-navy-700'
+                      }`}
+                    >
+                      Commuter Survey ({COMMUTER_SURVEY_BLUEPRINT.length})
+                    </button>
+                    <button
+                      onClick={() => setBlueprintInstrumentFilter('facilities')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
+                        blueprintInstrumentFilter === 'facilities' ? 'bg-amber-700 text-white' : 'bg-navy-50 text-navy-700'
+                      }`}
+                    >
+                      Facilities Records ({FACILITIES_RECORDS_BLUEPRINT.length})
+                    </button>
+                  </div>
+                  <span className="text-[11px] text-navy-400">Stable IDs map directly to the engine</span>
+                </div>
+
+                <div className="overflow-x-auto border border-navy-100 rounded-2xl">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-navy-50/80 text-navy-700 border-b border-navy-100">
+                        <th className="p-3 font-bold">Stable ID</th>
+                        <th className="p-3 font-bold">Scope</th>
+                        <th className="p-3 font-bold">Question / Record Description</th>
+                        <th className="p-3 font-bold">Type</th>
+                        <th className="p-3 font-bold">Unit / Rule</th>
+                        <th className="p-3 font-bold">Destination Field</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-navy-50">
+                      {displayedQuestions.map((q) => (
+                        <tr key={q.stableFieldId} className="hover:bg-navy-50/40">
+                          <td className="p-3 font-mono text-[11px] font-bold text-navy-900">{q.stableFieldId}</td>
+                          <td className="p-3">
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                              q.scope === 1 ? 'bg-amber-100 text-amber-900' :
+                              q.scope === 2 ? 'bg-blue-100 text-blue-900' :
+                              q.scope === 3 ? 'bg-purple-100 text-purple-900' : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {q.scope === 0 ? 'Admin' : `Scope ${q.scope}`}
+                            </span>
+                          </td>
+                          <td className="p-3 max-w-sm">
+                            <div className="font-semibold text-navy-800">{q.questionText}</div>
+                            {q.helpText && <div className="text-[11px] text-navy-400 mt-0.5">{q.helpText}</div>}
+                          </td>
+                          <td className="p-3 font-mono text-[11px] text-navy-600">{q.responseType}</td>
+                          <td className="p-3 text-[11px] text-navy-600">{q.unit || q.validationRules || '—'}</td>
+                          <td className="p-3 font-mono text-[11px] text-cobalt">{q.destinationCalculationField}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Standard CSV Templates Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: Energy & Fuel Invoices */}
             <div className="bg-white p-6 rounded-3xl border border-navy-100 shadow-2xs flex flex-col justify-between space-y-4">
@@ -155,12 +345,12 @@ SPLIT-AC-LAB,Computer Lab 3,R-22,12,2022-08-10,Technician Rahim,Legacy R-22 unit
                 <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
                   <FileText className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-navy-900 text-base">Campus Commuter Survey</h3>
+                <h3 className="font-bold text-navy-900 text-base">Campus Commuter Survey CSV</h3>
                 <p className="text-xs text-navy-600 leading-relaxed">
                   Individual passenger questionnaire capturing student, faculty, and administrative staff transport modes, origin wards, and weekly trips.
                 </p>
                 <div className="text-[11px] text-navy-500 space-y-1 pt-1">
-                  <div><strong>Format:</strong> CSV Survey Template & Script</div>
+                  <div><strong>Format:</strong> CSV Survey Template</div>
                   <div><strong>Target:</strong> 10%–20% representative sample</div>
                 </div>
               </div>

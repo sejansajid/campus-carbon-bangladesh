@@ -42,6 +42,12 @@ export const App: React.FC = () => {
     navigateTo('assessment');
   };
 
+  const handleViewExample = () => {
+    window.location.hash = 'assessment/example';
+    setCurrentView('assessment');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-ivory flex flex-col selection:bg-cobalt-100 selection:text-navy-950 font-sans">
       {/* 1. Global Navigation: brand | Home | Assessment | Resources | language */}
@@ -58,6 +64,7 @@ export const App: React.FC = () => {
         {currentView === 'home' && (
           <Homepage
             onStartAssessment={handleStartAssessment}
+            onViewExample={handleViewExample}
             lang={lang}
           />
         )}

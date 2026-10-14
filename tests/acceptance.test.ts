@@ -6,19 +6,36 @@ import { EMISSION_FACTOR_REGISTRY, getFactorById } from '../shared/factors/regis
 import { GWP_SETS, getGWP } from '../shared/factors/gwp';
 import { evaluateMitigationScenario, PRESET_SCENARIOS } from '../shared/scenarios/mitigation';
 import { ActivityRecord, CommuterSurveyResponse, PopulationRecord } from '../shared/types';
+import { 
+  FULL_SURVEY_BLUEPRINT, 
+  generateGoogleFormsAppsScript, 
+  parseGoogleFormsExportCsv 
+} from '../shared/templates/surveyBlueprint';
 import { app } from '../server/src/index';
 
-const BASE_URL = 'http://localhost:4000';
+let BASE_URL = 'http://localhost:4000';
 
 let testServer: any;
 before(() => {
-  return new Promise((resolve) => {
-    testServer = app.listen(4000, () => resolve(true));
+  return new Promise((resolve, reject) => {
+    testServer = app.listen(0, () => {
+      const addr = testServer.address();
+      const port = typeof addr === 'object' && addr ? addr.port : 4000;
+      BASE_URL = `http://localhost:${port}`;
+      resolve(true);
+    });
+    testServer.on('error', reject);
   });
 });
 
 after(() => {
-  if (testServer) testServer.close();
+  return new Promise((resolve) => {
+    if (testServer) {
+      testServer.close(() => resolve(true));
+    } else {
+      resolve(true);
+    }
+  });
 });
 
 describe('1. Synthetic Test Institutional Run (Section 14)', () => {
@@ -602,4 +619,144 @@ describe('8. Redesign & Defect Repair Acceptance Criteria (Campus Carbon Prompt)
     }
   });
 });
+
+describe('9. Survey Blueprint, Google Forms Round-Trip & Policy Brief Invariants', () => {
+  test('Survey Blueprint Schema Integrity & Google Forms Generator', () => {
+    // 1. Verify schema completeness
+    assert.ok(FULL_SURVEY_BLUEPRINT.length >= 12, 'Blueprint must include comprehensive instruments');
+    
+    const scopesFound = new Set(FULL_SURVEY_BLUEPRINT.map(q => q.scope));
+    assert.ok(scopesFound.has(0), 'Must include administrative/census fields');
+    assert.ok(scopesFound.has(1), 'Must include Scope 1 records');
+    assert.ok(scopesFound.has(2), 'Must include Scope 2 electricity');
+    assert.ok(scopesFound.has(3), 'Must include Scope 3 commuter questions');
+
+    for (const q of FULL_SURVEY_BLUEPRINT) {
+      assert.ok(q.stableFieldId.length > 0, `Question missing stableFieldId: ${q.questionText}`);
+      assert.ok(q.questionText.length > 0, `Question missing questionText: ${q.stableFieldId}`);
+      assert.ok(q.exampleResponse.length > 0, `Question missing exampleResponse: ${q.stableFieldId}`);
+      assert.ok(q.destinationCalculationField.length > 0, `Question missing destinationCalculationField: ${q.stableFieldId}`);
+    }
+
+    // 2. Verify Google Apps Script generator
+    const script = generateGoogleFormsAppsScript();
+    assert.ok(script.includes('createCampusCommuterSurvey'), 'Script must define generator function');
+    assert.ok(script.includes('setCollectEmail(false)'), 'Script must explicitly disable automated email collection');
+    assert.ok(script.includes('requireNumberGreaterThan(0)'), 'Script must enforce positive numeric distance validation');
+    assert.ok(script.includes('Mohammadpur') && script.includes('Dhanmondi'), 'Script must include Dhaka area presets');
+  });
+
+  test('Google Forms CSV response fixture round-trip to validated calculation', () => {
+    // Sample Google Forms export CSV with 1 header, 3 valid rows, and 1 invalid row
+    const fixtureCsv = [
+      'Timestamp,1. What is your primary affiliation or role at the university?,2. Which metropolitan zone or area do you commute from?,"3. On average, how many days per week do you commute to campus?",4. What is your primary mode of transportation to campus?,5. Do you use multiple transportation modes during your typical one-way commute?,6. What is your approximate one-way travel distance to campus in kilometers (km)?,"7. If you travel by Private Car, what fuel type does the vehicle use?","8. If you travel by Private Car, how many passengers (including driver) typically share the vehicle?",9. Do you commute using official university-owned buses or vans?',
+      '2024/09/01 10:15:00 AM,Student,Dhanmondi,5,Public City Bus,No (Single mode only),8.5,,,No',
+      '2024/09/01 10:18:22 AM,Faculty Member / Teacher,Uttara,4,Private Car,No (Single mode only),18.0,Octane / Gasoline,2,No',
+      '2024/09/01 10:21:45 AM,Administrative Staff,Mohammadpur,5,Walking,No (Single mode only),1.2,,,No',
+      '2024/09/01 10:25:10 AM,Student,Mirpur,5,Public City Bus,No (Single mode only),-99.0,,,No' // Invalid distance
+    ].join('\n');
+
+    const result = parseGoogleFormsExportCsv(fixtureCsv, 'INST-FIXTURE', 240);
+
+    // 1. Row error handling
+    assert.strictEqual(result.totalRows, 4);
+    assert.strictEqual(result.validCommuters.length, 3);
+    assert.strictEqual(result.errors.length, 1);
+    assert.strictEqual(result.errors[0].rowNumber, 5); // 1-indexed (header is 1, row 4 data is line 5)
+    assert.ok(result.errors[0].error.includes('Distance'));
+
+    // 2. Data fidelity of valid commuters
+    const student = result.validCommuters.find(c => c.role === 'student');
+    assert.ok(student);
+    assert.strictEqual(student.primaryMode, 'public_bus');
+    assert.strictEqual(student.totalOneWayKm, 8.5);
+    assert.strictEqual(student.annualAttendanceDays, 200); // 5 * (240 / 6) = 200
+
+    const faculty = result.validCommuters.find(c => c.role === 'faculty');
+    assert.ok(faculty);
+    assert.strictEqual(faculty.primaryMode, 'private_car');
+    assert.strictEqual(faculty.carFuelType, 'octane');
+    assert.strictEqual(faculty.carOccupancy, 2);
+
+    // 3. Round-trip execution in calculation engine
+    const pop: PopulationRecord = {
+      id: 'POP-RT',
+      institutionId: 'INST-FIXTURE',
+      year: 2024,
+      studentHeadcount: 500,
+      facultyHeadcount: 50,
+      staffHeadcount: 50,
+      totalHeadcount: 600,
+      campusOperatingDaysPerYear: 240,
+      sourceCitation: 'Round-trip Fixture'
+    };
+
+    const run = calculateInventory([], pop, result.validCommuters.map(c => ({
+      id: c.id,
+      institutionId: 'INST-FIXTURE',
+      campusId: 'CAMPUS-1',
+      role: c.role,
+      originArea: c.originArea,
+      annualAttendanceDays: c.annualAttendanceDays,
+      primaryMode: c.primaryMode,
+      totalOneWayKm: c.totalOneWayKm,
+      distanceBasis: 'one_way',
+      usesInstitutionalFleet: c.usesInstitutionalFleet,
+      carFuelType: c.carFuelType,
+      carOccupancy: c.carOccupancy
+    })));
+
+    assert.ok(run.scope3Total > 0, 'Scope 3 emissions must be calculated from imported survey responses');
+    assert.ok(run.scope3Breakdown.studentCommuting > 0);
+    assert.ok(run.scope3Breakdown.facultyCommuting > 0);
+  });
+
+  test('POST /api/policy-brief generates evidence-grounded recommendations with strict schema', async () => {
+    // Run baseline calculation
+    const resCalc = await fetch(`${BASE_URL}/api/calculate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ institutionId: 'INST-ULAB', tier: 'current_inventory_method' })
+    });
+    assert.strictEqual(resCalc.status, 200);
+    const calculationRun = await resCalc.json() as any;
+
+    // Request policy brief
+    const resBrief = await fetch(`${BASE_URL}/api/policy-brief`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        institutionId: 'INST-ULAB',
+        calculationRun
+      })
+    });
+
+    assert.strictEqual(resBrief.status, 200);
+    const brief = await resBrief.json() as any;
+
+    // Verify schema adherence
+    assert.ok(brief.executiveInterpretation && brief.executiveInterpretation.length > 50);
+    assert.ok(Array.isArray(brief.recommendations) && brief.recommendations.length >= 2);
+    assert.ok(Array.isArray(brief.implementationTable) && brief.implementationTable.length >= 2);
+    assert.ok(Array.isArray(brief.assumptionsAndLimitations));
+
+    // Verify generator attribution (never pretend fallback is AI)
+    assert.ok(
+      brief.providerStatus.toLowerCase().includes('deterministic') ||
+      brief.providerStatus.startsWith('gemini') || 
+      brief.providerStatus.startsWith('gpt'),
+      `Unexpected generator attribution: ${brief.providerStatus}`
+    );
+
+    for (const rec of brief.recommendations) {
+      assert.ok(rec.title.length > 0);
+      assert.ok(rec.category.length > 0);
+      assert.ok(rec.proposedPolicy.length > 0);
+      assert.ok(rec.implementationSteps.length > 0);
+      assert.ok(rec.proposedDepartment.length > 0);
+      assert.ok(rec.monitoringIndicator.length > 0);
+    }
+  });
+});
+
 

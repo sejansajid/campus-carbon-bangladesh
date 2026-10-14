@@ -8,7 +8,8 @@ import { EMISSION_FACTOR_REGISTRY } from '../../shared/factors/registry';
 import { GWP_SETS } from '../../shared/factors/gwp';
 import { evaluateMitigationScenario, PRESET_SCENARIOS } from '../../shared/scenarios/mitigation';
 import { CalculationMethodTier, MitigationScenarioConfig, ActivityRecord, CommuterSurveyResponse } from '../../shared/types';
-import { generateDeterministicPolicyBrief } from './services/policyBriefWriter';
+import { generateDeterministicPolicyBrief, generatePolicyBriefAsync } from './services/policyBriefWriter';
+import { FULL_SURVEY_BLUEPRINT, generateGoogleFormsAppsScript, parseGoogleFormsExportCsv } from '../../shared/templates/surveyBlueprint';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -450,14 +451,71 @@ app.post('/api/scenarios/evaluate', (req, res) => {
 // ----------------------------------------------------------------
 // Policy Recommendations Brief Generator (Deterministic with Optional LLM Interface)
 // ----------------------------------------------------------------
-app.post('/api/policy-brief', (req, res) => {
-  const { evidencePacket, lang } = req.body;
+app.post('/api/policy-brief', async (req, res) => {
+  let { evidencePacket, calculationRun, institutionId, lang, forceRegenerate } = req.body;
+
+  if (!evidencePacket && calculationRun) {
+    const instId = institutionId || calculationRun.institutionId || 'INST-ULAB';
+    const inst = db.getInstitutionById(instId);
+    const pop = db.getPopulation(instId);
+    const total = calculationRun.totalGrossEmissions || 1;
+    const s1 = calculationRun.scope1Total || 0;
+    const s2 = calculationRun.scope2LocationBased || 0;
+    const s3 = calculationRun.scope3Total || 0;
+    const s3Commuting = calculationRun.scope3Breakdown?.totalCommuting || s3;
+
+    evidencePacket = {
+      runId: calculationRun.runId || `RUN-${Date.now()}`,
+      institutionName: inst?.name || 'Institutional Assessment',
+      reportingYear: inst?.reportingYear || 2022,
+      totalGrossEmissions: total,
+      perCapitaTotal: calculationRun.perCapitaTotal || 0,
+      perStudentTotal: calculationRun.perStudentTotal || 0,
+      scope1Total: s1,
+      scope2Total: s2,
+      scope3Total: s3,
+      scope1SharePercent: total > 0 ? (s1 / total) * 100 : 0,
+      scope2SharePercent: total > 0 ? (s2 / total) * 100 : 0,
+      scope3SharePercent: total > 0 ? (s3 / total) * 100 : 0,
+      largestSource: {
+        name: s3Commuting > s2 ? 'Student & Staff Commuting' : 'Purchased Utility Electricity',
+        tons: s3Commuting > s2 ? s3Commuting : s2,
+        sharePercent: total > 0 ? ((s3Commuting > s2 ? s3Commuting : s2) / total) * 100 : 0,
+        scope: s3Commuting > s2 ? 3 : 2
+      },
+      hotspots: [
+        { name: 'Student & Staff Commuting', tons: s3Commuting, sharePercent: (s3Commuting / total) * 100, scope: 3, category: 'Commuter Travel' },
+        { name: 'Purchased Electricity', tons: s2, sharePercent: (s2 / total) * 100, scope: 2, category: 'Grid Electricity' },
+        { name: 'Direct Backup Generator Diesel', tons: s1, sharePercent: (s1 / total) * 100, scope: 1, category: 'Stationary Combustion' }
+      ],
+      population: {
+        total: pop?.totalHeadcount || 5350,
+        students: pop?.studentHeadcount || 4860,
+        faculty: pop?.facultyHeadcount || 240,
+        staff: pop?.staffHeadcount || 250,
+        operatingDays: pop?.campusOperatingDaysPerYear || 294
+      },
+      coverageStatus: {
+        isPartial: Boolean(calculationRun.unquantifiedCategories?.length),
+        unquantifiedCategories: calculationRun.unquantifiedCategories || [],
+        dataQualityTiers: {}
+      },
+      scenarioSavings: {
+        solarRooftopTons: s2 * 0.35,
+        commuterShiftTons: s3Commuting * 0.30,
+        coolingEfficiencyTons: 0,
+        totalPotentialTons: (s2 * 0.35) + (s3Commuting * 0.30),
+        percentageReduction: total > 0 ? 32.5 : 0
+      }
+    };
+  }
+
   if (!evidencePacket || !evidencePacket.institutionName || evidencePacket.totalGrossEmissions === undefined) {
-    return res.status(400).json({ error: 'Valid evidencePacket is required' });
+    return res.status(400).json({ error: 'Valid evidencePacket or calculationRun is required' });
   }
 
   try {
-    const brief = generateDeterministicPolicyBrief(evidencePacket, lang || 'en');
+    const brief = await generatePolicyBriefAsync(evidencePacket, lang || 'en', Boolean(forceRegenerate));
     res.json(brief);
   } catch (err: any) {
     res.status(500).json({ error: 'Failed to generate policy brief: ' + err.message });
@@ -519,73 +577,45 @@ app.get('/api/templates/:type', (req, res) => {
     return res.send(csvContent);
   }
 
+  if (type === 'blueprint' || type === 'survey-blueprint') {
+    const format = req.query.format === 'csv' ? 'csv' : 'json';
+    if (format === 'csv') {
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="survey_question_blueprint.csv"');
+      const csvHeader = 'stable_field_id,instrument,scope,question_text,response_type,unit,is_required,example_response,destination_field\n';
+      const csvRows = FULL_SURVEY_BLUEPRINT.map(q => 
+        `"${q.stableFieldId}","${q.instrument}",${q.scope},"${q.questionText.replace(/"/g, '""')}","${q.responseType}","${q.unit || ''}",${q.isRequired},"${q.exampleResponse}","${q.destinationCalculationField}"`
+      ).join('\n');
+      return res.send(csvHeader + csvRows);
+    }
+    return res.json(FULL_SURVEY_BLUEPRINT);
+  }
+
   if (type === 'google-forms-script' || type === 'gas-script') {
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Content-Disposition', 'attachment; filename="CampusCarbon_CommuterSurvey_GoogleFormsGenerator.js"');
-    const scriptContent = `/**
- * Campus Carbon Bangladesh - Google Forms Commuter Survey Generator
- * Instructions:
- * 1. Open Google Drive -> New -> More -> Google Apps Script
- * 2. Paste this script into Code.gs
- * 3. Click 'Run' -> 'createCampusCommuterSurvey'
- * 4. Check your Google Drive for the generated Survey Form and responses sheet!
- */
-function createCampusCommuterSurvey() {
-  var form = FormApp.create('Campus Commuter Carbon Survey - Bangladesh HEI');
-  form.setDescription('Anonymous travel survey to measure greenhouse gas emissions and environmental footprint of our university community.');
-  form.setIsQuiz(false);
-  form.setCollectEmail(false);
-
-  var itemRole = form.addMultipleChoiceItem();
-  itemRole.setTitle('1. What is your primary role at the university?')
-    .setChoiceValues(['student', 'faculty', 'staff'])
-    .setRequired(true);
-
-  var itemOrigin = form.addListItem();
-  itemOrigin.setTitle('2. Which area of the metropolitan city do you commute from?')
-    .setChoiceValues([
-      'Dhanmondi', 'Mohammadpur', 'Mirpur', 'Uttara', 'Farmgate', 
-      'Gulshan', 'Banani', 'Badda', 'Kallyanpur', 'Adabar', 
-      'Old Dhaka', 'Motijheel', 'Rampura', 'Khilgaon', 'Other Area'
-    ])
-    .setRequired(true);
-
-  var itemMode = form.addMultipleChoiceItem();
-  itemMode.setTitle('3. What is your primary mode of transportation to campus?')
-    .setChoiceValues([
-      'Walking',
-      'Bicycle',
-      'Rickshaw (Human-powered)',
-      'Battery-operated Auto-Rickshaw / Easybike',
-      'CNG Auto-Rickshaw',
-      'Motorcycle',
-      'Private Car',
-      'Ridesharing (Car/CNG)',
-      'Public City Bus',
-      'Leguna (Human hauler)',
-      'University-provided Bus / Van',
-      'Train / Metro Rail',
-      'Multiple Transports'
-    ])
-    .setRequired(true);
-
-  var itemDistance = form.addTextItem();
-  itemDistance.setTitle('4. What is the approximate one-way travel distance to campus in kilometers (km)?')
-    .setRequired(true);
-
-  var itemDays = form.addScaleItem();
-  itemDays.setTitle('5. On average, how many days per week do you commute to campus?')
-    .setBounds(1, 6)
-    .setRequired(true);
-
-  Logger.log('Form created successfully! URL: ' + form.getEditUrl());
-  Logger.log('Published Survey URL: ' + form.getPublishedUrl());
-}
-`;
+    const scriptContent = generateGoogleFormsAppsScript();
     return res.send(scriptContent);
   }
 
   res.status(404).json({ error: 'Unknown template type' });
+});
+
+// ----------------------------------------------------------------
+// Google Forms Export CSV Normalizer & Importer
+// ----------------------------------------------------------------
+app.post('/api/commuters/import-form', (req, res) => {
+  const { csvText, institutionId } = req.body;
+  if (!csvText) {
+    return res.status(400).json({ error: 'csvText is required' });
+  }
+
+  const instId = institutionId || 'INST-USER';
+  const pop = db.getPopulation(instId);
+  const operatingDays = pop?.campusOperatingDaysPerYear || 294;
+
+  const result = parseGoogleFormsExportCsv(csvText, instId, operatingDays);
+  res.json(result);
 });
 
 // ----------------------------------------------------------------
@@ -630,9 +660,14 @@ if (fs.existsSync(clientDist)) {
 export { app };
 export default app;
 
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+const isTestEnvironment = 
+  process.env.NODE_ENV === 'test' ||
+  process.env.npm_lifecycle_event === 'test' ||
+  process.argv.some(arg => arg.includes('test'));
+
+if (!isTestEnvironment) {
+  app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT} (bound to 0.0.0.0)`);
   });
 }
 
