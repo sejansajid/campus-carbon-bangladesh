@@ -1,0 +1,27 @@
+{
+  "name": "campus-carbon-bangladesh",
+  "version": "1.0.0",
+  "description": "Greenhouse Gas Emission Inventory, Campus Mapping, and Mitigation Platform for Higher Education Institutions in Bangladesh",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "start": "tsx server/src/index.ts",
+    "build": "npm run build --prefix client",
+    "dev:server": "tsx watch server/src/index.ts",
+    "dev:client": "npm run dev --prefix client",
+    "test": "tsx --test tests/**/*.test.ts"
+  },
+  "keywords": [
+    "carbon-accounting",
+    "bangladesh",
+    "higher-education",
+    "ghg-protocol",
+    "sustainability",
+    "lca"
+  ],
+  "author": "Antigravity Engineering Pair",
+  "license": "MIT"
+}

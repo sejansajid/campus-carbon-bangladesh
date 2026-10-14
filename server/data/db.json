@@ -1,0 +1,5238 @@
+{
+  "institutions": [
+    {
+      "id": "INST-ULAB",
+      "name": "University of Liberal Arts Bangladesh",
+      "nameBn": "ইউনিভার্সিটি অব লিবারেল আর্টস বাংলাদেশ",
+      "type": "private",
+      "division": "Dhaka",
+      "district": "Dhaka",
+      "address": "Permanent Campus, Mohammadpur, Dhaka 1207, Bangladesh",
+      "consolidationMethod": "operational_control",
+      "reportingYear": 2022,
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "periodType": "calendar_year",
+      "optInPublicComparison": true,
+      "updatedAt": "2026-10-14T16:07:43.049Z"
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "CAMPUS-ULAB-PERMANENT",
+      "institutionId": "INST-ULAB",
+      "name": "Permanent Campus",
+      "isMainCampus": true,
+      "centerCoordinates": [
+        23.7547,
+        90.3582
+      ],
+      "polygonGeoJSON": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              90.3565,
+              23.7535
+            ],
+            [
+              90.3595,
+              23.7535
+            ],
+            [
+              90.3598,
+              23.756
+            ],
+            [
+              90.3568,
+              23.7562
+            ],
+            [
+              90.3565,
+              23.7535
+            ]
+          ]
+        ]
+      },
+      "grossFloorAreaM2": 24500,
+      "landAreaAcres": 5.5,
+      "numberOfBuildings": 3,
+      "geometrySource": "drawn",
+      "confirmedByInstitution": true
+    }
+  ],
+  "populations": [
+    {
+      "institutionId": "INST-ULAB",
+      "year": 2022,
+      "studentHeadcount": 4860,
+      "facultyHeadcount": 240,
+      "staffHeadcount": 250,
+      "totalHeadcount": 5350,
+      "campusOperatingDaysPerYear": 294,
+      "sourceCitation": "Verified Institutional Registrar & Administration Records",
+      "id": "POP-1791994063054"
+    }
+  ],
+  "activities": [
+    {
+      "id": "ACT-S1-VEH-OCTANE-2022",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB-PERMANENT",
+      "inventoryId": "INV-ULAB-2022",
+      "scope": 1,
+      "category": "mobile_combustion_fleet",
+      "sourceOrAssetId": "FLEET-OCTANE",
+      "name": "University Vehicles (Octane Fuel)",
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "quantity": 8593.207692,
+      "unit": "L",
+      "fuelOrGasType": "Octane",
+      "isMonthly": false,
+      "dataQualityTier": "billed",
+      "notes": "Scope1!B19:B30 sum = 8,593.208 L billed octane",
+      "createdAt": "2022-12-31T23:59:59Z"
+    },
+    {
+      "id": "ACT-S1-VEH-DIESEL-2022",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB-PERMANENT",
+      "inventoryId": "INV-ULAB-2022",
+      "scope": 1,
+      "category": "mobile_combustion_fleet",
+      "sourceOrAssetId": "FLEET-DIESEL",
+      "name": "University Vehicles (Diesel Transport)",
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "quantity": 19128.779817,
+      "unit": "L",
+      "fuelOrGasType": "Diesel",
+      "isMonthly": false,
+      "dataQualityTier": "billed",
+      "notes": "Scope1!I19:I30 sum = 19,128.78 L transport diesel",
+      "createdAt": "2022-12-31T23:59:59Z"
+    },
+    {
+      "id": "ACT-S1-GEN-DIESEL-2022",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB-PERMANENT",
+      "inventoryId": "INV-ULAB-2022",
+      "scope": 1,
+      "category": "stationary_combustion_generator",
+      "sourceOrAssetId": "GEN-BACKUP",
+      "name": "Backup Generator Diesel",
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "quantity": 9112.844037,
+      "unit": "L",
+      "fuelOrGasType": "Diesel",
+      "isMonthly": false,
+      "dataQualityTier": "billed",
+      "notes": "Scope1!B47 sum = 9,112.844 L generator diesel",
+      "createdAt": "2022-12-31T23:59:59Z"
+    },
+    {
+      "id": "ACT-S1-COOK-LPG-2022",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB-PERMANENT",
+      "inventoryId": "INV-ULAB-2022",
+      "scope": 1,
+      "category": "cooking_combustion_cafeteria",
+      "sourceOrAssetId": "CAFE-LPG",
+      "name": "Cafeteria Cooking (LPG)",
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "quantity": 12720,
+      "unit": "kg",
+      "fuelOrGasType": "LPG",
+      "isMonthly": false,
+      "dataQualityTier": "billed",
+      "notes": "12,720 kg annual LPG in commercial cylinders",
+      "createdAt": "2022-12-31T23:59:59Z"
+    },
+    {
+      "id": "ACT-S1-AC-R410A-2022",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB-PERMANENT",
+      "inventoryId": "INV-ULAB-2022",
+      "scope": 1,
+      "category": "refrigerant_fugitive_ac",
+      "sourceOrAssetId": "AC-SYSTEMS-R410A",
+      "name": "AC Top-Up (R-410A)",
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "quantity": 136,
+      "unit": "kg",
+      "fuelOrGasType": "R-410A",
+      "isMonthly": false,
+      "dataQualityTier": "measured",
+      "notes": "136 kg maintenance top-up in 2022",
+      "createdAt": "2022-12-31T23:59:59Z"
+    },
+    {
+      "id": "ACT-S1-AC-R22-2022",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB-PERMANENT",
+      "inventoryId": "INV-ULAB-2022",
+      "scope": 1,
+      "category": "refrigerant_fugitive_ac",
+      "sourceOrAssetId": "AC-SYSTEMS-R22",
+      "name": "AC Top-Up (R-22/HCFC-22)",
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "quantity": 163,
+      "unit": "kg",
+      "fuelOrGasType": "R-22",
+      "isMonthly": false,
+      "dataQualityTier": "measured",
+      "notes": "163 kg maintenance top-up in 2022 (Montreal Protocol ODS)",
+      "createdAt": "2022-12-31T23:59:59Z"
+    },
+    {
+      "id": "ACT-S2-ELEC-GRID-2022",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB-PERMANENT",
+      "inventoryId": "INV-ULAB-2022",
+      "scope": 2,
+      "category": "purchased_electricity_grid",
+      "sourceOrAssetId": "METER-MAIN-DESCO",
+      "name": "Purchased Electricity (DESCO/DPDC)",
+      "periodStart": "2022-01-01",
+      "periodEnd": "2022-12-31",
+      "quantity": 641412,
+      "unit": "kWh",
+      "isMonthly": false,
+      "dataQualityTier": "billed",
+      "notes": "Annual billed import from power grid",
+      "createdAt": "2022-12-31T23:59:59Z"
+    }
+  ],
+  "commuterSurveys": [
+    {
+      "id": "RESP-01",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "student",
+      "originArea": "Dhanmondi",
+      "annualAttendanceDays": 294,
+      "primaryMode": "walking",
+      "totalOneWayKm": 1.255,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-02",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "student",
+      "originArea": "Mohammadpur",
+      "annualAttendanceDays": 294,
+      "primaryMode": "bicycle",
+      "totalOneWayKm": 2.77,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-03",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "student",
+      "originArea": "Adabar",
+      "annualAttendanceDays": 294,
+      "primaryMode": "rickshaw",
+      "totalOneWayKm": 3.04,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-04",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "student",
+      "originArea": "Kalyanpur",
+      "annualAttendanceDays": 294,
+      "primaryMode": "battery_rickshaw",
+      "totalOneWayKm": 3.255,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-05",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "student",
+      "originArea": "Mirpur",
+      "annualAttendanceDays": 294,
+      "primaryMode": "public_bus",
+      "totalOneWayKm": 14.51,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-06",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "student",
+      "originArea": "Farmgate",
+      "annualAttendanceDays": 294,
+      "primaryMode": "leguna",
+      "totalOneWayKm": 6.075,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-07",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "student",
+      "originArea": "Shyamoli",
+      "annualAttendanceDays": 294,
+      "primaryMode": "cng_autorickshaw",
+      "totalOneWayKm": 7.86,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-08",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "faculty",
+      "originArea": "Uttara",
+      "annualAttendanceDays": 294,
+      "primaryMode": "private_car",
+      "totalOneWayKm": 9.932,
+      "distanceBasis": "one_way",
+      "carOccupancy": 1,
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-09",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "faculty",
+      "originArea": "Gulshan",
+      "annualAttendanceDays": 294,
+      "primaryMode": "motorcycle",
+      "totalOneWayKm": 8.36,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "RESP-10",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-ULAB",
+      "role": "staff",
+      "originArea": "Badda",
+      "annualAttendanceDays": 294,
+      "primaryMode": "multiple_transport",
+      "totalOneWayKm": 9.045,
+      "distanceBasis": "one_way",
+      "usesInstitutionalFleet": false
+    },
+    {
+      "id": "SURVEY-1791994070504-vz0ei",
+      "institutionId": "INST-ULAB",
+      "campusId": "CAMPUS-MAIN",
+      "role": "student",
+      "originArea": "Dhanmondi",
+      "annualAttendanceDays": 245,
+      "primaryMode": "walking",
+      "totalOneWayKm": 3,
+      "distanceBasis": "one_way",
+      "carOccupancy": 1,
+      "usesInstitutionalFleet": false
+    }
+  ],
+  "calculationRuns": [
+    {
+      "runId": "RUN-1791994157801",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:09:17.801Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 725.5192834859241,
+      "totalGrossEmissions": 1575.82712471255,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 418.2269583177,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 680.51476913994,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1223.4248431042229,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.2945471261144953,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.13561108102540637,
+      "perStudentTotal": 0.32424426434414605,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (8 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 8,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.086054929695,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0861 tCO2e/person * 4860 headcount = 418.227 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 418.2269583177,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 418.2269583177
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791994156534",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "legacy_study_reproduction",
+      "calculatedAt": "2026-10-14T16:09:16.534Z",
+      "scope1Total": 743.109067306402,
+      "scope2LocationBased": 454.13646294584015,
+      "scope3Total": 1302.1028167528978,
+      "totalGrossEmissions": 2499.3483470051397,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 20.648281879632002,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 423.629067306402,
+        "totalWithODS": 743.109067306402
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 1182.8448017605763,
+        "facultyCommuting": 58.412088975830926,
+        "staffCommuting": 60.845926016490544,
+        "totalCommuting": 1302.1028167528978,
+        "gridTdLosses": 0,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1825.8380018214493,
+        "ch4Ton": 0.06693318042605498,
+        "n2oTon": 0.0015032787685686636,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.4671679153280635,
+      "perCapitaScope1": 0.13889889108530878,
+      "perCapitaScope2": 0.08488532017679255,
+      "perCapitaScope3": 0.2433837040659622,
+      "perStudentTotal": 0.5142692072027036,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-VOLUMETRIC-EPA2024",
+          "factorValue": 1.612,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "LEGACY CALCULATION: (12720 kg * 1.612 kg/L)/1000 = 20.5046 tCO2 (Assumed 1 kg = 1 L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 20.504640000000002,
+            "ch4Ton": 0.0048305472,
+            "n2oTon": 0.000032489424,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.648281879632002
+          },
+          "assumptions": [
+            "Dimensional mismatch preserved: kg multiplied by kg/L"
+          ],
+          "disclosures": [
+            "Methodological issue #1: LPG units mismatch"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Legacy reproduction: R-22 included in Scope 1"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.7080261406800001,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "LEGACY REPRODUCTION: (641412 kWh * 0.637861 * 1.11)/1000 = 454.1365 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 454.13646294584015,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 454.13646294584015
+          },
+          "assumptions": [
+            "Direct 1.11 multiplier applied to generation emissions in Scope 2"
+          ],
+          "disclosures": [
+            "Methodological issue #4: Grid losses mixed into Scope 2"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-LEGACY-COMMUTING",
+          "name": "Daily Commuting (Legacy Reproduction Model)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 758,
+          "rawUnit": "survey_respondents",
+          "normalizedQuantity": 5350,
+          "normalizedUnit": "campus_headcount",
+          "factorId": "LEGACY-ULAB-COMMUTE-EXPANSION",
+          "factorValue": 0.2433837040659622,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample (758 non-fleet commuters) sum = 184.27 tCO2. Scaled: (184.27 / 758) * 5350 = 1300.583 tCO2. Plus CH4 (1.519 tCO2e) & N2O (0.0002 tCO2e) = 1302.103 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 1300.5832878571664,
+            "ch4Ton": 0.05445736928557058,
+            "n2oTon": 6.164566437994723e-7,
+            "fGasTon": 0,
+            "totalCO2eTon": 1302.1028167528978
+          },
+          "assumptions": [
+            "758 non-university-transport responses expanded to 5,350 total population"
+          ],
+          "disclosures": [
+            "Methodological issue #2: motorcycle & transit formulas multiplied headcount/percentages",
+            "Methodological issue #3: non-fleet mean applied to all without fleet subtraction"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791994139972",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:08:59.972Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 725.5192834859241,
+      "totalGrossEmissions": 1575.82712471255,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 418.2269583177,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 680.51476913994,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1223.4248431042229,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.2945471261144953,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.13561108102540637,
+      "perStudentTotal": 0.32424426434414605,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (8 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 8,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.086054929695,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0861 tCO2e/person * 4860 headcount = 418.227 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 418.2269583177,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 418.2269583177
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791994139336",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:08:59.336Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 725.5192834859241,
+      "totalGrossEmissions": 1575.82712471255,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 418.2269583177,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 680.51476913994,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1223.4248431042229,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.2945471261144953,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.13561108102540637,
+      "perStudentTotal": 0.32424426434414605,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (8 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 8,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.086054929695,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0861 tCO2e/person * 4860 headcount = 418.227 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 418.2269583177,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 418.2269583177
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791994070513",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:07:50.513Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 725.5192834859241,
+      "totalGrossEmissions": 1575.82712471255,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 418.2269583177,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 680.51476913994,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1223.4248431042229,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.2945471261144953,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.13561108102540637,
+      "perStudentTotal": 0.32424426434414605,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (8 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 8,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.086054929695,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0861 tCO2e/person * 4860 headcount = 418.227 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 418.2269583177,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 418.2269583177
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791994063062",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:07:43.062Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 785.2659918170242,
+      "totalGrossEmissions": 1635.5738330436502,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 477.9736666488,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 740.26147747104,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1283.1715514353232,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.30571473514834585,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.14677869005925687,
+      "perStudentTotal": 0.33653782572914615,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (7 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 7,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.09834849108,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0983 tCO2e/person * 4860 headcount = 477.974 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 477.9736666488,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 477.9736666488
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791994032755",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:07:12.755Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 785.2659918170242,
+      "totalGrossEmissions": 1635.5738330436502,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 477.9736666488,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 740.26147747104,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1283.1715514353232,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.30571473514834585,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.14677869005925687,
+      "perStudentTotal": 0.33653782572914615,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (7 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 7,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.09834849108,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0983 tCO2e/person * 4860 headcount = 477.974 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 477.9736666488,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 477.9736666488
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791994001812",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:06:41.812Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 785.2659918170242,
+      "totalGrossEmissions": 1635.5738330436502,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 477.9736666488,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 740.26147747104,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1283.1715514353232,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.30571473514834585,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.14677869005925687,
+      "perStudentTotal": 0.33653782572914615,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (7 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 7,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.09834849108,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0983 tCO2e/person * 4860 headcount = 477.974 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 477.9736666488,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 477.9736666488
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791993909690",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:05:09.690Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 785.2659918170242,
+      "totalGrossEmissions": 1635.5738330436502,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 477.9736666488,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 740.26147747104,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1283.1715514353232,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.30571473514834585,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.14677869005925687,
+      "perStudentTotal": 0.33653782572914615,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (7 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 7,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.09834849108,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0983 tCO2e/person * 4860 headcount = 477.974 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 477.9736666488,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 477.9736666488
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791993873568",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:04:33.568Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 785.2659918170242,
+      "totalGrossEmissions": 1635.5738330436502,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 477.9736666488,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 740.26147747104,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1283.1715514353232,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.30571473514834585,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.14677869005925687,
+      "perStudentTotal": 0.33653782572914615,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (7 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 7,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.09834849108,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0983 tCO2e/person * 4860 headcount = 477.974 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 477.9736666488,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 477.9736666488
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791993616083",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T16:00:16.083Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 785.2659918170242,
+      "totalGrossEmissions": 1635.5738330436502,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 477.9736666488,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 740.26147747104,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1283.1715514353232,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.30571473514834585,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.14677869005925687,
+      "perStudentTotal": 0.33653782572914615,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (7 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 7,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.09834849108,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0983 tCO2e/person * 4860 headcount = 477.974 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 477.9736666488,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 477.9736666488
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791992560248",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "current_inventory_method",
+      "calculatedAt": "2026-10-14T15:42:40.248Z",
+      "scope1Total": 441.17589262676995,
+      "scope2LocationBased": 409.131948599856,
+      "scope3Total": 785.2659918170242,
+      "totalGrossEmissions": 1635.5738330436502,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 38.195107199999995,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 441.17589262676995,
+        "totalWithODS": 760.65589262677
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856,
+        "tdLossesReallocatedToScope3": 45.00451434598416
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 477.9736666488,
+        "facultyCommuting": 221.62818412224001,
+        "staffCommuting": 40.6596267,
+        "totalCommuting": 740.26147747104,
+        "gridTdLosses": 45.00451434598416,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1283.1715514353232,
+        "ch4Ton": 0.0082812639404844,
+        "n2oTon": 0.0015337728879248641,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.30571473514834585,
+      "perCapitaScope1": 0.08246278366855513,
+      "perCapitaScope2": 0.07647326142053383,
+      "perCapitaScope3": 0.14677869005925687,
+      "perStudentTotal": 0.33653782572914615,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-MASS-IPCC2006",
+          "factorValue": 3,
+          "factorUnit": "kgCO2/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "CURRENT METHOD: (12720 kg * 3.00 kgCO2/kg)/1000 = 38.1600 tCO2 (Corrected for LPG liquid density ~0.54 kg/L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 38.16,
+            "ch4Ton": 0.0006360000000000001,
+            "n2oTon": 0.0000636,
+            "fGasTon": 0,
+            "totalCO2eTon": 38.195107199999995
+          },
+          "assumptions": [
+            "Mass-based emission factor applied"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.637861388,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 2 Generation: (641412 kWh * 0.637861)/1000 = 409.1319 tCO2e. (T&D loss 11% allocated to Scope 3)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 409.131948599856,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 409.131948599856
+          },
+          "assumptions": [
+            "Bangladesh National Grid generation mix 2021-2022"
+          ],
+          "disclosures": [
+            "Scope 2 Location-Based Generation only"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022-TD-LOSS",
+          "name": "Grid T&D Losses (Upstream)",
+          "scope": 3,
+          "category": "grid_transmission_distribution_losses",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-GRID-TD-LOSS-11PCT",
+          "factorValue": 0.07016475268,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Scope 3 Cat 3: (641412 kWh * 0.637861 * 0.11)/1000 = 45.0045 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 45.00451434598416,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 45.00451434598416
+          },
+          "assumptions": [
+            "11% grid transmission and distribution loss"
+          ],
+          "disclosures": [
+            "Re-allocated from Scope 2 to Scope 3 Cat 3 per GHG Protocol Scope 2 Guidance"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STUDENT",
+          "name": "Student Commuting (7 sampled -> 4860 pop)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 7,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 4860,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.09834849108,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.0983 tCO2e/person * 4860 headcount = 477.974 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 477.9736666488,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 477.9736666488
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-FACULTY",
+          "name": "Faculty Commuting (2 sampled -> 240 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 2,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 240,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.923450767176,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.9235 tCO2e/person * 240 headcount = 221.628 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 221.62818412224001,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 221.62818412224001
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-STRATUM-STAFF",
+          "name": "Staff Commuting (1 sampled -> 250 pop)",
+          "scope": 3,
+          "category": "employee_commuting",
+          "rawQuantity": 1,
+          "rawUnit": "sample_responses",
+          "normalizedQuantity": 250,
+          "normalizedUnit": "stratum_population",
+          "factorId": "EF-COMMUTE-STRATIFIED",
+          "factorValue": 0.1626385068,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample mean: 0.1626 tCO2e/person * 250 headcount = 40.660 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 40.6596267,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 40.6596267
+          },
+          "assumptions": [
+            "Stratified expansion with verified round-trip distance"
+          ],
+          "disclosures": [
+            "Zero Scope 3 applied to institutional fleet users"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    },
+    {
+      "runId": "RUN-1791992550772",
+      "inventoryId": "INV-ULAB-2022",
+      "institutionId": "INST-ULAB",
+      "methodTier": "legacy_study_reproduction",
+      "calculatedAt": "2026-10-14T15:42:30.772Z",
+      "scope1Total": 743.109067306402,
+      "scope2LocationBased": 454.13646294584015,
+      "scope3Total": 1302.1028167528978,
+      "totalGrossEmissions": 2499.3483470051397,
+      "scope1Breakdown": {
+        "stationaryDiesel": 24.53172088731776,
+        "fleetOctane": 20.08631792117693,
+        "fleetDiesel": 51.6147466182753,
+        "cafeteriaLpg": 20.648281879632002,
+        "acR410A": 306.748,
+        "acR22MontrealProtocol": 319.48,
+        "totalWithoutODS": 423.629067306402,
+        "totalWithODS": 743.109067306402
+      },
+      "scope2Breakdown": {
+        "generationEmissions": 409.131948599856
+      },
+      "scope3Breakdown": {
+        "studentCommuting": 1182.8448017605763,
+        "facultyCommuting": 58.412088975830926,
+        "staffCommuting": 60.845926016490544,
+        "totalCommuting": 1302.1028167528978,
+        "gridTdLosses": 0,
+        "waterEmissions": 0
+      },
+      "gasDecomposition": {
+        "co2Ton": 1825.8380018214493,
+        "ch4Ton": 0.06693318042605498,
+        "n2oTon": 0.0015032787685686636,
+        "hfcTonCO2e": 306.748,
+        "hcfcTonCO2e": 319.48
+      },
+      "perCapitaTotal": 0.4671679153280635,
+      "perCapitaScope1": 0.13889889108530878,
+      "perCapitaScope2": 0.08488532017679255,
+      "perCapitaScope3": 0.2433837040659622,
+      "perStudentTotal": 0.5142692072027036,
+      "traces": [
+        {
+          "itemKey": "ACT-S1-VEH-OCTANE-2022",
+          "name": "University Vehicles (Octane Fuel)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 8593.207692,
+          "rawUnit": "L",
+          "normalizedQuantity": 8593.207692,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-OCTANE-EPA2024",
+          "factorValue": 2.308,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (8593.207692 L * 2.308)/1000 = 19.8331 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 19.833123353136,
+            "ch4Ton": 0.00167567549994,
+            "n2oTon": 0.0007562022768959999,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.08631792117693
+          },
+          "assumptions": [
+            "Mobile gasoline combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-VEH-DIESEL-2022",
+          "name": "University Vehicles (Diesel Transport)",
+          "scope": 1,
+          "category": "mobile_combustion_fleet",
+          "rawQuantity": 19128.779817,
+          "rawUnit": "L",
+          "normalizedQuantity": 19128.779817,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-MOBILE-EPA2024",
+          "factorValue": 2.687,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (19128.779817 L * 2.687)/1000 = 51.3990 t; CH4 & N2O evaluated via AR6 GWP",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 51.39903136827899,
+            "ch4Ton": 0.0026780291743799998,
+            "n2oTon": 0.000516477055059,
+            "fGasTon": 0,
+            "totalCO2eTon": 51.6147466182753
+          },
+          "assumptions": [
+            "Mobile diesel combustion"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-GEN-DIESEL-2022",
+          "name": "Backup Generator Diesel",
+          "scope": 1,
+          "category": "stationary_combustion_generator",
+          "rawQuantity": 9112.844037,
+          "rawUnit": "L",
+          "normalizedQuantity": 9112.844037,
+          "normalizedUnit": "L",
+          "factorId": "EF-FUEL-DIESEL-GEN-EPA2024",
+          "factorValue": 2.676,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "CO2: (9112.844037 L * 2.676)/1000 = 24.3860 t; CH4: (9112.844037 * 0.0003612)/1000 * 27.9 = 0.09183 tCO2e; N2O: (9112.844037 * 0.00002167)/1000 * 273 = 0.05392 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 24.385970643012,
+            "ch4Ton": 0.0032915592661644003,
+            "n2oTon": 0.000197493555969864,
+            "fGasTon": 0,
+            "totalCO2eTon": 24.53172088731776
+          },
+          "assumptions": [
+            "Stationary diesel combustion with standard EPA emissions"
+          ],
+          "disclosures": []
+        },
+        {
+          "itemKey": "ACT-S1-COOK-LPG-2022",
+          "name": "Cafeteria Cooking (LPG)",
+          "scope": 1,
+          "category": "cooking_combustion_cafeteria",
+          "rawQuantity": 12720,
+          "rawUnit": "kg",
+          "normalizedQuantity": 12720,
+          "normalizedUnit": "kg",
+          "factorId": "EF-LPG-VOLUMETRIC-EPA2024",
+          "factorValue": 1.612,
+          "factorUnit": "kgCO2/L",
+          "factorProvenance": "international_proxy",
+          "equationText": "LEGACY CALCULATION: (12720 kg * 1.612 kg/L)/1000 = 20.5046 tCO2 (Assumed 1 kg = 1 L)",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 20.504640000000002,
+            "ch4Ton": 0.0048305472,
+            "n2oTon": 0.000032489424,
+            "fGasTon": 0,
+            "totalCO2eTon": 20.648281879632002
+          },
+          "assumptions": [
+            "Dimensional mismatch preserved: kg multiplied by kg/L"
+          ],
+          "disclosures": [
+            "Methodological issue #1: LPG units mismatch"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R410A-2022",
+          "name": "AC Top-Up (R-410A)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 136,
+          "rawUnit": "kg",
+          "normalizedQuantity": 136,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R410A-IPCC-AR6",
+          "factorValue": 2255.5,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(136 kg * 2255.5 GWP)/1000 = 306.748 tCO2e",
+          "gwpApplied": 2255.5,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 306.748,
+            "totalCO2eTon": 306.748
+          },
+          "assumptions": [
+            "Sales-based top-up replacement equals annual fugitive emissions"
+          ],
+          "disclosures": [
+            "Included in Kyoto GHG Basket"
+          ]
+        },
+        {
+          "itemKey": "ACT-S1-AC-R22-2022",
+          "name": "AC Top-Up (R-22/HCFC-22)",
+          "scope": 1,
+          "category": "refrigerant_fugitive_ac",
+          "rawQuantity": 163,
+          "rawUnit": "kg",
+          "normalizedQuantity": 163,
+          "normalizedUnit": "kg",
+          "factorId": "EF-REFRIG-R22-IPCC-AR6",
+          "factorValue": 1960,
+          "factorUnit": "kgCO2e/kg",
+          "factorProvenance": "international_proxy",
+          "equationText": "(163 kg * 1960 GWP)/1000 = 319.480 tCO2e",
+          "gwpApplied": 1960,
+          "gasBreakdown": {
+            "co2Ton": 0,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 319.48,
+            "totalCO2eTon": 319.48
+          },
+          "assumptions": [
+            "Top-up assumed emitted"
+          ],
+          "disclosures": [
+            "Legacy reproduction: R-22 included in Scope 1"
+          ]
+        },
+        {
+          "itemKey": "ACT-S2-ELEC-GRID-2022",
+          "name": "Purchased Electricity (DESCO/DPDC)",
+          "scope": 2,
+          "category": "purchased_electricity_grid",
+          "rawQuantity": 641412,
+          "rawUnit": "kWh",
+          "normalizedQuantity": 641412,
+          "normalizedUnit": "kWh",
+          "factorId": "EF-ELEC-GRID-BD-RESEARCH-2022",
+          "factorValue": 0.7080261406800001,
+          "factorUnit": "kgCO2e/kWh",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "LEGACY REPRODUCTION: (641412 kWh * 0.637861 * 1.11)/1000 = 454.1365 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 454.13646294584015,
+            "ch4Ton": 0,
+            "n2oTon": 0,
+            "fGasTon": 0,
+            "totalCO2eTon": 454.13646294584015
+          },
+          "assumptions": [
+            "Direct 1.11 multiplier applied to generation emissions in Scope 2"
+          ],
+          "disclosures": [
+            "Methodological issue #4: Grid losses mixed into Scope 2"
+          ]
+        },
+        {
+          "itemKey": "SCOPE3-LEGACY-COMMUTING",
+          "name": "Daily Commuting (Legacy Reproduction Model)",
+          "scope": 3,
+          "category": "student_commuting",
+          "rawQuantity": 758,
+          "rawUnit": "survey_respondents",
+          "normalizedQuantity": 5350,
+          "normalizedUnit": "campus_headcount",
+          "factorId": "LEGACY-ULAB-COMMUTE-EXPANSION",
+          "factorValue": 0.2433837040659622,
+          "factorUnit": "tCO2e/person-yr",
+          "factorProvenance": "bangladesh_research_derived",
+          "equationText": "Sample (758 non-fleet commuters) sum = 184.27 tCO2. Scaled: (184.27 / 758) * 5350 = 1300.583 tCO2. Plus CH4 (1.519 tCO2e) & N2O (0.0002 tCO2e) = 1302.103 tCO2e",
+          "gwpApplied": 1,
+          "gasBreakdown": {
+            "co2Ton": 1300.5832878571664,
+            "ch4Ton": 0.05445736928557058,
+            "n2oTon": 6.164566437994723e-7,
+            "fGasTon": 0,
+            "totalCO2eTon": 1302.1028167528978
+          },
+          "assumptions": [
+            "758 non-university-transport responses expanded to 5,350 total population"
+          ],
+          "disclosures": [
+            "Methodological issue #2: motorcycle & transit formulas multiplied headcount/percentages",
+            "Methodological issue #3: non-fleet mean applied to all without fleet subtraction"
+          ]
+        }
+      ],
+      "unquantifiedCategories": [
+        "Purchased Goods & Services (Scope 3 Cat 1)",
+        "Capital Goods (Scope 3 Cat 2)",
+        "Waste Generated in Operations (Scope 3 Cat 5)",
+        "Business Travel (Scope 3 Cat 6)"
+      ],
+      "dataQualityNotes": [
+        "Scope 1 fuels and AC refrigerants derived from verified campus administrative receipts",
+        "Scope 2 based on billed utility imports (DESCO/DPDC 641,412 kWh)",
+        "Scope 3 commuting derived from 803 campus survey respondents"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "ACT-01",
+      "institutionId": "INST-ULAB",
+      "title": "Transition AC fleet to low-GWP R-32 units",
+      "scope": 1,
+      "category": "refrigerant_fugitive_ac",
+      "responsibleDepartment": "Facilities Management",
+      "targetCompletionDate": "2026-12-31",
+      "status": "in_progress",
+      "estimatedReductionTCO2e": 420,
+      "estimatedCostBDT": 3500000,
+      "description": "Replace aging R-22 and high-GWP R-410A units with high-efficiency inverter R-32 cooling systems with certified preventative leak detection.",
+      "createdAt": "2025-10-01T09:00:00Z",
+      "updatedAt": "2025-10-10T14:30:00Z",
+      "feedbacks": [
+        {
+          "id": "FB-01",
+          "author": "Campus Sustainability Officer",
+          "type": "status_change",
+          "text": "Vendor RFP issued for 50 inverter units with A2L ventilation compliance.",
+          "timestamp": "2025-10-10T14:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": "ACT-02",
+      "institutionId": "INST-ULAB",
+      "title": "Install 42 kWp Rooftop Solar System on Academic Building",
+      "scope": 2,
+      "category": "purchased_electricity_grid",
+      "responsibleDepartment": "Engineering & Physical Plant",
+      "targetCompletionDate": "2026-06-30",
+      "status": "approved",
+      "estimatedReductionTCO2e": 42.24,
+      "estimatedCostBDT": 4200000,
+      "description": "Implement Alfatha et al. proposal: 42 kWp grid-tied rooftop solar generating 66.2 MWh/yr with 98% campus self-consumption.",
+      "createdAt": "2025-10-02T10:00:00Z",
+      "updatedAt": "2025-10-08T11:00:00Z",
+      "feedbacks": [
+        {
+          "id": "FB-02",
+          "author": "Chief Financial Officer",
+          "type": "comment",
+          "text": "Approved under green campus capital grant budget FY2026.",
+          "timestamp": "2025-10-08T11:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "ACT-03",
+      "institutionId": "INST-ULAB",
+      "title": "Dedicated Shared Hybrid Minibus for Faculty Commuters",
+      "scope": 3,
+      "category": "employee_commuting",
+      "responsibleDepartment": "Transport Operations",
+      "targetCompletionDate": "2026-03-31",
+      "status": "proposed",
+      "estimatedReductionTCO2e": 8.5,
+      "estimatedCostBDT": 1800000,
+      "description": "Provide pooled 14-seater hybrid CNG/gasoline shuttle replacing 14 individual faculty private car daily commutes.",
+      "createdAt": "2025-10-05T12:00:00Z",
+      "updatedAt": "2025-10-05T12:00:00Z",
+      "feedbacks": []
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "LOG-1791994157803",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994157801",
+      "timestamp": "2026-10-14T16:09:17.803Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1575.82712471255,
+        "perCapita": 0.2945471261144953
+      }
+    },
+    {
+      "id": "LOG-1791994156535",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994156534",
+      "timestamp": "2026-10-14T16:09:16.535Z",
+      "details": {
+        "tier": "legacy_study_reproduction",
+        "totalGrossEmissions": 2499.3483470051397,
+        "perCapita": 0.4671679153280635
+      }
+    },
+    {
+      "id": "LOG-1791994139974",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994139972",
+      "timestamp": "2026-10-14T16:08:59.974Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1575.82712471255,
+        "perCapita": 0.2945471261144953
+      }
+    },
+    {
+      "id": "LOG-1791994139338",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994139336",
+      "timestamp": "2026-10-14T16:08:59.338Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1575.82712471255,
+        "perCapita": 0.2945471261144953
+      }
+    },
+    {
+      "id": "LOG-1791994070514",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994070513",
+      "timestamp": "2026-10-14T16:07:50.514Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1575.82712471255,
+        "perCapita": 0.2945471261144953
+      }
+    },
+    {
+      "id": "LOG-1791994070506",
+      "action": "IMPORT_COMMUTER_SURVEYS",
+      "entity": "CommuterSurveyResponse",
+      "entityId": "BATCH",
+      "timestamp": "2026-10-14T16:07:50.506Z",
+      "details": {
+        "count": 1
+      }
+    },
+    {
+      "id": "LOG-1791994063064",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994063062",
+      "timestamp": "2026-10-14T16:07:43.064Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1635.5738330436502,
+        "perCapita": 0.30571473514834585
+      }
+    },
+    {
+      "id": "LOG-1791994063056",
+      "action": "UPDATE_POPULATION",
+      "entity": "PopulationRecord",
+      "entityId": "POP-1791994063054",
+      "timestamp": "2026-10-14T16:07:43.056Z",
+      "details": {
+        "totalHeadcount": 5350
+      }
+    },
+    {
+      "id": "LOG-1791994063051",
+      "action": "CREATE_INSTITUTION",
+      "entity": "Institution",
+      "entityId": "INST-ULAB",
+      "timestamp": "2026-10-14T16:07:43.051Z",
+      "details": {
+        "name": "University of Liberal Arts Bangladesh"
+      }
+    },
+    {
+      "id": "LOG-1791994032756",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994032755",
+      "timestamp": "2026-10-14T16:07:12.756Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1635.5738330436502,
+        "perCapita": 0.30571473514834585
+      }
+    },
+    {
+      "id": "LOG-1791994001813",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791994001812",
+      "timestamp": "2026-10-14T16:06:41.813Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1635.5738330436502,
+        "perCapita": 0.30571473514834585
+      }
+    },
+    {
+      "id": "LOG-1791993909691",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791993909690",
+      "timestamp": "2026-10-14T16:05:09.691Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1635.5738330436502,
+        "perCapita": 0.30571473514834585
+      }
+    },
+    {
+      "id": "LOG-1791993873570",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791993873568",
+      "timestamp": "2026-10-14T16:04:33.570Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1635.5738330436502,
+        "perCapita": 0.30571473514834585
+      }
+    },
+    {
+      "id": "LOG-1791993616084",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791993616083",
+      "timestamp": "2026-10-14T16:00:16.084Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1635.5738330436502,
+        "perCapita": 0.30571473514834585
+      }
+    },
+    {
+      "id": "LOG-1791992560249",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791992560248",
+      "timestamp": "2026-10-14T15:42:40.249Z",
+      "details": {
+        "tier": "current_inventory_method",
+        "totalGrossEmissions": 1635.5738330436502,
+        "perCapita": 0.30571473514834585
+      }
+    },
+    {
+      "id": "LOG-1791992550773",
+      "action": "EXECUTE_CALCULATION",
+      "entity": "CalculationRun",
+      "entityId": "RUN-1791992550772",
+      "timestamp": "2026-10-14T15:42:30.773Z",
+      "details": {
+        "tier": "legacy_study_reproduction",
+        "totalGrossEmissions": 2499.3483470051397,
+        "perCapita": 0.4671679153280635
+      }
+    },
+    {
+      "id": "LOG-01",
+      "action": "SEED_INITIAL_DATA",
+      "entity": "System",
+      "entityId": "INST-ULAB",
+      "timestamp": "2026-10-14T15:42:20.898Z",
+      "details": "Loaded ULAB 2022 research baseline dataset"
+    }
+  ]
+}
