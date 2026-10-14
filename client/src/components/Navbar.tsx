@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   ArrowRight, 
   Menu, 
-  X
+  X,
+  RotateCcw
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -69,6 +70,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               Resources
             </button>
 
+            {/* Reset Draft CTA (when in Assessment) */}
+            {currentView === 'assessment' && (
+              <button
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('cc_reset_draft'));
+                }}
+                className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold text-xs shadow-2xs transition flex items-center gap-1.5 cursor-pointer"
+                title="Reset all assessment draft data and start fresh"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-red-500" />
+                <span>Reset draft</span>
+              </button>
+            )}
+
             {/* Start Assessment CTA */}
             {currentView !== 'assessment' && (
               <button
@@ -123,6 +138,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             Resources
           </button>
+
+          {currentView === 'assessment' && (
+            <button
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('cc_reset_draft'));
+                setMobileMenuOpen(false);
+              }}
+              className="w-full py-2.5 rounded-xl bg-red-50 text-red-600 border border-red-200 font-bold text-xs flex items-center justify-center gap-1.5"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset assessment draft</span>
+            </button>
+          )}
 
           {currentView !== 'assessment' && (
             <button

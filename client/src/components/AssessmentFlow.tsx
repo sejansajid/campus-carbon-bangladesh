@@ -28,7 +28,8 @@ import {
   Info,
   Search,
   Navigation,
-  Loader2
+  Loader2,
+  RotateCcw
 } from 'lucide-react';
 import { 
   Institution, 
@@ -98,6 +99,10 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
   const [activeStep, setActiveStep] = useState<number>(1);
   const [route, setRoute] = useState<AssessmentRoute>('manual');
   const [draftSavedToast, setDraftSavedToast] = useState(false);
+  const [draftResetToast, setDraftResetToast] = useState(false);
+  const [hasSavedDraft, setHasSavedDraft] = useState(false);
+  const [savedDraftMeta, setSavedDraftMeta] = useState<{ name: string; step: number; updatedAt?: string } | null>(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   // Blueprint Preview Modal
@@ -212,13 +217,26 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
     document.body.removeChild(link);
   };
 
-  // Save / Load Draft to LocalStorage
+  // Check Saved Draft in LocalStorage (DO NOT auto-jump without user confirmation)
   useEffect(() => {
     try {
       const saved = localStorage.getItem('CC_ASSESSMENT_DRAFT');
       if (saved) {
         const parsed = JSON.parse(saved);
+        setHasSavedDraft(true);
+        setSavedDraftMeta({
+          name: parsed.institutionName || 'Untitled Assessment',
+          step: parsed.activeStep || 1,
+          updatedAt: parsed.updatedAt
+        });
+
+        // Preload fields so they are ready if resumed
         if (parsed.institutionName) setInstitutionName(parsed.institutionName);
+        if (parsed.institutionType) setInstitutionType(parsed.institutionType);
+        if (parsed.division) setDivision(parsed.division);
+        if (parsed.district) setDistrict(parsed.district);
+        if (parsed.address) setAddress(parsed.address);
+        if (parsed.reportingYear) setReportingYear(parsed.reportingYear);
         if (parsed.studentHeadcount) setStudentHeadcount(parsed.studentHeadcount);
         if (parsed.facultyHeadcount) setFacultyHeadcount(parsed.facultyHeadcount);
         if (parsed.staffHeadcount) setStaffHeadcount(parsed.staffHeadcount);
@@ -228,19 +246,101 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
         if (parsed.floorAreaM2) setFloorAreaM2(parsed.floorAreaM2);
         if (parsed.landAreaAcres) setLandAreaAcres(parsed.landAreaAcres);
         if (parsed.genDieselLitres) setGenDieselLitres(parsed.genDieselLitres);
+        if (parsed.genDieselStatus) setGenDieselStatus(parsed.genDieselStatus);
         if (parsed.fleetOctaneLitres) setFleetOctaneLitres(parsed.fleetOctaneLitres);
         if (parsed.fleetDieselLitres) setFleetDieselLitres(parsed.fleetDieselLitres);
         if (parsed.cafeteriaLpgKg) setCafeteriaLpgKg(parsed.cafeteriaLpgKg);
+        if (parsed.cafeteriaLpgStatus) setCafeteriaLpgStatus(parsed.cafeteriaLpgStatus);
         if (parsed.acR410AKg) setAcR410AKg(parsed.acR410AKg);
+        if (parsed.acR410AStatus) setAcR410AStatus(parsed.acR410AStatus);
         if (parsed.gridElectricityKWh) setGridElectricityKWh(parsed.gridElectricityKWh);
-        if (parsed.activeStep && parsed.activeStep > 1) {
-          setActiveStep(parsed.activeStep);
-          setMasterMode('active');
-        }
+        if (parsed.gridElectricityStatus) setGridElectricityStatus(parsed.gridElectricityStatus);
+        if (parsed.route) setRoute(parsed.route);
+        // User stays on landing view or whatever initial view requested
       }
     } catch (e) {
       console.warn('Failed to parse saved draft from localStorage:', e);
     }
+  }, []);
+
+  const handleResumeSavedDraft = () => {
+    if (savedDraftMeta && savedDraftMeta.step) {
+      setActiveStep(savedDraftMeta.step);
+    }
+    setMasterMode('active');
+  };
+
+  const handleResetAssessment = () => {
+    try {
+      localStorage.removeItem('CC_ASSESSMENT_DRAFT');
+    } catch (e) {}
+
+    // Reset all institution and activity fields to clean slate
+    setInstitutionName('');
+    setInstitutionType('private');
+    setDivision('Dhaka');
+    setDistrict('Dhaka');
+    setAddress('');
+    setReportingYear(new Date().getFullYear() - 1);
+    setPeriodStart(`${new Date().getFullYear() - 1}-01-01`);
+    setPeriodEnd(`${new Date().getFullYear() - 1}-12-31`);
+    setShowAdditionalDetails(false);
+    setHasOperationalControl(true);
+
+    setStudentHeadcount('');
+    setFacultyHeadcount('');
+    setStaffHeadcount('');
+    setOperatingDays('');
+
+    setFloorAreaM2('');
+    setLandAreaAcres('');
+    setCampusLat('');
+    setCampusLng('');
+    setCampusSearchQuery('');
+    setCampusSearchResults([]);
+    setCampusSearchError(null);
+
+    setGenDieselStatus('reported');
+    setGenDieselLitres('');
+    setFleetOctaneStatus('reported');
+    setFleetOctaneLitres('');
+    setFleetDieselStatus('reported');
+    setFleetDieselLitres('');
+    setCafeteriaLpgStatus('reported');
+    setCafeteriaLpgKg('');
+    setAcR410AStatus('reported');
+    setAcR410AKg('');
+    setAcR22Status('confirmed_zero');
+    setAcR22Kg('');
+
+    setGridElectricityStatus('reported');
+    setGridElectricityKWh('');
+
+    setCommuterSurveyStatus('reported');
+    setImportedCommuters([]);
+    setImportSummary(null);
+    setImportErrorDetails(null);
+
+    setUserCalculationRun(null);
+    setActiveStep(1);
+    setRoute('manual');
+    setValidationErrors({});
+    setHasSavedDraft(false);
+    setSavedDraftMeta(null);
+    setShowResetConfirm(false);
+    setMasterMode('landing');
+
+    setDraftResetToast(true);
+    setTimeout(() => setDraftResetToast(false), 3500);
+  };
+
+  // Global listener for navbar reset action
+  useEffect(() => {
+    const handleGlobalResetEvent = () => {
+      handleResetAssessment();
+    };
+    window.addEventListener('cc_reset_draft', handleGlobalResetEvent);
+    return () => window.removeEventListener('cc_reset_draft', handleGlobalResetEvent);
   }, []);
 
   const handleSaveDraft = () => {
@@ -276,6 +376,12 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
     };
     try {
       localStorage.setItem('CC_ASSESSMENT_DRAFT', JSON.stringify(draft));
+      setHasSavedDraft(true);
+      setSavedDraftMeta({
+        name: institutionName || 'Untitled Assessment',
+        step: activeStep,
+        updatedAt: draft.updatedAt
+      });
       setDraftSavedToast(true);
       setTimeout(() => setDraftSavedToast(false), 3000);
     } catch (e) {
@@ -949,6 +1055,57 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
     );
   }
 
+  const renderResetModalAndToast = () => (
+    <>
+      {/* Reset Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 bg-navy-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-navy-100 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3.5 text-red-600">
+              <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center shrink-0">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-navy-900 leading-tight">Reset Assessment Draft?</h3>
+                <p className="text-xs text-navy-500">This action will clear all entered data.</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-navy-600 leading-relaxed bg-navy-50/60 p-4 rounded-2xl border border-navy-100">
+              Resetting will completely wipe all institution details, campus GPS coordinates, Scope 1-3 activity entries, uploaded commuter records, and calculated figures stored in your browser so you can start from a clean slate.
+            </p>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowResetConfirm(false)}
+                className="px-4 py-2.5 rounded-xl bg-navy-50 hover:bg-navy-100 text-navy-700 font-bold text-xs transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleResetAssessment}
+                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>Yes, Reset Everything</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reset Success Toast */}
+      {draftResetToast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-navy-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-navy-700 text-xs font-semibold">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>Assessment draft reset. Starting clean.</span>
+        </div>
+      )}
+    </>
+  );
+
   // -------------------------------------------------------------
   // RENDERING: MODE = 'landing' (Two Choices + Example Entry Point)
   // -------------------------------------------------------------
@@ -967,6 +1124,53 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
             Select your preferred data entry route to calculate your campus greenhouse gas inventory.
           </p>
         </div>
+
+        {/* Saved Draft Banner with Resume & Reset Options */}
+        {hasSavedDraft && savedDraftMeta && (
+          <div className="bg-amber-50/90 border-2 border-amber-300 rounded-3xl p-6 sm:p-7 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0 text-amber-800">
+                <Save className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-200/80 px-2 py-0.5 rounded-md">
+                    Saved Draft Found
+                  </span>
+                  {savedDraftMeta.updatedAt && (
+                    <span className="text-[11px] text-amber-700">
+                      Saved {new Date(savedDraftMeta.updatedAt).toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-lg font-bold text-navy-950">
+                  {savedDraftMeta.name || 'Untitled Assessment'}
+                </h3>
+                <p className="text-xs text-navy-700">
+                  You have an in-progress draft at <strong>Step {savedDraftMeta.step} of 6</strong>. Would you like to resume where you left off, or reset and start fresh?
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
+              <button
+                onClick={handleResumeSavedDraft}
+                className="flex-1 md:flex-none px-5 py-2.5 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs shadow-2xs transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Resume Draft (Step {savedDraftMeta.step})</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => setShowResetConfirm(true)}
+                className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>Reset & Start Fresh</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Survey Templates & Google Forms Automation Package with Disclaimer */}
         {renderTemplatePackage(false)}
@@ -1056,6 +1260,8 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
             </button>
           </div>
         </div>
+
+        {renderResetModalAndToast()}
       </div>
     );
   }
@@ -1101,6 +1307,16 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
             >
               <Save className="w-3 h-3 text-navy-500" />
               <span>{draftSavedToast ? 'Draft saved!' : 'Save draft'}</span>
+            </button>
+            <span className="text-navy-300">•</span>
+            <button
+              type="button"
+              onClick={() => setShowResetConfirm(true)}
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-lg border border-red-200 cursor-pointer transition"
+              title="Clear all saved draft data and start fresh"
+            >
+              <RotateCcw className="w-3 h-3 text-red-500" />
+              <span>Reset draft</span>
             </button>
             <span className="text-navy-300">•</span>
             <button
@@ -2199,6 +2415,16 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
 
           <div className="flex items-center gap-3">
             <button
+              type="button"
+              onClick={() => setShowResetConfirm(true)}
+              className="px-4 py-2.5 rounded-xl text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 font-bold text-xs cursor-pointer shadow-2xs flex items-center gap-1.5 transition"
+              title="Reset this assessment draft and start fresh"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset & Start Fresh</span>
+            </button>
+
+            <button
               onClick={handleSaveDraft}
               className="px-4 py-2.5 rounded-xl text-navy-700 bg-white border border-navy-200 hover:bg-navy-50 font-bold text-xs cursor-pointer shadow-2xs"
             >
@@ -2215,6 +2441,8 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
           </div>
         </div>
       )}
+
+      {renderResetModalAndToast()}
     </div>
   );
 };
