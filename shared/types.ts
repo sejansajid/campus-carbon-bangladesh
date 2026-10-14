@@ -78,9 +78,10 @@ export type ScopeCategory =
   | 'water_supply_treatment'
   | 'solid_waste_disposal'
   | 'paper_procurement'
-  | 'business_travel';
+  | 'business_travel'
+  | 'out_of_scope_ods_memo';
 
-export type ScopeNumber = 1 | 2 | 3;
+export type ScopeNumber = 1 | 2 | 3 | 0;
 
 export interface ActivityRecord {
   id: string;
@@ -264,6 +265,7 @@ export interface InventoryCalculationResult {
   
   // Detailed audit traces
   traces: CalculationTrace[];
+  outOfScopeDisclosures?: CalculationTrace[];
   
   // Data coverage and flags
   unquantifiedCategories: string[];

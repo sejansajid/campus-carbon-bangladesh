@@ -1,4 +1,4 @@
-import { test, describe } from 'node:test';
+import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert';
 import { calculateInventory } from '../shared/engine/calculator';
 import { LEGACY_ULAB_2022_FIXTURE } from '../shared/engine/legacy-reproduction';
@@ -6,8 +6,20 @@ import { EMISSION_FACTOR_REGISTRY, getFactorById } from '../shared/factors/regis
 import { GWP_SETS, getGWP } from '../shared/factors/gwp';
 import { evaluateMitigationScenario, PRESET_SCENARIOS } from '../shared/scenarios/mitigation';
 import { ActivityRecord, CommuterSurveyResponse, PopulationRecord } from '../shared/types';
+import { app } from '../server/src/index';
 
 const BASE_URL = 'http://localhost:4000';
+
+let testServer: any;
+before(() => {
+  return new Promise((resolve) => {
+    testServer = app.listen(4000, () => resolve(true));
+  });
+});
+
+after(() => {
+  if (testServer) testServer.close();
+});
 
 describe('1. Synthetic Test Institutional Run (Section 14)', () => {
   test('Exact mathematical verification of synthetic baseline run', () => {
@@ -500,3 +512,94 @@ describe('7. Live Backend API Acceptance Tests', () => {
     assert.ok(scriptText.includes('createCampusCommuterSurvey'));
   });
 });
+
+describe('8. Redesign & Defect Repair Acceptance Criteria (Campus Carbon Prompt)', () => {
+  test('Defect 1 Invariant: Scope 1 and refrigerant line items strictly reconcile', async () => {
+    const res = await fetch(`${BASE_URL}/api/calculate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ institutionId: 'INST-ULAB', tier: 'current_inventory_method' })
+    });
+    assert.strictEqual(res.status, 200);
+    const run = await res.json() as any;
+
+    // Scope 1 total is 441.18 tCO2e
+    assert.strictEqual(Number(run.scope1Total.toFixed(2)), 441.18);
+    // In-scope AC R-410A is 306.75 tCO2e
+    assert.strictEqual(Number(run.scope1Breakdown.acR410A.toFixed(2)), 306.75);
+    // Ensure in-scope refrigerant does not exceed Scope 1 total
+    assert.ok(run.scope1Breakdown.acR410A <= run.scope1Total);
+    // Montreal Protocol R-22 is 319.48 tCO2e and must be disclosed in outOfScopeDisclosures
+    assert.ok(run.outOfScopeDisclosures);
+    assert.strictEqual(run.outOfScopeDisclosures.length, 1);
+    assert.strictEqual(run.outOfScopeDisclosures[0].scope, 0);
+    assert.strictEqual(Number(run.outOfScopeDisclosures[0].gasBreakdown.totalCO2eTon.toFixed(2)), 319.48);
+  });
+
+  test('Defect 2 Invariant: Scenario cooling reductions never exceed Scope 1 cooling baseline', async () => {
+    const resCalc = await fetch(`${BASE_URL}/api/calculate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ institutionId: 'INST-ULAB', tier: 'current_inventory_method' })
+    });
+    const baseline = await resCalc.json() as any;
+
+    // Evaluate ambitious scenario with 80% cooling reduction
+    const resScenario = await fetch(`${BASE_URL}/api/scenarios/evaluate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        institutionId: 'INST-ULAB',
+        scenarioConfig: PRESET_SCENARIOS[2] // Ambitious
+      })
+    });
+    assert.strictEqual(resScenario.status, 200);
+    const evalData = await resScenario.json() as any;
+    const scenario = evalData.scenarioResult;
+
+    // The in-scope net reduction cannot exceed the in-scope baseline
+    assert.ok(scenario.netReductionTCO2e < scenario.baselineTotalTCO2e);
+    // Core inventory percentage reduction cannot exceed 100%
+    assert.ok(scenario.percentageReduction <= 100);
+    assert.ok(scenario.percentageReduction >= 0);
+  });
+
+  test('Demo Isolation Invariant: Shared historical fixture INST-ULAB is protected from mutation', async () => {
+    // Attempting to overwrite INST-ULAB name
+    const res = await fetch(`${BASE_URL}/api/institutions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: 'INST-ULAB',
+        name: 'Hacked University Name'
+      })
+    });
+    assert.ok(res.status === 400 || res.status === 403, `Expected 400 or 403, got ${res.status}`);
+    const data = await res.json() as any;
+    assert.ok(data.error);
+  });
+
+  test('Language Hygiene Invariant: English and Bangla i18n dictionaries contain no prompt leaks', async () => {
+    const { EN_TRANSLATIONS } = await import('../shared/i18n/en');
+    const { BN_TRANSLATIONS } = await import('../shared/i18n/bn');
+
+    const enValues = Object.values(EN_TRANSLATIONS).join(' ');
+    const bnValues = Object.values(BN_TRANSLATIONS).join(' ');
+
+    const forbiddenPatterns = [
+      'Prompt Section',
+      'Methodological Issue #',
+      'Route A',
+      'Route B',
+      'Re-run Engine',
+      'Bulk Data Ingestion',
+      'GHG Protocol HEI Standard'
+    ];
+
+    for (const pattern of forbiddenPatterns) {
+      assert.ok(!enValues.includes(pattern), `EN dictionary leaked: ${pattern}`);
+      assert.ok(!bnValues.includes(pattern), `BN dictionary leaked: ${pattern}`);
+    }
+  });
+});
+

@@ -22,6 +22,8 @@ export interface ScenarioCalculationResult {
   scope3Reduction: number;
   
   scenarioPerCapita: number;
+  outOfScopeOdsBaseline?: number;
+  outOfScopeOdsSavings?: number;
   
   interventions: {
     category: string;
@@ -49,35 +51,54 @@ export function evaluateMitigationScenario(
   let scope2Additions = 0;
   let scope3Savings = 0;
 
+  const includesOdsInScope1 = Boolean(
+    baseline.scope1Total && 
+    baseline.scope1Breakdown.totalWithODS && 
+    Math.abs(baseline.scope1Total - baseline.scope1Breakdown.totalWithODS) < 0.01
+  );
+
+  let outOfScopeOdsBaseline = 0;
+  let outOfScopeOdsSavings = 0;
+
   // 1. COOLANT TRANSITION & AC LEAK REDUCTION (SCOPE 1)
   if (config.coolantTransition.enabled) {
-    const acBaseline = baseline.scope1Breakdown.acR410A + (baseline.scope1Breakdown.acR22MontrealProtocol || 0);
-    if (acBaseline > 0) {
+    const inScopeAcBaseline = includesOdsInScope1
+      ? (baseline.scope1Breakdown.acR410A + (baseline.scope1Breakdown.acR22MontrealProtocol || 0))
+      : baseline.scope1Breakdown.acR410A;
+    
+    outOfScopeOdsBaseline = !includesOdsInScope1 ? (baseline.scope1Breakdown.acR22MontrealProtocol || 0) : 0;
+
+    if (inScopeAcBaseline > 0 || outOfScopeOdsBaseline > 0) {
       if (!config.coolantTransition.replaceEquipment && (config.coolantTransition.targetCoolant === 'R32' || config.coolantTransition.targetCoolant === 'R290')) {
         warnings.push('CRITICAL: R-32 or R-290 cannot be dropped into existing R-22/R-410A compressors due to operating pressure and A2L flammability differences. Equipment replacement must be specified.');
       }
 
-      // R32 has GWP 771 vs R410A GWP 2255.5 (~65.8% reduction) and R22 GWP 1960 (~60.7% reduction)
-      // plus leak reduction through scheduled preventative maintenance
-      const gwpFactorReduction = config.coolantTransition.targetCoolant === 'R32' ? (1 - 771 / 2100) : 0.99;
+      // R32 has GWP 771 vs R410A GWP 2255.5 (~65.8% reduction)
+      const gwpFactorReduction = config.coolantTransition.targetCoolant === 'R32' ? (1 - 771 / 2255.5) : 0.99;
       const leakReduction = config.coolantTransition.leakReductionPercent / 100;
       
       const effectiveSavingRatio = 1 - (1 - gwpFactorReduction) * (1 - leakReduction);
-      const savings = acBaseline * effectiveSavingRatio;
-      scope1Savings += savings;
+      const inScopeSavings = inScopeAcBaseline * effectiveSavingRatio;
+      scope1Savings += inScopeSavings;
+
+      if (outOfScopeOdsBaseline > 0) {
+        outOfScopeOdsSavings = outOfScopeOdsBaseline * effectiveSavingRatio;
+      }
 
       interventions.push({
         category: 'Cooling / HVAC Refrigerants',
         description: `Transition to ${config.coolantTransition.targetCoolant} with ${config.coolantTransition.leakReductionPercent}% leak reduction`,
         scopeAffected: 1,
-        grossSavingsTCO2e: savings,
+        grossSavingsTCO2e: inScopeSavings,
         crossScopeAdditionTCO2e: 0,
-        netSavingsTCO2e: savings,
+        netSavingsTCO2e: inScopeSavings,
         technicalFeasibilityNotes: [
           config.coolantTransition.replaceEquipment 
             ? 'Compatible heat pumps/inverters with A2L ventilation installed' 
             : 'WARNING: Compressor retrofit required for safety certification',
-          'Enforces ASHRAE 15 mechanical room safety protocols'
+          outOfScopeOdsSavings > 0
+            ? `Separately disclosed Montreal Protocol ODS abatement: ${outOfScopeOdsSavings.toFixed(2)} tCO2e phased out (reported in memo item, not deducted from Scope 1)`
+            : 'Enforces mechanical room safety protocols'
         ]
       });
     }
@@ -212,6 +233,8 @@ export function evaluateMitigationScenario(
     scope3Scenario,
     scope3Reduction: scope3Savings,
     scenarioPerCapita,
+    outOfScopeOdsBaseline,
+    outOfScopeOdsSavings,
     interventions,
     interactionWarnings: warnings
   };

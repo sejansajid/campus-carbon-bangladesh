@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MapPin, Layers, ShieldCheck, Info, Maximize2 } from 'lucide-react';
+import { MapPin, Layers, ShieldCheck, Info, Compass, Maximize2, RefreshCw } from 'lucide-react';
 import L from 'leaflet';
 import { CampusBoundary } from '../../../shared/types';
-import { Language, t } from '../../../shared/i18n';
+import { Language } from '../../../shared/i18n';
 
 interface CampusMapProps {
   boundary?: CampusBoundary;
   institutionName: string;
   lang: Language;
+  isDemo?: boolean;
 }
 
-// Commuter origin coordinates in Dhaka with sample respondent counts from research dataset
+// Commuter origin coordinates with aggregated counts
 const DHAKA_COMMUTER_ORIGINS = [
   { area: 'Adabar', count: 24, coords: [23.7745, 90.3562], distanceKm: 2.8 },
   { area: 'Mohammadpur', count: 18, coords: [23.7588, 90.3602], distanceKm: 1.5 },
@@ -21,7 +22,7 @@ const DHAKA_COMMUTER_ORIGINS = [
   { area: 'Old Dhaka / Bangshal', count: 6, coords: [23.7145, 90.4072], distanceKm: 7.2 },
   { area: 'Banani', count: 5, coords: [23.7937, 90.4066], distanceKm: 9.0 },
   { area: 'Dhaka Cantonment', count: 5, coords: [23.8184, 90.3955], distanceKm: 8.0 },
-  // Small cell count (< 5) suppressed for privacy
+  // Under-threshold cells (< 5) are suppressed
   { area: 'Agargaon', count: 4, coords: [23.7778, 90.3782], distanceKm: 3.5, suppressed: true },
   { area: 'Badda', count: 3, coords: [23.7805, 90.4267], distanceKm: 9.8, suppressed: true },
   { area: 'Banasree', count: 2, coords: [23.7634, 90.4328], distanceKm: 10.2, suppressed: true }
@@ -30,37 +31,69 @@ const DHAKA_COMMUTER_ORIGINS = [
 export const CampusMap: React.FC<CampusMapProps> = ({
   boundary,
   institutionName,
-  lang
+  lang,
+  isDemo = false
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
 
   const [activeLayer, setActiveLayer] = useState<'all' | 'campus' | 'origins'>('all');
-  const [privacyThreshold, setPrivacyThreshold] = useState<number>(5);
+  const [tileError, setTileError] = useState<boolean>(false);
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false);
 
+  const isBn = lang === 'bn';
   const centerCoords: [number, number] = boundary?.centerCoordinates || [23.7547, 90.3582];
+  const landAreaAcres = boundary?.landAreaAcres ?? 5.5;
+  const buildingFloorAreaM2 = boundary?.grossFloorAreaM2 ?? 24500;
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
     // Initialize Map if not already created
     if (!mapInstanceRef.current) {
-      const map = L.map(mapContainerRef.current, {
-        center: centerCoords,
-        zoom: 13,
-        zoomControl: true
-      });
+      try {
+        const map = L.map(mapContainerRef.current, {
+          center: centerCoords,
+          zoom: 13,
+          zoomControl: true,
+          attributionControl: true
+        });
 
-      // Add OpenStreetMap base tiles with proper attribution
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+        // Add OpenStreetMap base tiles
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors'
+        });
 
-      mapInstanceRef.current = map;
+        tiles.on('tileerror', () => {
+          setTileError(true);
+        });
+
+        tiles.on('load', () => {
+          setMapLoaded(true);
+          setTileError(false);
+        });
+
+        tiles.addTo(map);
+        mapInstanceRef.current = map;
+
+        // Invalidate size immediately and after short delay to ensure proper rendering inside tabs/containers
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 150);
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 500);
+      } catch (err) {
+        console.error('Failed to initialize Leaflet map:', err);
+      }
     }
 
     const map = mapInstanceRef.current;
+    if (!map) return;
+
+    // Invalidate size on each update
+    map.invalidateSize();
 
     // Clear existing overlay layers
     map.eachLayer((layer) => {
@@ -69,20 +102,31 @@ export const CampusMap: React.FC<CampusMapProps> = ({
       }
     });
 
-    // 1. Campus Marker & Boundary Polygon
+    // 1. Campus Marker & Perimeter Polygon
     if (activeLayer === 'all' || activeLayer === 'campus') {
       const campusIcon = L.divIcon({
         className: 'custom-campus-pin',
-        html: `<div style="background-color:#0d9488;color:white;padding:4px 8px;border-radius:6px;font-weight:bold;font-size:11px;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);white-space:nowrap;">🏛️ ${institutionName}</div>`,
-        iconSize: [120, 30],
-        iconAnchor: [60, 15]
+        html: `<div style="background-color:#14243A;color:white;padding:5px 9px;border-radius:8px;font-weight:bold;font-size:11px;border:2px solid #2457D6;box-shadow:0 3px 8px rgba(0,0,0,0.3);white-space:nowrap;display:flex;align-items:center;gap:4px;">
+          <span>🏛️</span><span>${institutionName}</span>
+        </div>`,
+        iconSize: [140, 32],
+        iconAnchor: [70, 16]
       });
 
       L.marker(centerCoords, { icon: campusIcon })
         .addTo(map)
-        .bindPopup(`<b>${institutionName}</b><br/>Permanent Campus (Mohammadpur)<br/>Lat: ${centerCoords[0]}, Lng: ${centerCoords[1]}`);
+        .bindPopup(`
+          <div style="font-family:sans-serif;padding:4px;">
+            <b style="color:#14243A;font-size:13px;">${institutionName}</b><br/>
+            <span style="font-size:11px;color:#64748B;">Permanent Campus Perimeter</span><br/>
+            <hr style="margin:6px 0;border-top:1px solid #E2E8F0;"/>
+            <span style="font-size:11px;"><b>Land Area:</b> ${landAreaAcres} Acres</span><br/>
+            <span style="font-size:11px;"><b>Building Floor Area:</b> ${buildingFloorAreaM2.toLocaleString()} m²</span><br/>
+            <span style="font-size:10px;color:#94A3B8;">GPS: ${centerCoords[0].toFixed(4)}° N, ${centerCoords[1].toFixed(4)}° E</span>
+          </div>
+        `);
 
-      // Add illustrative campus boundary polygon
+      // Illustrative campus boundary polygon
       const polygonCoords: L.LatLngExpression[] = [
         [23.7535, 90.3565],
         [23.7535, 90.3595],
@@ -92,121 +136,193 @@ export const CampusMap: React.FC<CampusMapProps> = ({
       ];
 
       L.polygon(polygonCoords, {
-        color: '#0d9488',
-        fillColor: '#14b8a6',
-        fillOpacity: 0.25,
+        color: '#2457D6',
+        fillColor: '#3B82F6',
+        fillOpacity: 0.2,
         weight: 2
-      }).addTo(map).bindPopup('Institutional Accounting Perimeter: ~5.5 Acres');
+      }).addTo(map).bindPopup(`<b>Campus Perimeter Boundary:</b> ~${landAreaAcres} Acres`);
     }
 
-    // 2. Commuter Origin Privacy Clusters
+    // 2. Commuter Origin Clusters (Strictly k >= 5 respondents)
     if (activeLayer === 'all' || activeLayer === 'origins') {
-      DHKH_LOOP: for (const item of DHAKA_COMMUTER_ORIGINS) {
-        // Enforce privacy threshold: Suppress cells with count < threshold
-        if (item.count < privacyThreshold) {
-          continue DHKH_LOOP;
-        }
+      const publicOrigins = DHAKA_COMMUTER_ORIGINS.filter(o => !o.suppressed);
 
-        const radius = Math.min(25, Math.max(8, item.count * 1.2));
-        const circle = L.circleMarker(item.coords as [number, number], {
-          radius: radius,
-          fillColor: '#8b5cf6',
-          color: '#6d28d9',
-          weight: 1.5,
-          opacity: 0.8,
-          fillOpacity: 0.45
+      publicOrigins.forEach(origin => {
+        const radius = Math.min(22, Math.max(9, Math.sqrt(origin.count) * 4));
+        const circle = L.circleMarker(origin.coords as [number, number], {
+          radius,
+          fillColor: '#7C3AED',
+          color: '#FFFFFF',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.75
         }).addTo(map);
 
         circle.bindPopup(`
-          <div style="font-size:12px;font-family:sans-serif;">
-            <b>${item.area} Commuter Cluster</b><br/>
-            Respondents: <b>${item.count}</b> individuals<br/>
-            Average Distance: ~${item.distanceKm} km to campus<br/>
-            <span style="color:#64748b;font-size:10px;">Privacy: Aggregated cluster (k ≥ ${privacyThreshold})</span>
+          <div style="font-family:sans-serif;padding:4px;">
+            <b style="color:#14243A;font-size:13px;">${origin.area}</b><br/>
+            <span style="font-size:11px;color:#7C3AED;font-weight:bold;">${origin.count} survey respondents (k ≥ 5)</span><br/>
+            <span style="font-size:11px;color:#64748B;">Approx. Distance: ${origin.distanceKm} km to campus</span>
           </div>
         `);
-      }
+      });
     }
 
-  }, [centerCoords, activeLayer, privacyThreshold, institutionName]);
+    // Fit bounds smoothly
+    if (activeLayer === 'campus') {
+      map.setView(centerCoords, 15);
+    } else {
+      map.setView(centerCoords, 12);
+    }
+
+    // Window resize listener
+    const handleResize = () => {
+      map.invalidateSize();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [boundary, centerCoords, activeLayer, institutionName, landAreaAcres, buildingFloorAreaM2]);
+
+  const handleRecenter = () => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.setView(centerCoords, 13);
+      mapInstanceRef.current.invalidateSize();
+    }
+  };
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-4">
+      {/* Map Control Bar */}
+      <div className="bg-white p-5 rounded-3xl border border-navy-100 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-teal-700" />
-              Interactive Campus GIS & Commuter Origin Mapping
-            </h2>
-            <p className="text-xs text-slate-500">
-              Visualizes the institutional boundary, building footprints, and aggregated student/faculty commuting hubs across the Dhaka metropolitan region.
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-cobalt-600"></span>
+              <span className="text-xs font-bold text-cobalt-600 uppercase tracking-wider">
+                {isBn ? 'ক্যাম্পাস ভৌগোলিক মানচিত্র' : 'Spatial Footprint & Commuter GIS'}
+              </span>
+            </div>
+            <h3 className="text-xl font-extrabold text-navy-900 mt-1">
+              {isBn ? 'ক্যাম্পাস সীমানা ও যাতায়াত হাব' : 'Campus Perimeter & Travel Clusters'}
+            </h3>
+            <p className="text-xs text-navy-500 mt-0.5">
+              {isBn 
+                ? 'বিশ্ববিদ্যালয় সীমানা এবং শিক্ষার্থীদের বৃহত্তর ঢাকা অঞ্চলের যাতায়াত ক্লাস্টার।'
+                : 'Interactive spatial visualization of campus boundary and origin commuter clusters across Dhaka.'}
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-500 font-medium">Layers:</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center bg-navy-50 p-1 rounded-xl border border-navy-100">
+              <button
+                onClick={() => setActiveLayer('all')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                  activeLayer === 'all' 
+                    ? 'bg-navy-800 text-white shadow-xs' 
+                    : 'text-navy-600 hover:text-navy-900'
+                }`}
+              >
+                {isBn ? 'সব লেয়ার' : 'All Layers'}
+              </button>
+              <button
+                onClick={() => setActiveLayer('campus')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                  activeLayer === 'campus' 
+                    ? 'bg-cobalt-600 text-white shadow-xs' 
+                    : 'text-navy-600 hover:text-navy-900'
+                }`}
+              >
+                {isBn ? 'শুধু ক্যাম্পাস' : 'Campus Only'}
+              </button>
+              <button
+                onClick={() => setActiveLayer('origins')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                  activeLayer === 'origins' 
+                    ? 'bg-purple-600 text-white shadow-xs' 
+                    : 'text-navy-600 hover:text-navy-900'
+                }`}
+              >
+                {isBn ? 'যাতায়াত হাব' : 'Commuter Hubs'}
+              </button>
+            </div>
+
             <button
-              onClick={() => setActiveLayer('all')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${activeLayer === 'all' ? 'bg-teal-700 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+              onClick={handleRecenter}
+              className="p-2 rounded-xl bg-navy-50 hover:bg-navy-100 text-navy-700 border border-navy-200 transition"
+              title={isBn ? 'পুনরায় কেন্দ্র করুন' : 'Recenter map'}
+              aria-label="Recenter map"
             >
-              All Layers
-            </button>
-            <button
-              onClick={() => setActiveLayer('campus')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${activeLayer === 'campus' ? 'bg-teal-700 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-            >
-              Campus Only
-            </button>
-            <button
-              onClick={() => setActiveLayer('origins')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${activeLayer === 'origins' ? 'bg-purple-700 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-            >
-              Commuter Hubs
+              <RefreshCw className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Map Card */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
-        {/* Leaflet Container */}
+      {/* Map Canvas with Guaranteed Responsive Height */}
+      <div className="bg-white p-4 rounded-3xl border border-navy-100 shadow-xs space-y-4">
         <div 
           ref={mapContainerRef} 
-          className="h-[460px] w-full rounded-xl overflow-hidden border border-slate-200 shadow-inner relative"
-        />
-
-        {/* Spatial Metadata & Privacy Callout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-1">
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-            <span className="font-bold text-slate-700 block">Campus Perimeter Area</span>
-            <div className="text-base font-extrabold text-slate-900">
-              5.5 <span className="text-xs font-normal text-slate-500">Acres (24,500 m² Floor Area)</span>
+          style={{ height: '520px', minHeight: '360px', width: '100%' }}
+          className="w-full rounded-2xl overflow-hidden border border-navy-100 shadow-inner relative z-0"
+        >
+          {tileError && (
+            <div className="absolute top-4 left-4 z-1000 bg-amber-50 border border-amber-300 text-amber-900 px-3 py-2 rounded-xl text-xs shadow-md">
+              <span>Map tiles are loading slowly or offline. Geometry data remains functional.</span>
             </div>
-            <div className="text-[11px] text-slate-400">
-              Coordinates: {centerCoords[0].toFixed(4)}° N, {centerCoords[1].toFixed(4)}° E
+          )}
+        </div>
+
+        {/* Spatial Metadata & Accurate Privacy Disclosure */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-1">
+          {/* Card 1: Separate Land Area from Building Floor Area */}
+          <div className="p-4 rounded-2xl bg-navy-50/70 border border-navy-100 space-y-1">
+            <span className="font-bold text-navy-800 block text-xs">
+              {isBn ? 'ক্যাম্পাস ভৌগোলিক এলাকা' : 'Campus Spatial Footprint'}
+            </span>
+            <div className="flex items-baseline gap-3 pt-1">
+              <div>
+                <span className="text-lg font-extrabold text-navy-900 tabular-nums">{landAreaAcres}</span>
+                <span className="text-xs text-navy-500 ml-1">Acres (Land Area)</span>
+              </div>
+              <div className="text-navy-300">|</div>
+              <div>
+                <span className="text-lg font-extrabold text-navy-900 tabular-nums">{buildingFloorAreaM2.toLocaleString()}</span>
+                <span className="text-xs text-navy-500 ml-1">m² (Building Floor)</span>
+              </div>
+            </div>
+            <div className="text-[11px] text-navy-500 pt-1">
+              {isBn 
+                ? `স্থানাঙ্ক: ${centerCoords[0].toFixed(4)}° উত্তর, ${centerCoords[1].toFixed(4)}° পূর্ব` 
+                : `Coordinates: ${centerCoords[0].toFixed(4)}° N, ${centerCoords[1].toFixed(4)}° E`}
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-purple-50/70 border border-purple-200 space-y-1">
-            <span className="font-bold text-purple-900 block flex items-center gap-1.5">
+          {/* Card 2: Accurate Privacy-Preserving Explanation */}
+          <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-1">
+            <span className="font-bold text-purple-900 block flex items-center gap-1.5 text-xs">
               <ShieldCheck className="w-4 h-4 text-purple-700" />
-              Privacy-Preserving Aggregation (k ≥ 5)
+              {isBn ? 'গোপনীয়তা রক্ষা পরিমাপ (k ≥ ৫)' : 'Privacy Measure (k ≥ 5 Aggregation)'}
             </span>
-            <div className="text-[11px] text-purple-800 leading-relaxed">
-              To guarantee individual respondent anonymity, small origin cells with fewer than 5 travelers are automatically suppressed and grouped into broad regional clusters.
-            </div>
+            <p className="text-[11px] text-purple-800 leading-relaxed">
+              {isBn 
+                ? 'ব্যক্তিগত গোপনীয়তা সুরক্ষার জন্য ৫ জনের কম ভ্রমণকারী সংবলিত অঞ্চলগুলো মানচিত্র থেকে স্বয়ংক্রিয়ভাবে বাদ দেওয়া হয়।' 
+                : 'To protect personal privacy, origins with fewer than 5 survey respondents are withheld from spatial maps and grouped into regional totals.'}
+            </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-teal-50/70 border border-teal-200 space-y-1">
-            <span className="font-bold text-teal-900 block flex items-center gap-1.5">
-              <Info className="w-4 h-4 text-teal-700" />
-              Cartographic Citation & Source
+          {/* Card 3: Cartographic Citation */}
+          <div className="p-4 rounded-2xl bg-cobalt-50/70 border border-cobalt-200 space-y-1">
+            <span className="font-bold text-cobalt-900 block flex items-center gap-1.5 text-xs">
+              <Info className="w-4 h-4 text-cobalt-700" />
+              {isBn ? 'মানচিত্রের তথ্যসূত্র' : 'Cartographic Provenance'}
             </span>
-            <div className="text-[11px] text-teal-800 leading-relaxed">
-              OpenStreetMap tile provider & ULAB GIS Heatmap coordinates (<code className="bg-teal-100 px-1 rounded">HEATMAP.kml</code> research dataset).
-            </div>
+            <p className="text-[11px] text-cobalt-800 leading-relaxed">
+              {isDemo
+                ? (isBn ? 'উন্মুক্ত স্ট্রিটম্যাপ ও ULAB গবেষণা জরিপ ক্লাস্টার।' : 'OpenStreetMap base tiles & ULAB research survey origin dataset.')
+                : (isBn ? 'আপনার বিশ্ববিদ্যালয়ের জরিপ থেকে সংগৃহীত হাব।' : 'Derived from your institution’s approved commuter travel survey.')}
+            </p>
           </div>
         </div>
       </div>

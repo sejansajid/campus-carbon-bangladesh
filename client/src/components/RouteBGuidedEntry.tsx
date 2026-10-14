@@ -113,10 +113,10 @@ export const RouteBGuidedEntry: React.FC<RouteBGuidedEntryProps> = ({
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           <Layers className="w-5 h-5 text-teal-700" />
-          Route B — Guided Question Data Entry
+          Enter existing data
         </h2>
         <p className="text-xs text-slate-500 leading-relaxed">
-          Step-by-step entry for independently collected data, utility bills, generator fuel logbooks, and maintenance receipts.
+          Step-by-step entry for campus utility bills, generator fuel logbooks, and maintenance receipts.
           Live calculation traces reveal exact emission factors and unit conversions in real time.
         </p>
       </div>

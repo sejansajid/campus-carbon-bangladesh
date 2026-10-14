@@ -1,27 +1,49 @@
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    background-color: #F6F3EC;
+    color: #14243A;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Tabular numbers for all metrics */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #ECE6D9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #C2D2E1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #94AFC9;
 }
 
-/* Ensure Leaflet tiles render smoothly */
+/* Ensure Leaflet tiles render reliably with explicit responsive heights */
 .leaflet-container {
-  width: 100%;
-  height: 100%;
-  border-radius: 0.5rem;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 360px;
   z-index: 10;
+  border-radius: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .leaflet-container {
+    min-height: 520px;
+  }
 }

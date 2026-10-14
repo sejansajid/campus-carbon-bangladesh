@@ -35,13 +35,35 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({
   const [periodType, setPeriodType] = useState(institution.periodType);
   const [optIn, setOptIn] = useState(institution.optInPublicComparison);
 
-  // Population
-  const [students, setStudents] = useState(population?.studentHeadcount || 4860);
-  const [faculty, setFaculty] = useState(population?.facultyHeadcount || 240);
-  const [staff, setStaff] = useState(population?.staffHeadcount || 250);
-  const [operatingDays, setOperatingDays] = useState(population?.campusOperatingDaysPerYear || 294);
-  const [floorArea, setFloorArea] = useState(boundary?.grossFloorAreaM2 || 24500);
-  const [landArea, setLandArea] = useState(boundary?.landAreaAcres || 5.5);
+  // Population & Geometry - Zero/empty defaults for new assessments
+  const [students, setStudents] = useState(population?.studentHeadcount ?? 0);
+  const [faculty, setFaculty] = useState(population?.facultyHeadcount ?? 0);
+  const [staff, setStaff] = useState(population?.staffHeadcount ?? 0);
+  const [operatingDays, setOperatingDays] = useState(population?.campusOperatingDaysPerYear ?? 0);
+  const [floorArea, setFloorArea] = useState(boundary?.grossFloorAreaM2 ?? 0);
+  const [landArea, setLandArea] = useState(boundary?.landAreaAcres ?? 0);
+
+  // Sync state whenever institution/population/boundary changes
+  React.useEffect(() => {
+    setName(institution.name);
+    setNameBn(institution.nameBn || '');
+    setType(institution.type);
+    setDivision(institution.division);
+    setDistrict(institution.district);
+    setAddress(institution.address || '');
+    setConsolidationMethod(institution.consolidationMethod);
+    setReportingYear(institution.reportingYear);
+    setPeriodStart(institution.periodStart);
+    setPeriodEnd(institution.periodEnd);
+    setPeriodType(institution.periodType);
+    setOptIn(institution.optInPublicComparison);
+    setStudents(population?.studentHeadcount ?? 0);
+    setFaculty(population?.facultyHeadcount ?? 0);
+    setStaff(population?.staffHeadcount ?? 0);
+    setOperatingDays(population?.campusOperatingDaysPerYear ?? 0);
+    setFloorArea(boundary?.grossFloorAreaM2 ?? 0);
+    setLandArea(boundary?.landAreaAcres ?? 0);
+  }, [institution, population, boundary]);
 
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [saving, setSaving] = useState(false);

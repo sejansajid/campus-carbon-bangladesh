@@ -38,13 +38,20 @@ app.get('/api/institutions/:id', (req, res) => {
 
 app.post('/api/institutions', (req, res) => {
   const data = req.body;
-  if (!data.name || !data.division) {
-    return res.status(400).json({ error: 'Name and division are required' });
+  if (!data.name) {
+    return res.status(400).json({ error: 'Name is required' });
   }
   const id = data.id || `INST-${Date.now()}`;
-  const inst = db.saveInstitution({ ...data, id });
-  db.log('CREATE_INSTITUTION', 'Institution', inst.id, { name: inst.name });
-  res.status(201).json(inst);
+  try {
+    const inst = db.saveInstitution({ ...data, id });
+    db.log('CREATE_INSTITUTION', 'Institution', inst.id, { name: inst.name });
+    res.status(201).json(inst);
+  } catch (err: any) {
+    if (err.message && err.message.includes('read-only')) {
+      return res.status(403).json({ error: err.message });
+    }
+    return res.status(400).json({ error: err.message });
+  }
 });
 
 app.get('/api/boundaries/:institutionId', (req, res) => {
@@ -58,9 +65,16 @@ app.post('/api/boundaries', (req, res) => {
     return res.status(400).json({ error: 'institutionId and name required' });
   }
   const id = data.id || `CAMPUS-${Date.now()}`;
-  const boundary = db.saveBoundary({ ...data, id });
-  db.log('UPDATE_BOUNDARY', 'CampusBoundary', boundary.id, { name: boundary.name });
-  res.json(boundary);
+  try {
+    const boundary = db.saveBoundary({ ...data, id });
+    db.log('UPDATE_BOUNDARY', 'CampusBoundary', boundary.id, { name: boundary.name });
+    res.json(boundary);
+  } catch (err: any) {
+    if (err.message && err.message.includes('read-only')) {
+      return res.status(403).json({ error: err.message });
+    }
+    return res.status(400).json({ error: err.message });
+  }
 });
 
 // ----------------------------------------------------------------
@@ -80,17 +94,24 @@ app.post('/api/population', (req, res) => {
   const total = student + faculty + staff;
 
   const id = data.id || `POP-${Date.now()}`;
-  const pop = db.savePopulation({
-    ...data,
-    id,
-    studentHeadcount: student,
-    facultyHeadcount: faculty,
-    staffHeadcount: staff,
-    totalHeadcount: total,
-    campusOperatingDaysPerYear: Number(data.campusOperatingDaysPerYear) || 294
-  });
-  db.log('UPDATE_POPULATION', 'PopulationRecord', pop.id, { totalHeadcount: total });
-  res.json(pop);
+  try {
+    const pop = db.savePopulation({
+      ...data,
+      id,
+      studentHeadcount: student,
+      facultyHeadcount: faculty,
+      staffHeadcount: staff,
+      totalHeadcount: total,
+      campusOperatingDaysPerYear: Number(data.campusOperatingDaysPerYear) || 294
+    });
+    db.log('UPDATE_POPULATION', 'PopulationRecord', pop.id, { totalHeadcount: total });
+    res.json(pop);
+  } catch (err: any) {
+    if (err.message && err.message.includes('read-only')) {
+      return res.status(403).json({ error: err.message });
+    }
+    return res.status(400).json({ error: err.message });
+  }
 });
 
 // ----------------------------------------------------------------
@@ -588,6 +609,12 @@ if (fs.existsSync(clientDist)) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+export { app };
+export default app;
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+

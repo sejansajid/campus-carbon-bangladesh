@@ -45,11 +45,11 @@ export const FactorRegistryBrowser: React.FC<FactorRegistryBrowserProps> = ({ la
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-teal-700" />
-          Bangladesh National Emission Factor Registry
+          Emission Factors Database
         </h2>
         <p className="text-xs text-slate-500 leading-relaxed">
-          Search and audit authoritative greenhouse gas emission factors, accounting boundaries, and scientific citations. 
-          Official Bangladesh national factors are distinctly segregated from research-derived and international proxy metrics.
+          Search and inspect greenhouse gas emission factors, accounting boundaries, and scientific citations. 
+          Agency-published factors are segregated from research-derived and international proxy metrics.
         </p>
       </div>
 

@@ -34,6 +34,7 @@ export function calculateInventory(
   const separateTdLosses = options.separateTdLosses ?? !isLegacy;
 
   const traces: CalculationTrace[] = [];
+  const outOfScopeDisclosures: CalculationTrace[] = [];
   const unquantifiedCategories: string[] = [];
   const dataQualityNotes: string[] = [];
 
@@ -235,7 +236,7 @@ export function calculateInventory(
         gwpApplied: gwp.co2,
         gasBreakdown: { co2Ton, ch4Ton, n2oTon, fGasTon: 0, totalCO2eTon: totalCO2e },
         assumptions: isLegacy ? ['Dimensional mismatch preserved: kg multiplied by kg/L'] : ['Mass-based emission factor applied'],
-        disclosures: isLegacy ? ['Methodological issue #1: LPG units mismatch'] : []
+        disclosures: isLegacy ? ['Volumetric factor applied directly to mass'] : ['Mass-based emission factor applied']
       });
     } else if (act.category === 'refrigerant_fugitive_ac') {
       const gasType = (act.fuelOrGasType || act.name).toUpperCase();
@@ -272,11 +273,13 @@ export function calculateInventory(
         const tCO2e = (kg * gwpVal) / 1000;
         acR22TonCO2e += tCO2e;
 
-        traces.push({
+        const r22Trace: CalculationTrace = {
           itemKey: act.id,
-          name: act.name || 'AC Refrigerant (R-22/HCFC-22)',
-          scope: 1,
-          category: act.category,
+          name: includeOdsInScope1 
+            ? (act.name || 'AC Refrigerant (R-22/HCFC-22)') 
+            : 'AC Refrigerant R-22 (Montreal Protocol ODS — Out-of-Scope)',
+          scope: includeOdsInScope1 ? 1 : 0,
+          category: includeOdsInScope1 ? act.category : 'out_of_scope_ods_memo',
           rawQuantity: kg,
           rawUnit: 'kg',
           normalizedQuantity: kg,
@@ -285,16 +288,22 @@ export function calculateInventory(
           factorValue: gwpVal,
           factorUnit: 'kgCO2e/kg',
           factorProvenance: 'international_proxy',
-          equationText: `(${kg} kg * ${gwpVal} GWP)/1000 = ${tCO2e.toFixed(3)} tCO2e`,
+          equationText: `(${kg} kg * ${gwpVal} GWP)/1000 = ${tCO2e.toFixed(3)} tCO2e (${includeOdsInScope1 ? 'Included in historical Scope 1' : 'Reported separately under Montreal Protocol ODS disclosure'})`,
           gwpApplied: gwpVal,
           gasBreakdown: { co2Ton: 0, ch4Ton: 0, n2oTon: 0, fGasTon: tCO2e, totalCO2eTon: tCO2e },
           assumptions: ['Top-up assumed emitted'],
           disclosures: [
             includeOdsInScope1
-              ? 'Legacy reproduction: R-22 included in Scope 1'
-              : 'Current method: R-22 is an ODS under Montreal Protocol and reported out-of-scope'
+              ? 'Historical method: R-22 included in Scope 1'
+              : 'Standard method: R-22 is an ODS under Montreal Protocol and reported out-of-scope'
           ]
-        });
+        };
+
+        if (includeOdsInScope1) {
+          traces.push(r22Trace);
+        } else {
+          outOfScopeDisclosures.push(r22Trace);
+        }
       }
     }
   }
@@ -387,7 +396,7 @@ export function calculateInventory(
         gwpApplied: 1,
         gasBreakdown: { co2Ton: legacyScope2, ch4Ton: 0, n2oTon: 0, fGasTon: 0, totalCO2eTon: legacyScope2 },
         assumptions: ['Direct 1.11 multiplier applied to generation emissions in Scope 2'],
-        disclosures: ['Methodological issue #4: Grid losses mixed into Scope 2']
+        disclosures: ['Transmission and distribution losses bundled in Scope 2 generation factor']
       });
     }
   }
@@ -487,8 +496,7 @@ export function calculateInventory(
         gasBreakdown: { co2Ton: legacyCO2, ch4Ton: legacyCH4, n2oTon: legacyN2O, fGasTon: 0, totalCO2eTon: totalLegacyCommuting },
         assumptions: ['758 non-university-transport responses expanded to 5,350 total population'],
         disclosures: [
-          'Methodological issue #2: motorcycle & transit formulas multiplied headcount/percentages',
-          'Methodological issue #3: non-fleet mean applied to all without fleet subtraction'
+          'Historical survey scaling approach applied across entire headcount'
         ]
       });
     } else {
@@ -623,6 +631,7 @@ export function calculateInventory(
     perCapitaScope3,
     perStudentTotal,
     traces,
+    outOfScopeDisclosures,
     unquantifiedCategories: [
       'Purchased Goods & Services (Scope 3 Cat 1)',
       'Capital Goods (Scope 3 Cat 2)',

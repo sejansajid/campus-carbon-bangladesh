@@ -155,11 +155,11 @@ export const RouteACollectKit: React.FC<RouteACollectKitProps> = ({
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           <FileSpreadsheet className="w-5 h-5 text-teal-700" />
-          Route A — Standardized Data Collection Kit
+          Collect data with templates
         </h2>
         <p className="text-xs text-slate-500 leading-relaxed">
           Higher education institutions can distribute standardized data collection kits to facilities staff, transport managers, 
-          and campus commuters. Download ready-to-use templates, run the automated Google Forms creator script, or import completed records below.
+          and campus commuters. Download ready-to-use templates, create a Google Form using a script, or upload completed records below.
         </p>
       </div>
 
@@ -243,15 +243,15 @@ export const RouteACollectKit: React.FC<RouteACollectKitProps> = ({
             </a>
           </div>
 
-          {/* Google Apps Script Automated Generator */}
+          {/* Google Apps Script Generator */}
           <div className="p-4 rounded-xl border border-teal-200 bg-teal-50/70 md:col-span-2 flex flex-col justify-between space-y-3">
             <div>
               <div className="font-bold text-xs text-teal-900 flex items-center gap-1.5">
                 <Code className="w-4 h-4 text-teal-700" />
-                Google Apps Script — Automated Google Form Creator
+                Create a Google Form using a script
               </div>
               <div className="text-[11px] text-teal-800/80 mt-1">
-                Run this script in your Google Drive to instantly generate a branded, anonymous, mobile-ready Google Forms survey for your campus community with validated questions and choices.
+                Run this script in your Google Drive account to generate an anonymous, mobile-ready Google Form survey for your campus community with validated questions. Alternatively, use the native form below or export CSV templates.
               </div>
             </div>
             <a
@@ -260,13 +260,13 @@ export const RouteACollectKit: React.FC<RouteACollectKitProps> = ({
               className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-700 text-white font-semibold text-xs hover:bg-teal-800 transition shadow-xs self-start"
             >
               <Download className="w-3.5 h-3.5" />
-              Download Google Apps Script (.js)
+              Download script to create Google Form (.js)
             </a>
           </div>
         </div>
       </div>
 
-      {/* Route A Native Online Questionnaire */}
+      {/* Native Online Questionnaire */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
           <Sparkles className="w-4 h-4 text-teal-600" />
@@ -394,10 +394,10 @@ export const RouteACollectKit: React.FC<RouteACollectKitProps> = ({
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
           <Upload className="w-4 h-4 text-teal-600" />
-          Bulk Data Ingestion (Paste or Upload Completed CSV)
+          Upload or paste your data
         </h3>
         <p className="text-xs text-slate-500">
-          Paste comma-separated rows or export from your Google Sheet / Excel survey. Each row will be validated against strict dimensional rules before ingestion.
+          Paste comma-separated rows or upload an exported CSV from your survey. Each row will be validated before ingestion.
         </p>
 
         <textarea

@@ -78,23 +78,23 @@ function initializeDefaultData(): DatabaseSchema {
     {
       id: 'ACT-01',
       institutionId: 'INST-ULAB',
-      title: 'Transition AC fleet to low-GWP R-32 units',
+      title: '[Illustrative Demo Action] Transition AC units to low-GWP R-32',
       scope: 1,
       category: 'refrigerant_fugitive_ac',
       responsibleDepartment: 'Facilities Management',
       targetCompletionDate: '2026-12-31',
       status: 'in_progress',
-      estimatedReductionTCO2e: 420.0,
+      estimatedReductionTCO2e: 239.3,
       estimatedCostBDT: 3500000,
-      description: 'Replace aging R-22 and high-GWP R-410A units with high-efficiency inverter R-32 cooling systems with certified preventative leak detection.',
+      description: 'Illustrative demonstration proposal: Replace aging AC units with high-efficiency R-32 systems with certified preventative leak detection. (Sample proposal for review, not an actual ULAB decision).',
       createdAt: '2025-10-01T09:00:00Z',
       updatedAt: '2025-10-10T14:30:00Z',
       feedbacks: [
         {
           id: 'FB-01',
-          author: 'Campus Sustainability Officer',
+          author: 'Demo Reviewer (Illustrative)',
           type: 'status_change',
-          text: 'Vendor RFP issued for 50 inverter units with A2L ventilation compliance.',
+          text: 'Illustrative feedback: Technical RFP draft prepared for inverter units with A2L ventilation compliance.',
           timestamp: '2025-10-10T14:30:00Z'
         }
       ]
@@ -102,7 +102,7 @@ function initializeDefaultData(): DatabaseSchema {
     {
       id: 'ACT-02',
       institutionId: 'INST-ULAB',
-      title: 'Install 42 kWp Rooftop Solar System on Academic Building',
+      title: '[Illustrative Demo Action] Install 42 kWp Rooftop Solar System',
       scope: 2,
       category: 'purchased_electricity_grid',
       responsibleDepartment: 'Engineering & Physical Plant',
@@ -110,15 +110,15 @@ function initializeDefaultData(): DatabaseSchema {
       status: 'approved',
       estimatedReductionTCO2e: 42.24,
       estimatedCostBDT: 4200000,
-      description: 'Implement Alfatha et al. proposal: 42 kWp grid-tied rooftop solar generating 66.2 MWh/yr with 98% campus self-consumption.',
+      description: 'Illustrative demonstration proposal based on Alfatha et al. research paper: 42 kWp grid-tied rooftop solar generating 66.2 MWh/yr with high campus self-consumption.',
       createdAt: '2025-10-02T10:00:00Z',
       updatedAt: '2025-10-08T11:00:00Z',
       feedbacks: [
         {
           id: 'FB-02',
-          author: 'Chief Financial Officer',
+          author: 'Demo Reviewer (Illustrative)',
           type: 'comment',
-          text: 'Approved under green campus capital grant budget FY2026.',
+          text: 'Illustrative note: Proposed for capital grant budget evaluation.',
           timestamp: '2025-10-08T11:00:00Z'
         }
       ]
@@ -126,7 +126,7 @@ function initializeDefaultData(): DatabaseSchema {
     {
       id: 'ACT-03',
       institutionId: 'INST-ULAB',
-      title: 'Dedicated Shared Hybrid Minibus for Faculty Commuters',
+      title: '[Illustrative Demo Action] Dedicated Shared Hybrid Minibus for Faculty',
       scope: 3,
       category: 'employee_commuting',
       responsibleDepartment: 'Transport Operations',
@@ -134,7 +134,7 @@ function initializeDefaultData(): DatabaseSchema {
       status: 'proposed',
       estimatedReductionTCO2e: 8.5,
       estimatedCostBDT: 1800000,
-      description: 'Provide pooled 14-seater hybrid CNG/gasoline shuttle replacing 14 individual faculty private car daily commutes.',
+      description: 'Illustrative demonstration proposal: Pooled 14-seater hybrid CNG/gasoline shuttle replacing individual faculty private car daily commutes.',
       createdAt: '2025-10-05T12:00:00Z',
       updatedAt: '2025-10-05T12:00:00Z',
       feedbacks: []
@@ -201,6 +201,9 @@ class StorageEngine {
   }
 
   saveInstitution(inst: Institution): Institution {
+    if (inst.id === 'INST-ULAB') {
+      throw new Error('INST-ULAB is a protected read-only demo institution and cannot be modified.');
+    }
     const idx = this.data.institutions.findIndex(i => i.id === inst.id);
     if (idx >= 0) {
       this.data.institutions[idx] = { ...inst, updatedAt: new Date().toISOString() };
@@ -217,6 +220,9 @@ class StorageEngine {
   }
 
   saveBoundary(boundary: CampusBoundary): CampusBoundary {
+    if (boundary.institutionId === 'INST-ULAB') {
+      throw new Error('INST-ULAB boundary is a protected read-only demo fixture and cannot be modified.');
+    }
     const idx = this.data.boundaries.findIndex(b => b.id === boundary.id);
     if (idx >= 0) {
       this.data.boundaries[idx] = boundary;
@@ -233,6 +239,9 @@ class StorageEngine {
   }
 
   savePopulation(pop: PopulationRecord): PopulationRecord {
+    if (pop.institutionId === 'INST-ULAB') {
+      throw new Error('INST-ULAB population is a protected read-only demo fixture and cannot be modified.');
+    }
     const idx = this.data.populations.findIndex(p => p.institutionId === pop.institutionId);
     if (idx >= 0) {
       this.data.populations[idx] = pop;
