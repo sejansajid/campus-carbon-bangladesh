@@ -222,12 +222,29 @@ export const CampusMap: React.FC<CampusMapProps> = ({
     }
   };
 
+  // Cleanup Leaflet on unmount
+  useEffect(() => {
+    return () => {
+      if (mapInstanceRef.current) {
+        try {
+          mapInstanceRef.current.remove();
+        } catch (e) {
+          // ignore
+        }
+        mapInstanceRef.current = null;
+      }
+    };
+  }, []);
+
   // Map Initialization & Updates (ONLY when hasCoordinates is true)
   useEffect(() => {
     if (!hasCoordinates || !mapContainerRef.current) return;
 
     if (!mapInstanceRef.current) {
       try {
+        if ((mapContainerRef.current as any)._leaflet_id) {
+          (mapContainerRef.current as any)._leaflet_id = null;
+        }
         const map = L.map(mapContainerRef.current, {
           center: coords,
           zoom: 13,
@@ -246,8 +263,12 @@ export const CampusMap: React.FC<CampusMapProps> = ({
 
         mapInstanceRef.current = map;
 
-        setTimeout(() => map.invalidateSize(), 150);
-        setTimeout(() => map.invalidateSize(), 500);
+        setTimeout(() => {
+          try { map.invalidateSize(); } catch (e) {}
+        }, 150);
+        setTimeout(() => {
+          try { map.invalidateSize(); } catch (e) {}
+        }, 500);
       } catch (err) {
         console.error('Failed to initialize Leaflet map:', err);
       }

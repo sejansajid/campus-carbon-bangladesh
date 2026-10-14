@@ -651,8 +651,33 @@ app.get('/api/reports/:institutionId', (req, res) => {
 // ----------------------------------------------------------------
 const clientDist = path.resolve(__dirname, '../../client/dist');
 if (fs.existsSync(clientDist)) {
-  app.use(express.static(clientDist));
+  // Immutable hashed assets under /assets/
+  app.use('/assets', express.static(path.join(clientDist, 'assets'), {
+    immutable: true,
+    maxAge: '1y'
+  }));
+
+  // Never return index.html for missing /assets/* requests (avoids SyntaxError: Unexpected token '<')
+  app.all('/assets/*', (req, res) => {
+    res.status(404).type('text/plain').send('Asset not found');
+  });
+
+  // Serve other static files with no-cache on HTML
+  app.use(express.static(clientDist, {
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+      }
+    }
+  }));
+
+  // SPA fallback with no-cache so browsers always get the latest bundle references
   app.get('*', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.sendFile(path.join(clientDist, 'index.html'));
   });
 }

@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar';
 import { Homepage } from './components/Homepage';
 import { AssessmentFlow } from './components/AssessmentFlow';
 import { ResourcesPage } from './components/ResourcesPage';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'assessment' | 'resources'>('home');
@@ -57,20 +58,22 @@ export const App: React.FC = () => {
 
       {/* 2. Main Page Shell */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {currentView === 'home' && (
-          <Homepage
-            onStartAssessment={handleStartAssessment}
-            onViewExample={handleViewExample}
-          />
-        )}
+        <ErrorBoundary>
+          {currentView === 'home' && (
+            <Homepage
+              onStartAssessment={handleStartAssessment}
+              onViewExample={handleViewExample}
+            />
+          )}
 
-        {currentView === 'assessment' && (
-          <AssessmentFlow />
-        )}
+          {currentView === 'assessment' && (
+            <AssessmentFlow />
+          )}
 
-        {currentView === 'resources' && (
-          <ResourcesPage />
-        )}
+          {currentView === 'resources' && (
+            <ResourcesPage />
+          )}
+        </ErrorBoundary>
       </main>
 
       {/* 3. Compact Professional Footer */}
