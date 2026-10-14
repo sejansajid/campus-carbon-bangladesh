@@ -8,6 +8,7 @@ import { EMISSION_FACTOR_REGISTRY } from '../../shared/factors/registry';
 import { GWP_SETS } from '../../shared/factors/gwp';
 import { evaluateMitigationScenario, PRESET_SCENARIOS } from '../../shared/scenarios/mitigation';
 import { CalculationMethodTier, MitigationScenarioConfig, ActivityRecord, CommuterSurveyResponse } from '../../shared/types';
+import { generateDeterministicPolicyBrief } from './services/policyBriefWriter';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -444,6 +445,23 @@ app.post('/api/scenarios/evaluate', (req, res) => {
     scenarioResult: result,
     presets: PRESET_SCENARIOS
   });
+});
+
+// ----------------------------------------------------------------
+// Policy Recommendations Brief Generator (Deterministic with Optional LLM Interface)
+// ----------------------------------------------------------------
+app.post('/api/policy-brief', (req, res) => {
+  const { evidencePacket, lang } = req.body;
+  if (!evidencePacket || !evidencePacket.institutionName || evidencePacket.totalGrossEmissions === undefined) {
+    return res.status(400).json({ error: 'Valid evidencePacket is required' });
+  }
+
+  try {
+    const brief = generateDeterministicPolicyBrief(evidencePacket, lang || 'en');
+    res.json(brief);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to generate policy brief: ' + err.message });
+  }
 });
 
 // ----------------------------------------------------------------
