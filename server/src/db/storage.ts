@@ -55,15 +55,15 @@ function initializeDefaultData(): DatabaseSchema {
     institutionId: 'INST-ULAB',
     name: 'Permanent Campus',
     isMainCampus: true,
-    centerCoordinates: [23.7547, 90.3582], // Mohammadpur Permanent Campus
+    centerCoordinates: [23.75945, 90.34897], // Mohammadpur Permanent Campus
     polygonGeoJSON: {
       type: 'Polygon',
       coordinates: [[
-        [90.3565, 23.7535],
-        [90.3595, 23.7535],
-        [90.3598, 23.7560],
-        [90.3568, 23.7562],
-        [90.3565, 23.7535]
+        [90.3473, 23.7581],
+        [90.3510, 23.7581],
+        [90.3510, 23.7609],
+        [90.3473, 23.7609],
+        [90.3473, 23.7581]
       ]]
     },
     grossFloorAreaM2: 24500,

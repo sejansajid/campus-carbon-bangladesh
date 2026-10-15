@@ -72,9 +72,9 @@ export const CampusMap: React.FC<CampusMapProps> = ({
       return boundary.centerCoordinates;
     }
     if (isDemo) {
-      return [23.7547, 90.3582];
+      return [23.75945, 90.34897];
     }
-    return [23.7547, 90.3582];
+    return [23.75945, 90.34897];
   });
 
   const [latInput, setLatInput] = useState<string>(String(coords[0]));
@@ -315,15 +315,20 @@ export const CampusMap: React.FC<CampusMapProps> = ({
 
       // Draw Perimeter Polygon if not point_only
       if (boundaryType !== 'point_only') {
-        const dLat = 0.0015;
-        const dLng = 0.0018;
-        const polygonCoords: L.LatLngExpression[] = [
-          [coords[0] - dLat, coords[1] - dLng],
-          [coords[0] - dLat, coords[1] + dLng],
-          [coords[0] + dLat, coords[1] + dLng],
-          [coords[0] + dLat, coords[1] - dLng],
-          [coords[0] - dLat, coords[1] - dLng]
-        ];
+        let polygonCoords: L.LatLngExpression[] = [];
+        if (boundary?.polygonGeoJSON?.coordinates?.[0]?.length) {
+          polygonCoords = boundary.polygonGeoJSON.coordinates[0].map(([lng, lat]: [number, number]) => [lat, lng]);
+        } else {
+          const dLat = 0.0014;
+          const dLng = 0.0018;
+          polygonCoords = [
+            [coords[0] - dLat, coords[1] - dLng],
+            [coords[0] - dLat, coords[1] + dLng],
+            [coords[0] + dLat, coords[1] + dLng],
+            [coords[0] + dLat, coords[1] - dLng],
+            [coords[0] - dLat, coords[1] - dLng]
+          ];
+        }
 
         const isVerified = boundaryType === 'verified';
         L.polygon(polygonCoords, {
@@ -563,10 +568,10 @@ export const CampusMap: React.FC<CampusMapProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => handlePresetSelect(23.7547, 90.3582)}
+              onClick={() => handlePresetSelect(23.75945, 90.34897)}
               className="px-2.5 py-1 rounded-lg bg-navy-50 hover:bg-navy-100 text-navy-800 border border-navy-200 cursor-pointer font-medium"
             >
-              ULAB Mohammadpur
+              ULAB Mohammadpur (Permanent Campus)
             </button>
           </div>
 
@@ -819,6 +824,13 @@ export const CampusMap: React.FC<CampusMapProps> = ({
                   className="px-2 py-0.5 rounded bg-navy-50 hover:bg-navy-100 text-navy-700 border border-navy-200 cursor-pointer"
                 >
                   SUST Sylhet (24.9205, 91.8319)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handlePresetSelect(23.75945, 90.34897)}
+                  className="px-2 py-0.5 rounded bg-navy-50 hover:bg-navy-100 text-navy-700 border border-navy-200 cursor-pointer"
+                >
+                  ULAB Permanent Campus (23.7595, 90.3490)
                 </button>
               </div>
 

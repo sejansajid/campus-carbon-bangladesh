@@ -1038,7 +1038,17 @@ export const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ initialMode }) =
           institutionId: 'INST-ULAB',
           name: 'Permanent Campus',
           isMainCampus: true,
-          centerCoordinates: [23.7547, 90.3582],
+          centerCoordinates: [23.75945, 90.34897],
+          polygonGeoJSON: {
+            type: 'Polygon',
+            coordinates: [[
+              [90.3473, 23.7581],
+              [90.3510, 23.7581],
+              [90.3510, 23.7609],
+              [90.3473, 23.7609],
+              [90.3473, 23.7581]
+            ]]
+          },
           grossFloorAreaM2: 24500,
           landAreaAcres: 5.5,
           numberOfBuildings: 3,

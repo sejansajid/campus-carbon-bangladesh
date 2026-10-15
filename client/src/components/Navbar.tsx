@@ -25,16 +25,15 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-16">
           {/* Brand */}
           <div 
-            className="flex items-center space-x-3 cursor-pointer select-none" 
+            className="flex items-center space-x-3 cursor-pointer select-none py-1" 
             onClick={() => setCurrentView('home')}
           >
-            <div className="w-10 h-10 rounded-xl bg-navy-800 flex items-center justify-center text-white shadow-xs font-bold text-lg">
-              CC
-            </div>
-            <div>
-              <div className="font-extrabold text-navy-900 text-base leading-tight tracking-tight">
-                Campus Carbon <span className="text-cobalt">Bangladesh</span>
-              </div>
+            <img 
+              src="/logo.png" 
+              alt="Campus Carbon Bangladesh" 
+              className="h-10 sm:h-11 w-auto object-contain" 
+            />
+            <div className="hidden lg:block border-l border-navy-200 pl-3">
               <div className="text-[10px] text-navy-500 font-medium">
                 Higher Education Carbon Analytics & Decarbonization
               </div>

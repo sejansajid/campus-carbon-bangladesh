@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Flame, Zap, Car, Eye, ChevronRight } from 'lucide-react';
+import { ArrowRight, Flame, Zap, Car, Eye, ChevronRight, BookOpen, ExternalLink } from 'lucide-react';
 import { CampusIllustration } from './CampusIllustration';
 
 interface HomepageProps {
@@ -38,10 +38,21 @@ export const Homepage: React.FC<HomepageProps> = ({
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </button>
 
+          <a
+            href="https://doi.org/10.1109/ACCESS.2025.3605517"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 font-bold text-base shadow-2xs transition inline-flex items-center justify-center gap-2 cursor-pointer group"
+          >
+            <BookOpen className="w-4 h-4 text-cobalt group-hover:scale-110 transition-transform" />
+            <span>Learn the methodology</span>
+            <ExternalLink className="w-3.5 h-3.5 text-navy-400 group-hover:text-cobalt transition-colors" />
+          </a>
+
           {onViewExample && (
             <button
               onClick={onViewExample}
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-navy-50 text-navy-800 border border-navy-200 font-bold text-base shadow-2xs transition inline-flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-navy-50 hover:bg-navy-100 text-navy-800 border border-navy-200 font-bold text-base shadow-2xs transition inline-flex items-center justify-center gap-2 cursor-pointer"
             >
               <Eye className="w-4 h-4 text-cobalt" />
               <span>See what your report will look like</span>
@@ -138,48 +149,60 @@ export const Homepage: React.FC<HomepageProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-navy-100 pb-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-navy-50 text-[11px] font-semibold text-navy-700 mb-1">
-              <span>Institutional Assessment Preview</span>
+              <span>Peer-Reviewed Institutional Benchmark</span>
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-navy-900">
               University of Liberal Arts Bangladesh (ULAB) — 2022
             </h2>
             <p className="text-xs text-navy-500">
-              Permanent Campus, Mohammadpur, Dhaka • Calendar Year 2022 • GHG Protocol Operational Control
+              Permanent Campus, Mohammadpur, Dhaka • Calendar Year 2022 • GHG Protocol Operational Control (5,350 Headcount)
             </p>
           </div>
-          {onViewExample && (
-            <button
-              onClick={onViewExample}
-              className="self-start sm:self-auto px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs shadow-2xs transition flex items-center gap-1.5 cursor-pointer"
+          <div className="flex items-center gap-2 flex-wrap">
+            <a
+              href="https://doi.org/10.1109/ACCESS.2025.3605517"
+              target="_blank"
+              rel="noreferrer"
+              className="px-4 py-2 rounded-xl bg-white hover:bg-navy-50 text-navy-700 border border-navy-200 font-bold text-xs shadow-2xs transition flex items-center gap-1.5 cursor-pointer"
             >
-              <Eye className="w-4 h-4" />
-              <span>Explore full interactive report</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          )}
+              <BookOpen className="w-3.5 h-3.5 text-cobalt" />
+              <span>Learn the methodology</span>
+              <ExternalLink className="w-3 h-3 text-navy-400" />
+            </a>
+            {onViewExample && (
+              <button
+                onClick={onViewExample}
+                className="px-4 py-2 rounded-xl bg-cobalt hover:bg-cobalt-700 text-white font-bold text-xs shadow-2xs transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <Eye className="w-4 h-4" />
+                <span>Explore full interactive report</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* 4 Summary Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <div className="p-4 rounded-2xl bg-navy-50/60 border border-navy-100">
             <span className="text-[11px] uppercase tracking-wider font-semibold text-navy-500 block">Total Footprint</span>
-            <span className="text-xl sm:text-2xl font-black text-navy-900 tracking-tight">2,498.79</span>
+            <span className="text-xl sm:text-2xl font-black text-navy-900 tracking-tight">2,498.80</span>
             <span className="text-[11px] text-navy-600 block">tCO₂e / year</span>
           </div>
           <div className="p-4 rounded-2xl bg-navy-50/60 border border-navy-100">
             <span className="text-[11px] uppercase tracking-wider font-semibold text-navy-500 block">Per Capita</span>
-            <span className="text-xl sm:text-2xl font-black text-navy-900 tracking-tight">0.467</span>
-            <span className="text-[11px] text-navy-600 block">tCO₂e / person (5,349 headcount)</span>
+            <span className="text-xl sm:text-2xl font-black text-navy-900 tracking-tight">0.4671</span>
+            <span className="text-[11px] text-navy-600 block">tCO₂e / person (5,350 headcount)</span>
           </div>
           <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/60">
             <span className="text-[11px] uppercase tracking-wider font-semibold text-amber-800 block">Dominant Hotspot</span>
             <span className="text-xl sm:text-2xl font-black text-amber-900 tracking-tight">Commuting</span>
-            <span className="text-[11px] text-amber-700 block">99.1% of reported emissions</span>
+            <span className="text-[11px] text-amber-700 block">1,302.10 tCO₂e (52.1%)</span>
           </div>
           <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/60">
-            <span className="text-[11px] uppercase tracking-wider font-semibold text-emerald-800 block">Coverage Status</span>
-            <span className="text-xl sm:text-2xl font-black text-emerald-900 tracking-tight">Complete</span>
-            <span className="text-[11px] text-emerald-700 block">100% (Scopes 1, 2, 3 quantified)</span>
+            <span className="text-[11px] uppercase tracking-wider font-semibold text-emerald-800 block">Direct Operations</span>
+            <span className="text-xl sm:text-2xl font-black text-emerald-900 tracking-tight">742.55</span>
+            <span className="text-[11px] text-emerald-700 block">tCO₂e Scope 1 (29.7%)</span>
           </div>
         </div>
 
@@ -189,19 +212,20 @@ export const Homepage: React.FC<HomepageProps> = ({
           <div className="md:col-span-5 flex flex-col items-center justify-center p-4 bg-navy-50/30 rounded-2xl border border-navy-100">
             <svg viewBox="0 0 200 200" className="w-40 h-40 drop-shadow-2xs">
               <circle cx="100" cy="100" r="70" fill="transparent" stroke="#E2E8F0" strokeWidth="24" />
-              {/* Scope 1: 0.2% -> strokeDasharray="3 437" */}
-              <circle cx="100" cy="100" r="70" fill="transparent" stroke="#F59E0B" strokeWidth="24" strokeDasharray="3 437" strokeDashoffset="0" />
-              {/* Scope 2: 0.7% -> strokeDasharray="4 436" */}
-              <circle cx="100" cy="100" r="70" fill="transparent" stroke="#2563EB" strokeWidth="24" strokeDasharray="4 436" strokeDashoffset="-4" />
-              {/* Scope 3: 99.1% -> dominant arc */}
-              <circle cx="100" cy="100" r="70" fill="transparent" stroke="#7C3AED" strokeWidth="24" strokeDasharray="433 440" strokeDashoffset="-8" />
-              <text x="100" y="95" textAnchor="middle" className="text-xs font-bold fill-navy-500">Scope 3</text>
-              <text x="100" y="115" textAnchor="middle" className="text-lg font-black fill-purple-900">99.1%</text>
+              {/* Scope 1: 29.7% -> 131 of 440 */}
+              <circle cx="100" cy="100" r="70" fill="transparent" stroke="#F59E0B" strokeWidth="24" strokeDasharray="131 440" strokeDashoffset="0" />
+              {/* Scope 2: 18.2% -> 80 of 440 */}
+              <circle cx="100" cy="100" r="70" fill="transparent" stroke="#2563EB" strokeWidth="24" strokeDasharray="80 440" strokeDashoffset="-131" />
+              {/* Scope 3: 52.1% -> 229 of 440 */}
+              <circle cx="100" cy="100" r="70" fill="transparent" stroke="#7C3AED" strokeWidth="24" strokeDasharray="229 440" strokeDashoffset="-211" />
+              <text x="100" y="93" textAnchor="middle" className="text-[11px] font-bold fill-navy-500 uppercase tracking-wider">Total</text>
+              <text x="100" y="113" textAnchor="middle" className="text-base font-black fill-navy-900">2,498.8</text>
+              <text x="100" y="127" textAnchor="middle" className="text-[10px] font-bold fill-navy-400">tCO₂e</text>
             </svg>
-            <div className="flex items-center gap-3 text-xs font-semibold mt-2">
-              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Scope 1 (0.2%)</span>
-              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-cobalt"></span>Scope 2 (0.7%)</span>
-              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-purple-600"></span>Scope 3 (99.1%)</span>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold mt-2">
+              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>Scope 1 (29.7%)</span>
+              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-cobalt"></span>Scope 2 (18.2%)</span>
+              <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-purple-600"></span>Scope 3 (52.1%)</span>
             </div>
           </div>
 
@@ -209,53 +233,55 @@ export const Homepage: React.FC<HomepageProps> = ({
           <div className="md:col-span-7 space-y-3">
             <div className="text-xs font-bold text-navy-800 flex items-center justify-between">
               <span>Top Emission Contributors</span>
-              <span className="text-navy-400 font-normal">Ranked by tCO₂e</span>
+              <span className="text-navy-400 font-normal">Ranked by tCO₂e (Paper Baseline)</span>
             </div>
 
             <div className="space-y-2.5">
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="font-semibold text-navy-800">1. Student & Staff Commuting</span>
-                  <span className="font-bold text-purple-700">2,476.32 tCO₂e (99.1%)</span>
+                  <span className="font-semibold text-navy-800">1. Student & Staff Commuting (Scope 3)</span>
+                  <span className="font-bold text-purple-700">1,302.10 tCO₂e (52.1%)</span>
                 </div>
                 <div className="w-full bg-navy-100 rounded-full h-2.5 overflow-hidden">
-                  <div className="bg-purple-600 h-2.5 rounded-full" style={{ width: '99.1%' }}></div>
+                  <div className="bg-purple-600 h-2.5 rounded-full" style={{ width: '52.1%' }}></div>
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="font-semibold text-navy-800">2. Purchased Electricity (Grid)</span>
-                  <span className="font-bold text-cobalt">18.00 tCO₂e (0.7%)</span>
+                  <span className="font-semibold text-navy-800">2. AC Fugitive Refrigerant Top-Ups (Scope 1)</span>
+                  <span className="font-bold text-amber-700">626.23 tCO₂e (25.1%)</span>
                 </div>
                 <div className="w-full bg-navy-100 rounded-full h-2.5 overflow-hidden">
-                  <div className="bg-cobalt h-2.5 rounded-full" style={{ width: '12%' }}></div>
+                  <div className="bg-amber-500 h-2.5 rounded-full" style={{ width: '25.1%' }}></div>
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="font-semibold text-navy-800">3. Diesel Backup Generators</span>
-                  <span className="font-bold text-amber-700">4.47 tCO₂e (0.2%)</span>
+                  <span className="font-semibold text-navy-800">3. Purchased Electricity / Grid (Scope 2)</span>
+                  <span className="font-bold text-cobalt">454.14 tCO₂e (18.2%)</span>
                 </div>
                 <div className="w-full bg-navy-100 rounded-full h-2.5 overflow-hidden">
-                  <div className="bg-amber-500 h-2.5 rounded-full" style={{ width: '5%' }}></div>
+                  <div className="bg-cobalt h-2.5 rounded-full" style={{ width: '18.2%' }}></div>
                 </div>
               </div>
             </div>
 
-            {onViewExample && (
-              <div className="pt-2 flex items-center justify-between text-[11px] text-navy-500 border-t border-navy-100">
-                <span>Includes verified figures, automated policy brief & vector SVG export</span>
-                <button
-                  onClick={onViewExample}
-                  className="font-bold text-cobalt hover:underline flex items-center gap-1 cursor-pointer"
-                >
-                  <span>View full assessment</span>
-                  <ChevronRight className="w-3 h-3" />
-                </button>
-              </div>
-            )}
+            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-navy-500 border-t border-navy-100">
+              <span className="truncate">
+                Peer-reviewed in <strong>IEEE Access (2025)</strong>: Hasan et al.
+              </span>
+              <a
+                href="https://doi.org/10.1109/ACCESS.2025.3605517"
+                target="_blank"
+                rel="noreferrer"
+                className="font-bold text-cobalt hover:underline inline-flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                <span>Learn the methodology</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
